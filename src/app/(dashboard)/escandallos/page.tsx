@@ -221,130 +221,158 @@ export default function EscandallosPage() {
   }
 
   return (
-    <div className="max-w-[1400px] mx-auto pb-20">
-      <header className="mb-16 flex justify-between items-start">
+    <div className="mx-auto max-w-[1400px] pb-20">
+      <header className="mb-10 flex flex-col gap-6 lg:mb-16 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <p className="font-label text-secondary text-[10px] uppercase tracking-[0.4em] mb-4">Ingenieria de menu · Aura Master</p>
+          <p className="mb-4 font-label text-[10px] uppercase tracking-[0.4em] text-secondary">Ingenieria de menu · Aura Master</p>
           <input
             value={recipeName}
             onChange={(e) => setRecipeName(e.target.value)}
-            className="text-6xl font-headline font-light text-on-surface bg-transparent border-none outline-none focus:text-secondary transition-all"
+            className="w-full bg-transparent text-4xl font-headline font-light text-on-surface outline-none transition-all focus:text-secondary sm:text-5xl lg:text-6xl"
           />
         </div>
-        <div className="glass-panel p-4 rounded-2xl border border-outline-variant/10 text-center min-w-[140px]">
-          <p className="text-[8px] font-label uppercase tracking-widest text-on-surface-variant mb-1">Raciones (PAX)</p>
+        <div className="glass-panel min-w-[140px] rounded-2xl border border-outline-variant/10 p-4 text-center">
+          <p className="mb-1 text-[8px] font-label uppercase tracking-widest text-on-surface-variant">Raciones (PAX)</p>
           <input
             type="number"
             value={pax}
             onChange={(e) => setPax(parseInt(e.target.value, 10) || 1)}
-            className="bg-transparent text-center text-3xl font-headline text-secondary w-full"
+            className="w-full bg-transparent text-center text-3xl font-headline text-secondary"
           />
         </div>
       </header>
 
-      <main className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <div className="lg:col-span-2 space-y-6">
-          <div className="glass-panel rounded-[40px] border border-outline-variant/10 overflow-hidden shadow-2xl">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-surface-container-high/50 border-b border-outline-variant/10">
-                  <th className="p-6 font-label text-[9px] uppercase tracking-widest text-on-surface-variant font-bold">Ingrediente</th>
-                  <th className="p-6 font-label text-[9px] uppercase tracking-widest text-on-surface-variant font-bold text-center">P. Bruto</th>
-                  <th className="p-6 font-label text-[9px] uppercase tracking-widest text-on-surface-variant font-bold text-center">Merma</th>
-                  <th className="p-6 font-label text-[9px] uppercase tracking-widest text-on-surface-variant font-bold text-center">P. Neto</th>
-                  <th className="p-6 font-label text-[9px] uppercase tracking-widest text-on-surface-variant font-bold text-right">Precio/Kg</th>
-                  <th className="p-6 font-label text-[9px] uppercase tracking-widest text-on-surface-variant font-bold text-right">Subtotal</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-outline-variant/5">
-                {ingredients.map((ing) => (
-                  <tr key={ing.id} className="hover:bg-white/5 transition-all">
-                    <td className="p-6 relative">
-                      <input
-                        value={ing.name}
-                        onChange={(e) => {
-                          updateIngredient(ing.id, 'name', e.target.value);
-                          void searchIngredients(e.target.value);
-                        }}
-                        className="bg-transparent text-on-surface font-light focus:text-secondary outline-none w-full"
-                        placeholder="Buscar en el Laboratorio..."
-                      />
-                      {searchResults.length > 0 && searchQuery === ing.name && (
-                        <div className="absolute left-6 top-full mt-2 w-64 glass-panel border border-secondary/20 rounded-xl overflow-hidden z-[100] shadow-2xl animate-fade-in">
-                          {searchResults.map((res) => (
-                            <button
-                              key={res.id}
-                              onClick={() => selectIngredient(res, ing.id)}
-                              className="w-full p-4 text-left hover:bg-secondary/10 transition-colors border-b border-white/5 last:border-none"
-                            >
-                              <p className="text-xs text-on-surface font-medium">{res.name}</p>
-                              <p className="text-[8px] text-on-surface-variant uppercase tracking-widest">{res.category}</p>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </td>
-                    <td className="p-6 text-center">
-                      <input type="number" value={ing.gross_weight} onChange={(e) => updateIngredient(ing.id, 'gross_weight', parseFloat(e.target.value) || 0)} className="bg-transparent text-center text-on-surface w-24 border-b border-white/10" />
-                      <span className="text-[8px] text-on-surface-variant/40 ml-1">{ing.unit}</span>
-                    </td>
-                    <td className="p-6 text-center">
-                      <input type="number" value={ing.waste_percent} onChange={(e) => updateIngredient(ing.id, 'waste_percent', parseFloat(e.target.value) || 0)} className="bg-transparent text-center text-secondary w-20 border-b border-secondary/20" />
-                      <span className="text-[8px] text-on-surface-variant/40">%</span>
-                    </td>
-                    <td className="p-6 text-center opacity-40 font-light italic">{(ing.gross_weight * (1 - ing.waste_percent / 100)).toFixed(3)}</td>
-                    <td className="p-6 text-right">
-                      <input type="number" value={ing.price_per_kg} onChange={(e) => updateIngredient(ing.id, 'price_per_kg', parseFloat(e.target.value) || 0)} className="bg-transparent text-right text-on-surface w-20" />
-                      <span className="text-[8px] text-on-surface-variant/40 ml-1">EUR</span>
-                    </td>
-                    <td className="p-6 text-right font-headline text-on-surface">{(ing.gross_weight * ing.price_per_kg).toFixed(2)} EUR</td>
+      <main className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-12">
+        <div className="space-y-6 lg:col-span-2">
+          <div className="glass-panel overflow-hidden rounded-[32px] border border-outline-variant/10 shadow-2xl sm:rounded-[40px]">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[720px] border-collapse text-left">
+                <thead>
+                  <tr className="border-b border-outline-variant/10 bg-surface-container-high/50">
+                    <th className="p-6 text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">Ingrediente</th>
+                    <th className="p-6 text-center text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">P. Bruto</th>
+                    <th className="p-6 text-center text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">Merma</th>
+                    <th className="p-6 text-center text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">P. Neto</th>
+                    <th className="p-6 text-right text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">Precio/Kg</th>
+                    <th className="p-6 text-right text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">Subtotal</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-outline-variant/5">
+                  {ingredients.map((ing) => (
+                    <tr key={ing.id} className="transition-all hover:bg-white/5">
+                      <td className="relative p-6">
+                        <input
+                          value={ing.name}
+                          onChange={(e) => {
+                            updateIngredient(ing.id, 'name', e.target.value);
+                            void searchIngredients(e.target.value);
+                          }}
+                          className="w-full bg-transparent font-light text-on-surface outline-none focus:text-secondary"
+                          placeholder="Buscar en el Laboratorio..."
+                        />
+                        {searchResults.length > 0 && searchQuery === ing.name && (
+                          <div className="glass-panel absolute left-6 top-full z-[100] mt-2 w-64 overflow-hidden rounded-xl border border-secondary/20 shadow-2xl animate-fade-in">
+                            {searchResults.map((res) => (
+                              <button
+                                key={res.id}
+                                onClick={() => selectIngredient(res, ing.id)}
+                                className="w-full border-b border-white/5 p-4 text-left transition-colors hover:bg-secondary/10 last:border-none"
+                              >
+                                <p className="text-xs font-medium text-on-surface">{res.name}</p>
+                                <p className="text-[8px] uppercase tracking-widest text-on-surface-variant">{res.category}</p>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </td>
+                      <td className="p-6 text-center">
+                        <input
+                          type="number"
+                          value={ing.gross_weight}
+                          onChange={(e) => updateIngredient(ing.id, 'gross_weight', parseFloat(e.target.value) || 0)}
+                          className="w-24 border-b border-white/10 bg-transparent text-center text-on-surface"
+                        />
+                        <span className="ml-1 text-[8px] text-on-surface-variant/40">{ing.unit}</span>
+                      </td>
+                      <td className="p-6 text-center">
+                        <input
+                          type="number"
+                          value={ing.waste_percent}
+                          onChange={(e) => updateIngredient(ing.id, 'waste_percent', parseFloat(e.target.value) || 0)}
+                          className="w-20 border-b border-secondary/20 bg-transparent text-center text-secondary"
+                        />
+                        <span className="text-[8px] text-on-surface-variant/40">%</span>
+                      </td>
+                      <td className="p-6 text-center font-light italic opacity-40">
+                        {(ing.gross_weight * (1 - ing.waste_percent / 100)).toFixed(3)}
+                      </td>
+                      <td className="p-6 text-right">
+                        <input
+                          type="number"
+                          value={ing.price_per_kg}
+                          onChange={(e) => updateIngredient(ing.id, 'price_per_kg', parseFloat(e.target.value) || 0)}
+                          className="w-20 bg-transparent text-right text-on-surface"
+                        />
+                        <span className="ml-1 text-[8px] text-on-surface-variant/40">EUR</span>
+                      </td>
+                      <td className="p-6 text-right font-headline text-on-surface">
+                        {(ing.gross_weight * ing.price_per_kg).toFixed(2)} EUR
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-            <button onClick={addIngredient} className="w-full py-6 border-t border-outline-variant/10 text-secondary font-label text-[9px] uppercase tracking-widest hover:bg-secondary/5 transition-all flex items-center justify-center gap-3">
+            <button
+              onClick={addIngredient}
+              className="flex w-full items-center justify-center gap-3 border-t border-outline-variant/10 py-6 text-[9px] font-label uppercase tracking-widest text-secondary transition-all hover:bg-secondary/5"
+            >
               <AppIcon name="add" size={14} />
-              AÃ±adir ingrediente al proceso
+              Añadir ingrediente al proceso
             </button>
           </div>
 
-          {isSearching && <p className="text-[10px] uppercase tracking-widest text-secondary animate-pulse">Buscando ingredientes verificados...</p>}
+          {isSearching && (
+            <p className="animate-pulse text-[10px] uppercase tracking-widest text-secondary">
+              Buscando ingredientes verificados...
+            </p>
+          )}
         </div>
 
         <div className="space-y-6">
-          <div className="glass-panel p-10 rounded-[40px] border border-outline-variant/10 shadow-3xl bg-gradient-to-br from-surface-container-high/80 to-transparent">
-            <h3 className="font-headline text-2xl mb-10 italic">Resumen tÃ©cnico</h3>
+          <div className="glass-panel rounded-[32px] border border-outline-variant/10 bg-gradient-to-br from-surface-container-high/80 to-transparent p-8 shadow-3xl sm:rounded-[40px] sm:p-10">
+            <h3 className="mb-10 font-headline text-2xl italic">Resumen técnico</h3>
 
-            <div className="space-y-8 mb-12">
-              <div className="flex justify-between items-center">
-                <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Coste total de producciÃ³n</p>
-                <p className="text-4xl font-headline text-on-surface font-light">{stats.total_cost.toFixed(2)} EUR</p>
+            <div className="mb-12 space-y-8">
+              <div className="flex items-center justify-between gap-4">
+                <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Coste total de producción</p>
+                <p className="text-right text-4xl font-headline font-light text-on-surface">{stats.total_cost.toFixed(2)} EUR</p>
               </div>
-              <div className="flex justify-between items-center border-y border-outline-variant/10 py-6">
-                <p className="font-label text-[10px] uppercase tracking-widest text-secondary font-bold">Coste por raciÃ³n</p>
-                <p className="text-5xl font-headline text-secondary tracking-tighter">{stats.cost_per_serving.toFixed(2)} EUR</p>
+              <div className="flex items-center justify-between gap-4 border-y border-outline-variant/10 py-6">
+                <p className="font-label text-[10px] uppercase tracking-widest font-bold text-secondary">Coste por ración</p>
+                <p className="text-right text-4xl font-headline tracking-tighter text-secondary sm:text-5xl">{stats.cost_per_serving.toFixed(2)} EUR</p>
               </div>
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between gap-4">
                 <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Rendimiento neto total</p>
-                <p className="text-2xl font-headline text-on-surface-variant/60 italic">{stats.total_net_weight.toFixed(3)} Kg</p>
+                <p className="text-right text-2xl font-headline italic text-on-surface-variant/60">{stats.total_net_weight.toFixed(3)} Kg</p>
               </div>
             </div>
 
             <div className="space-y-3">
-              <button onClick={saveRecipe} className="w-full py-5 bg-secondary text-black rounded-2xl font-label text-[10px] uppercase tracking-widest font-bold shadow-2xl shadow-secondary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-3">
+              <button onClick={saveRecipe} className="flex w-full items-center justify-center gap-3 rounded-2xl bg-secondary py-5 font-label text-[10px] font-bold uppercase tracking-widest text-black shadow-2xl shadow-secondary/20 transition-all hover:scale-[1.02]">
                 <AppIcon name="person" size={16} />
                 Guardar en mi perfil
               </button>
-              <button onClick={exportA4} className="w-full py-5 bg-surface-container-highest text-on-surface rounded-2xl font-label text-[10px] uppercase tracking-widest font-bold hover:bg-white/5 transition-all flex items-center justify-center gap-3">
+              <button onClick={exportA4} className="flex w-full items-center justify-center gap-3 rounded-2xl bg-surface-container-highest py-5 font-label text-[10px] font-bold uppercase tracking-widest text-on-surface transition-all hover:bg-white/5">
                 <AppIcon name="print" size={16} />
                 Exportar PDF profesional
               </button>
             </div>
           </div>
 
-          <div className="p-8 border border-white/5 rounded-[32px] bg-white/5 italic">
-            <p className="text-[11px] text-on-surface-variant/60 leading-relaxed font-light">
+          <div className="rounded-[32px] border border-white/5 bg-white/5 p-8 italic">
+            <p className="text-[11px] font-light leading-relaxed text-on-surface-variant/60">
               El escandallo no es solo un coste: es la hoja de control que protege margen, regularidad y calidad de pase.
             </p>
           </div>
