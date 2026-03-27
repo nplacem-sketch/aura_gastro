@@ -17,7 +17,11 @@ interface AuthState {
   isPremium: boolean;
   isAdmin: boolean;
   signIn: (email: string, pass: string) => Promise<void>;
-  signUp: (email: string, pass: string, metadata?: Record<string, unknown>) => Promise<void>;
+  signUp: (
+    email: string,
+    pass: string,
+    metadata?: Record<string, unknown>
+  ) => Promise<{ emailConfirmationRequired: boolean }>;
   signOut: () => Promise<void>;
 }
 
@@ -31,7 +35,7 @@ const AuthContext = createContext<AuthState>({
   isPremium: false,
   isAdmin: false,
   signIn: async () => {},
-  signUp: async () => {},
+  signUp: async () => ({ emailConfirmationRequired: false }),
   signOut: async () => {},
 });
 
@@ -127,14 +131,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signUp = async (email: string, pass: string, metadata: Record<string, unknown> = {}) => {
+    const siteUrl =
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
+
     const { data, error } = await supabase().auth.signUp({
       email,
       password: pass,
-      options: { data: { ...metadata, role: 'USER', plan: 'FREE' } },
+      options: {
+        emailRedirectTo: `${siteUrl}/login?verified=1`,
+        data: { ...metadata, role: 'USER', plan: 'FREE' },
+      },
     });
 
     if (error) throw error;
     if (data.session) await applySession(data.session);
+    return { emailConfirmationRequired: !data.session };
   };
 
   const signOut = async () => {

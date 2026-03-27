@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
 import AppIcon from '@/components/AppIcon';
 import PlansPopup from '@/components/PlansPopup';
 import { canAccessTier } from '@/lib/access';
 import { useAuth } from '@/lib/auth-context';
 import { recipesDb } from '@/lib/supabase';
+import { normalizeDisplayText } from '@/lib/text';
 
 type RecipeStep = {
   id: string;
@@ -53,13 +54,16 @@ export default function RecipeDetailPage() {
   }, [id]);
 
   const resolvedSteps = useMemo(() => {
-    if (steps.length > 0) return steps.map((step) => step.instruction);
+    if (steps.length > 0) return steps.map((step) => normalizeDisplayText(step.instruction));
     if (!recipe?.steps) return [];
 
     try {
       const parsed = typeof recipe.steps === 'string' ? JSON.parse(recipe.steps) : recipe.steps;
       return Array.isArray(parsed)
-        ? parsed.map((step: any) => (typeof step === 'string' ? step : step?.instruction)).filter(Boolean)
+        ? parsed
+            .map((step: any) => (typeof step === 'string' ? step : step?.instruction))
+            .filter(Boolean)
+            .map((step: string) => normalizeDisplayText(step))
         : [];
     } catch {
       return [];
@@ -68,8 +72,8 @@ export default function RecipeDetailPage() {
 
   if (loading) {
     return (
-      <div className="p-20 text-center font-label text-xs uppercase tracking-[0.5em] text-secondary animate-pulse">
-        Desglosando ficha tÃ©cnica...
+      <div className="animate-pulse p-20 text-center font-label text-xs uppercase tracking-[0.5em] text-secondary">
+        Desglosando ficha tecnica...
       </div>
     );
   }
@@ -91,13 +95,13 @@ export default function RecipeDetailPage() {
         <div className="relative z-10 flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="mb-4 font-label text-[10px] uppercase tracking-[0.4em] text-secondary">
-              Protocolo gastronÃ³mico: {recipe.tier}
+              Protocolo gastronomico: {recipe.tier}
             </p>
             <h1 className="max-w-4xl text-5xl font-headline leading-none text-on-surface md:text-6xl">
-              {recipe.title}
+              {normalizeDisplayText(recipe.title)}
             </h1>
             <p className="mt-6 max-w-3xl text-sm font-light leading-relaxed text-on-surface-variant">
-              {recipe.description || 'Ficha culinaria lista para producciÃ³n, pase y control tÃ©cnico.'}
+              {normalizeDisplayText(recipe.description) || 'Ficha culinaria lista para produccion, pase y control tecnico.'}
             </p>
           </div>
 
@@ -122,7 +126,7 @@ export default function RecipeDetailPage() {
                 <AppIcon name="lock" size={44} className="mb-6 text-secondary" aria-label="Bloqueado" />
                 <h2 className="mb-4 text-2xl font-headline text-on-surface">Contenido reservado</h2>
                 <p className="mb-8 max-w-sm text-sm font-light text-on-surface-variant">
-                  Esta ficha tÃ©cnica contiene procesos moleculares de nivel PREMIUM. Actualiza tu suscripciÃ³n para desbloquear.
+                  Esta ficha tecnica contiene procesos moleculares de nivel PREMIUM. Actualiza tu suscripcion para desbloquear.
                 </p>
                 <button
                   type="button"
@@ -139,7 +143,7 @@ export default function RecipeDetailPage() {
               {ingredients.length > 0 ? (
                 ingredients.map((ingredient) => (
                   <div key={ingredient.id} className="flex items-center justify-between border-b border-outline-variant/5 py-4">
-                    <span className="font-light text-on-surface">{ingredient.name}</span>
+                    <span className="font-light text-on-surface">{normalizeDisplayText(ingredient.name)}</span>
                     <span className="font-label text-[10px] uppercase tracking-widest text-secondary">
                       {[ingredient.quantity, ingredient.unit].filter(Boolean).join(' ')}
                     </span>
@@ -147,14 +151,14 @@ export default function RecipeDetailPage() {
                 ))
               ) : (
                 <p className="border-b border-outline-variant/5 py-4 text-[10px] uppercase tracking-widest text-on-surface-variant/40">
-                  No se han registrado componentes tÃ©cnicos para esta creaciÃ³n.
+                  No se han registrado componentes tecnicos para esta creacion.
                 </p>
               )}
             </div>
           </section>
 
           <section className="rounded-3xl border border-outline-variant/10 glass-panel p-10">
-            <h3 className="mb-8 text-3xl font-headline text-on-surface">Procesos de elaboraciÃ³n</h3>
+            <h3 className="mb-8 text-3xl font-headline text-on-surface">Procesos de elaboracion</h3>
             <div className="space-y-10">
               {resolvedSteps.length > 0 ? (
                 resolvedSteps.map((instruction, index) => (
@@ -170,7 +174,7 @@ export default function RecipeDetailPage() {
                   </div>
                 ))
               ) : (
-                <p className="italic opacity-40">Desglosando fases de elaboraciÃ³n...</p>
+                <p className="italic opacity-40">Desglosando fases de elaboracion...</p>
               )}
             </div>
           </section>
@@ -182,7 +186,7 @@ export default function RecipeDetailPage() {
               Ficha de maridaje
             </h4>
             <p className="mb-6 text-sm font-light leading-relaxed text-on-surface-variant">
-              Como maridaje recomendado para esta creaciÃ³n sugerimos una selecciÃ³n basada en el perfil organolÃ©ptico y los contrastes tÃ©cnicos.
+              Como maridaje recomendado para esta creacion sugerimos una seleccion basada en el perfil organoleptico y los contrastes tecnicos.
             </p>
             <button className="w-full rounded-xl border border-secondary/30 py-4 font-label text-[10px] uppercase tracking-widest text-secondary transition-all hover:bg-secondary/10">
               Consultar maridaje
@@ -191,7 +195,7 @@ export default function RecipeDetailPage() {
 
           <div className="rounded-3xl border border-outline-variant/10 glass-panel p-8">
             <h4 className="mb-6 font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
-              Registro de autorÃ­a
+              Registro de autoria
             </h4>
             <div className="space-y-4 text-[9px] font-label uppercase tracking-tighter text-[#afcdc3]/30">
               <p>Creada: {new Date(recipe.created_at).toLocaleDateString()}</p>

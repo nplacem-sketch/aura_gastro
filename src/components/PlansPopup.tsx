@@ -1,12 +1,20 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import AppIcon from '@/components/AppIcon';
 import verifiedCatalog from '@/data/verified-catalog.json';
 import { canAccessTier, normalizePlan } from '@/lib/access';
 import { useAuth } from '@/lib/auth-context';
-import { formatEuro, getDiscountedMonthlyPrice, getMonthlyGiftSavings, hasIntroMonthlyGift, TRIAL_GIFT_DAYS } from '@/lib/pricing';
+import {
+  formatEuro,
+  getDiscountedMonthlyPrice,
+  getMonthlyGiftSavings,
+  hasIntroMonthlyGift,
+  TRIAL_GIFT_DAYS,
+} from '@/lib/pricing';
+import { normalizeDisplayText } from '@/lib/text';
 
 type PlanRecord = {
   name: string;
@@ -26,6 +34,7 @@ export default function PlansPopup({
   requiredTier?: string;
 }) {
   const { user, plan, role } = useAuth();
+  const router = useRouter();
 
   if (!open) return null;
 
@@ -53,7 +62,7 @@ export default function PlansPopup({
             Esta zona requiere <span className="italic text-secondary">plan {normalizedRequiredTier}</span>
           </h2>
           <p className="mt-4 text-sm font-light leading-relaxed text-on-surface-variant">
-            Si quieres entrar en las áreas PRO o PREMIUM, elige uno de los planes disponibles. En PRO mensual y PREMIUM mensual ya verás descontados los {TRIAL_GIFT_DAYS} días de regalo del primer pago.
+            Si quieres entrar en las areas PRO o PREMIUM, elige uno de los planes disponibles. En PRO mensual y PREMIUM mensual ya veras descontados los {TRIAL_GIFT_DAYS} dias de regalo del primer pago.
           </p>
         </div>
 
@@ -62,9 +71,14 @@ export default function PlansPopup({
             const monthlyPrice = Number(planItem.price_monthly_eur || 0);
             const discountedPrice = getDiscountedMonthlyPrice(planItem.name, monthlyPrice);
             const savings = getMonthlyGiftSavings(planItem.name, monthlyPrice);
-            const current = normalizedCurrentPlan === planItem.name || (role === 'ADMIN' && planItem.name === 'PREMIUM');
-            const recommended = planItem.name === normalizedRequiredTier || (normalizedRequiredTier === 'PREMIUM' && planItem.name === 'PREMIUM');
+            const current =
+              normalizedCurrentPlan === planItem.name || (role === 'ADMIN' && planItem.name === 'PREMIUM');
+            const recommended =
+              planItem.name === normalizedRequiredTier ||
+              (normalizedRequiredTier === 'PREMIUM' && planItem.name === 'PREMIUM');
             const canEnter = canAccessTier(plan, planItem.name, role);
+            const freeBlocked = monthlyPrice === 0 && normalizedRequiredTier !== 'FREE';
+            const actionHref = current ? '/' : monthlyPrice === 0 ? (user ? '/' : '/register') : '/plans';
 
             return (
               <div
@@ -98,7 +112,7 @@ export default function PlansPopup({
                       </div>
                       <p className="mt-2 text-xs text-on-surface-variant">
                         <span className="mr-2 line-through opacity-70">{formatEuro(monthlyPrice)}/mes</span>
-                        Ahorras {formatEuro(savings)} con {TRIAL_GIFT_DAYS} días de regalo.
+                        Ahorras {formatEuro(savings)} con {TRIAL_GIFT_DAYS} dias de regalo.
                       </p>
                     </>
                   ) : (
@@ -107,39 +121,44 @@ export default function PlansPopup({
                 </div>
 
                 <p className="mb-5 min-h-[72px] text-sm font-light leading-relaxed text-on-surface-variant">
-                  {planItem.description}
+                  {normalizeDisplayText(planItem.description)}
                 </p>
 
                 <div className="mb-6 space-y-3">
                   {planItem.features.map((feature) => (
                     <div key={feature} className="flex items-start gap-3 text-xs text-on-surface-variant">
                       <AppIcon name="check_circle" size={14} className="mt-0.5 text-secondary" />
-                      <span>{feature}</span>
+                      <span>{normalizeDisplayText(feature)}</span>
                     </div>
                   ))}
                 </div>
 
-                <Link
-                  href={
-                    current
-                      ? '/dashboard'
-                      : monthlyPrice === 0
-                        ? user
-                          ? '/dashboard'
-                          : '/register'
-                        : '/plans'
-                  }
-                  onClick={onClose}
-                  className={`inline-flex w-full items-center justify-center rounded-2xl px-5 py-4 font-label text-[10px] uppercase tracking-widest transition-all ${
-                    current
-                      ? 'bg-surface-container-highest text-on-surface-variant'
-                      : recommended || !canEnter
-                        ? 'bg-secondary text-black hover:opacity-90'
-                        : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'
-                  }`}
-                >
-                  {current ? 'Tu plan actual' : monthlyPrice === 0 ? (user ? 'Ir al dashboard' : 'Empezar gratis') : 'Ver planes'}
-                </Link>
+                {freeBlocked ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      router.back();
+                    }}
+                    className="inline-flex w-full items-center justify-center rounded-2xl bg-surface-container-high px-5 py-4 font-label text-[10px] uppercase tracking-widest text-on-surface transition-all hover:bg-surface-container-highest"
+                  >
+                    Volver
+                  </button>
+                ) : (
+                  <Link
+                    href={actionHref}
+                    onClick={onClose}
+                    className={`inline-flex w-full items-center justify-center rounded-2xl px-5 py-4 font-label text-[10px] uppercase tracking-widest transition-all ${
+                      current
+                        ? 'bg-surface-container-highest text-on-surface-variant'
+                        : recommended || !canEnter
+                          ? 'bg-secondary text-black hover:opacity-90'
+                          : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'
+                    }`}
+                  >
+                    {current ? 'Tu plan actual' : monthlyPrice === 0 ? (user ? 'Ir al inicio' : 'Empezar gratis') : 'Ver planes'}
+                  </Link>
+                )}
               </div>
             );
           })}

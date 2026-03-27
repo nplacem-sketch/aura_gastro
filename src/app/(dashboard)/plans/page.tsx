@@ -1,12 +1,20 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 import AppIcon from '@/components/AppIcon';
 import verifiedCatalog from '@/data/verified-catalog.json';
 import { normalizePlan } from '@/lib/access';
 import { useAuth } from '@/lib/auth-context';
-import { formatEuro, getDiscountedMonthlyPrice, getMonthlyGiftSavings, hasIntroMonthlyGift, TRIAL_GIFT_DAYS } from '@/lib/pricing';
+import {
+  formatEuro,
+  getDiscountedMonthlyPrice,
+  getMonthlyGiftSavings,
+  hasIntroMonthlyGift,
+  TRIAL_GIFT_DAYS,
+} from '@/lib/pricing';
+import { normalizeDisplayText } from '@/lib/text';
 
 type PlanRecord = {
   name: string;
@@ -17,9 +25,12 @@ type PlanRecord = {
 };
 
 export default function PlansPage() {
-  const { plan, role } = useAuth();
+  const { user, session, plan, role } = useAuth();
+  const router = useRouter();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [plans, setPlans] = useState<PlanRecord[]>(verifiedCatalog.plans as PlanRecord[]);
+  const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPlans() {
@@ -52,11 +63,50 @@ export default function PlansPage() {
 
   const currentPlan = useMemo(() => normalizePlan(plan), [plan]);
 
+  async function handleCheckout(planName: string) {
+    if (planName === 'FREE') {
+      router.push(user ? '/' : '/register');
+      return;
+    }
+
+    if (!user || !session?.access_token) {
+      router.push('/login');
+      return;
+    }
+
+    setCheckoutLoading(planName);
+    setCheckoutError(null);
+
+    try {
+      const res = await fetch('/api/plans/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          plan: planName,
+          billingCycle,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.url) {
+        throw new Error(data.error || 'No se pudo iniciar el checkout de Stripe.');
+      }
+
+      window.location.href = data.url;
+    } catch (error: any) {
+      setCheckoutError(error.message || 'No se pudo iniciar el checkout de Stripe.');
+      setCheckoutLoading(null);
+    }
+  }
+
   return (
-    <div className="max-w-7xl mx-auto pb-20">
+    <div className="mx-auto max-w-7xl pb-20">
       <header className="mb-16 text-center">
         <p className="mb-4 text-center font-label text-[10px] uppercase tracking-[0.4em] text-secondary">
-          InversiÃ³n en Excelencia
+          Inversión en excelencia
         </p>
         <h1 className="mb-10 text-7xl font-headline font-light text-on-surface">
           Niveles de <span className="italic text-secondary">Acceso</span>
@@ -71,7 +121,8 @@ export default function PlansPage() {
             Mensual
           </span>
           <button
-            onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'yearly' : 'monthly')}
+            type="button"
+            onClick={() => setBillingCycle((current) => (current === 'monthly' ? 'yearly' : 'monthly'))}
             className="relative h-8 w-16 rounded-full border border-outline-variant/10 bg-surface-container-high p-1 transition-all"
           >
             <div
@@ -95,9 +146,15 @@ export default function PlansPage() {
         </div>
 
         <p className="mx-auto max-w-2xl font-light leading-relaxed text-on-surface-variant">
-          Cada plan ya tiene contenido real asignado por nivel: recetas, ingredientes, tÃ©cnicas y cursos con mÃ³dulos,
-          lecciones y examen. Los planes PRO mensual y PREMIUM mensual ya muestran descontados los {TRIAL_GIFT_DAYS} dÃ­as de regalo del primer pago.
+          Cada plan ya tiene contenido real asignado por nivel: recetas, ingredientes, técnicas y cursos con módulos,
+          lecciones y examen. Los planes PRO mensual y PREMIUM mensual ya muestran descontados los {TRIAL_GIFT_DAYS} días de regalo del primer pago.
         </p>
+
+        {checkoutError && (
+          <div className="mx-auto mt-8 max-w-2xl rounded-2xl border border-error/20 bg-error/10 p-4 text-sm text-error">
+            {checkoutError}
+          </div>
+        )}
       </header>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -119,11 +176,11 @@ export default function PlansPage() {
             >
               {popular && (
                 <span className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1.5 font-label text-[9px] uppercase tracking-widest text-black shadow-lg">
-                  MÃ¡s Popular
+                  Más popular
                 </span>
               )}
 
-              <div className="mb-0">
+              <div>
                 <h3 className="mb-2 font-headline text-3xl tracking-tight text-on-surface">{planItem.name}</h3>
                 <div className="mb-1 flex items-baseline gap-1">
                   <span className="text-5xl font-headline font-bold text-on-surface">
@@ -137,7 +194,7 @@ export default function PlansPage() {
                 {billingCycle === 'monthly' && hasIntroMonthlyGift(planItem.name) && (
                   <div className="mb-4">
                     <p className="animate-fade-in text-[10px] font-bold uppercase tracking-widest text-secondary">
-                      Primer mes con {TRIAL_GIFT_DAYS} dÃ­as descontados
+                      Primer mes con {TRIAL_GIFT_DAYS} días descontados
                     </p>
                     <p className="mt-2 text-xs text-on-surface-variant">
                       <span className="mr-2 line-through">{formatEuro(monthly)}/mes</span>
@@ -149,35 +206,44 @@ export default function PlansPage() {
                 {billingCycle === 'yearly' && planItem.name !== 'FREE' && (
                   <div className="mb-4">
                     <p className="animate-fade-in text-[10px] font-bold uppercase tracking-widest text-secondary">
-                      Pago Ãºnico de {formatEuro(yearly)} / aÃ±o
+                      Pago único de {formatEuro(yearly)} / año
                     </p>
                   </div>
                 )}
 
                 <p className="mt-4 h-16 overflow-hidden text-xs font-light leading-relaxed text-on-surface-variant">
-                  {planItem.description}
+                  {normalizeDisplayText(planItem.description)}
                 </p>
               </div>
 
               <div className="mb-10 flex-1 space-y-4">
-                {planItem.features.map((feature, i) => (
-                  <div key={i} className="flex items-start gap-3">
+                {planItem.features.map((feature, index) => (
+                  <div key={`${planItem.name}-${index}`} className="flex items-start gap-3">
                     <AppIcon name="check_circle" size={14} className="mt-0.5 text-secondary" />
-                    <span className="text-xs font-light text-on-surface-variant">{feature}</span>
+                    <span className="text-xs font-light text-on-surface-variant">{normalizeDisplayText(feature)}</span>
                   </div>
                 ))}
               </div>
 
               <button
+                type="button"
+                onClick={() => void handleCheckout(planItem.name)}
+                disabled={current || checkoutLoading === planItem.name}
                 className={`w-full rounded-2xl py-4 font-label text-[10px] font-bold uppercase tracking-widest shadow-xl shadow-black/20 transition-all ${
                   current
                     ? 'cursor-default bg-surface-container-highest text-on-surface-variant'
-                    : planItem.name === 'PREMIUM'
-                      ? 'bg-secondary text-black hover:bg-secondary/90'
-                      : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'
+                    : checkoutLoading === planItem.name
+                      ? 'cursor-wait bg-secondary/70 text-black'
+                      : planItem.name === 'PREMIUM'
+                        ? 'bg-secondary text-black hover:bg-secondary/90'
+                        : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'
                 }`}
               >
-                {current ? 'Plan Actual' : `Activar ${planItem.name}`}
+                {current
+                  ? 'Plan actual'
+                  : checkoutLoading === planItem.name
+                    ? 'Redirigiendo a Stripe...'
+                    : `Activar ${planItem.name}`}
               </button>
             </div>
           );

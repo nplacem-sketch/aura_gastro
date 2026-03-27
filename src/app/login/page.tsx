@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useMemo, useState } from 'react';
 
 import AppIcon from '@/components/AppIcon';
 import { useAuth } from '@/lib/auth-context';
@@ -20,14 +20,17 @@ const registerOptions = [
   },
 ];
 
-export default function LoginPage() {
+function LoginPageContent() {
   const { signIn } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const verified = searchParams.get('verified') === '1';
 
   const registerLinks = useMemo(
     () =>
@@ -47,7 +50,11 @@ export default function LoginPage() {
       router.push('/');
       router.refresh();
     } catch (err: any) {
-      setError(err.message || 'Error al iniciar sesion. Verifica tus credenciales.');
+      const message =
+        err?.message === 'Email not confirmed'
+          ? 'Tu cuenta aun no ha sido verificada. Revisa el email de confirmacion antes de iniciar sesion.'
+          : err.message || 'Error al iniciar sesion. Verifica tus credenciales.';
+      setError(message);
       setLoading(false);
     }
   };
@@ -72,6 +79,13 @@ export default function LoginPage() {
             <div className="mb-8 flex items-center gap-3 rounded-2xl border border-error/20 bg-error/10 p-4 text-xs font-light text-error">
               <AppIcon name="help" size={16} />
               {error}
+            </div>
+          )}
+
+          {verified && !error && (
+            <div className="mb-8 flex items-center gap-3 rounded-2xl border border-secondary/20 bg-secondary/10 p-4 text-xs font-light text-secondary">
+              <AppIcon name="check_circle" size={16} />
+              Tu email ha sido verificado. Ya puedes iniciar sesion.
             </div>
           )}
 
@@ -162,5 +176,13 @@ export default function LoginPage() {
         </aside>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#121413]" />}>
+      <LoginPageContent />
+    </Suspense>
   );
 }

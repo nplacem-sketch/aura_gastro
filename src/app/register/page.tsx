@@ -35,6 +35,7 @@ function RegisterPageContent() {
   const [postalCode, setPostalCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const type = String(searchParams.get('accountType') || '').toUpperCase();
@@ -65,11 +66,21 @@ function RegisterPageContent() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setSuccessMessage(null);
     try {
-      await signUp(email, password, {
+      const result = await signUp(email, password, {
         full_name: fullName,
         ...businessMetadata,
       });
+
+      if (result.emailConfirmationRequired) {
+        setSuccessMessage(
+          `Te hemos enviado un email de verificacion a ${email}. Revisa tu bandeja de entrada para activar la cuenta.`,
+        );
+        setLoading(false);
+        return;
+      }
+
       router.push('/');
       router.refresh();
     } catch (err: any) {
@@ -98,6 +109,13 @@ function RegisterPageContent() {
           <div className="mb-8 flex items-center gap-3 rounded-2xl border border-error/20 bg-error/10 p-4 text-xs font-light text-error">
             <AppIcon name="help" size={16} />
             {error}
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="mb-8 flex items-center gap-3 rounded-2xl border border-secondary/20 bg-secondary/10 p-4 text-xs font-light text-secondary">
+            <AppIcon name="check_circle" size={16} />
+            {successMessage}
           </div>
         )}
 

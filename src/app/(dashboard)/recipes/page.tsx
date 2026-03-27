@@ -8,6 +8,7 @@ import PlansPopup from '@/components/PlansPopup';
 import { canAccessTier } from '@/lib/access';
 import { useAuth } from '@/lib/auth-context';
 import { recipesDb } from '@/lib/supabase';
+import { normalizeDisplayText } from '@/lib/text';
 
 type RecipeCard = {
   id: string;
@@ -42,7 +43,7 @@ export default function RecipesPage() {
 
   if (loading) {
     return (
-      <div className="p-20 text-center font-label text-xs uppercase tracking-[0.5em] text-secondary animate-pulse">
+      <div className="animate-pulse p-20 text-center font-label text-xs uppercase tracking-[0.5em] text-secondary">
         Sincronizando recetario maestro...
       </div>
     );
@@ -60,7 +61,7 @@ export default function RecipesPage() {
           </h1>
         </div>
         <button className="glass-panel group flex items-center gap-2 rounded-lg border border-secondary/20 px-6 py-3 font-label text-[10px] uppercase tracking-widest text-secondary transition-all hover:bg-secondary/10">
-          Nueva creaciÃ³n
+          Nueva creación
           <AppIcon name="add" size={16} className="transition-transform group-hover:rotate-90" />
         </button>
       </header>
@@ -116,16 +117,16 @@ export default function RecipesPage() {
                           Contenido exclusivo
                         </p>
                         <p className="text-[11px] font-light text-on-surface-variant">
-                          Mejora tu plan para acceder a esta creaciÃ³n de vanguardia.
+                          Mejora tu plan para acceder a esta creación de vanguardia.
                         </p>
                       </div>
                     )}
 
                     <h3 className="mb-4 font-headline text-2xl leading-tight text-on-surface transition-colors group-hover:text-secondary">
-                      {recipe.title}
+                      {normalizeDisplayText(recipe.title)}
                     </h3>
                     <p className="mb-8 line-clamp-3 text-sm font-light text-on-surface-variant">
-                      {recipe.description || 'Ficha culinaria lista para producciÃ³n y servicio.'}
+                      {normalizeDisplayText(recipe.description) || 'Ficha culinaria lista para producción y servicio.'}
                     </p>
 
                     <div className="mt-auto flex items-center justify-between border-t border-outline-variant/10 pt-6 font-label text-[9px] uppercase tracking-widest text-[#afcdc3]/40">
@@ -155,7 +156,7 @@ export default function RecipesPage() {
               aria-label="Recetario"
             />
             <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant">
-              El recetario estÃ¡ vacÃ­o. Comienza tu primera creaciÃ³n.
+              El recetario está vacío. Comienza tu primera creación.
             </p>
           </div>
         )}
