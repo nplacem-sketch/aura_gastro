@@ -1,0 +1,169 @@
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
+
+import AppIcon from '@/components/AppIcon';
+import verifiedCatalog from '@/data/verified-catalog.json';
+import { normalizePlan } from '@/lib/access';
+import { useAuth } from '@/lib/auth-context';
+
+type PlanRecord = {
+  name: string;
+  price_monthly_eur: number;
+  price_annual_eur: number;
+  description: string;
+  features: string[];
+};
+
+export default function PlansPage() {
+  const { plan, role } = useAuth();
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+  const [plans, setPlans] = useState<PlanRecord[]>(verifiedCatalog.plans as PlanRecord[]);
+
+  useEffect(() => {
+    async function fetchPlans() {
+      try {
+        const res = await fetch('/api/plans', { cache: 'no-store' });
+        if (!res.ok) return;
+
+        const data = await res.json();
+        if (!Array.isArray(data.plans) || data.plans.length === 0) return;
+
+        setPlans(
+          data.plans.map((item: any) => {
+            const fallback = verifiedCatalog.plans.find((entry) => entry.name === item.name);
+            return {
+              name: item.name,
+              price_monthly_eur: Number(item.price_monthly_eur ?? fallback?.price_monthly_eur ?? 0),
+              price_annual_eur: Number(item.price_annual_eur ?? fallback?.price_annual_eur ?? 0),
+              description: fallback?.description ?? '',
+              features: fallback?.features ?? [],
+            };
+          }),
+        );
+      } catch (error) {
+        console.error('[Plans] fallback to local catalog', error);
+      }
+    }
+
+    void fetchPlans();
+  }, []);
+
+  const currentPlan = useMemo(() => normalizePlan(plan), [plan]);
+
+  return (
+    <div className="max-w-7xl mx-auto pb-20">
+      <header className="mb-16 text-center">
+        <p className="mb-4 text-center font-label text-[10px] uppercase tracking-[0.4em] text-secondary">
+          Inversión en Excelencia
+        </p>
+        <h1 className="mb-10 text-7xl font-headline font-light text-on-surface">
+          Niveles de <span className="italic text-secondary">Acceso</span>
+        </h1>
+
+        <div className="mb-12 flex items-center justify-center gap-6">
+          <span
+            className={`font-label text-xs uppercase tracking-widest transition-all ${
+              billingCycle === 'monthly' ? 'font-bold text-secondary' : 'text-on-surface-variant/40'
+            }`}
+          >
+            Mensual
+          </span>
+          <button
+            onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'yearly' : 'monthly')}
+            className="relative h-8 w-16 rounded-full border border-outline-variant/10 bg-surface-container-high p-1 transition-all"
+          >
+            <div
+              className={`absolute top-1 h-6 w-6 rounded-full bg-secondary shadow-lg transition-all ${
+                billingCycle === 'yearly' ? 'translate-x-8' : 'translate-x-0'
+              }`}
+            />
+          </button>
+          <div className="flex items-center gap-3">
+            <span
+              className={`font-label text-xs uppercase tracking-widest transition-all ${
+                billingCycle === 'yearly' ? 'font-bold text-secondary' : 'text-on-surface-variant/40'
+              }`}
+            >
+              Anual
+            </span>
+            <span className="rounded-full bg-primary/20 px-3 py-1 text-[8px] font-bold uppercase tracking-widest text-primary shadow-lg shadow-primary/10">
+              Ahorro anual
+            </span>
+          </div>
+        </div>
+
+        <p className="mx-auto max-w-2xl font-light leading-relaxed text-on-surface-variant">
+          Cada plan ya tiene contenido real asignado por nivel: recetas, ingredientes, técnicas y cursos con módulos,
+          lecciones y examen.
+        </p>
+      </header>
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {plans.map((planItem) => {
+          const monthly = planItem.price_monthly_eur;
+          const yearly = planItem.price_annual_eur;
+          const effectiveMonthly = billingCycle === 'monthly' ? monthly : Math.round(yearly / 12);
+          const current = currentPlan === planItem.name || (role === 'ADMIN' && planItem.name === 'ENTERPRISE');
+          const popular = planItem.name === 'PRO';
+
+          return (
+            <div
+              key={planItem.name}
+              className={`glass-panel relative flex flex-col rounded-[40px] border p-10 transition-all duration-500 hover:scale-[1.03] ${
+                popular ? 'border-primary/40 ring-1 ring-primary/20' : 'border-outline-variant/10'
+              }`}
+            >
+              {popular && (
+                <span className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1.5 font-label text-[9px] uppercase tracking-widest text-black shadow-lg">
+                  Más Popular
+                </span>
+              )}
+
+              <div className="mb-0">
+                <h3 className="mb-2 font-headline text-3xl tracking-tight text-on-surface">{planItem.name}</h3>
+                <div className="mb-1 flex items-baseline gap-1">
+                  <span className="text-5xl font-headline font-bold text-on-surface">{effectiveMonthly}€</span>
+                  <span className="text-sm font-light text-on-surface-variant">/ mes</span>
+                </div>
+
+                {billingCycle === 'yearly' && planItem.name !== 'FREE' && (
+                  <div className="mb-4">
+                    <p className="animate-fade-in text-[10px] font-bold uppercase tracking-widest text-secondary">
+                      Pago único de {yearly}€ / año
+                    </p>
+                  </div>
+                )}
+
+                <p className="mt-4 h-16 overflow-hidden text-xs font-light leading-relaxed text-on-surface-variant">
+                  {planItem.description}
+                </p>
+              </div>
+
+              <div className="mb-10 flex-1 space-y-4">
+                {planItem.features.map((feature, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <AppIcon name="check_circle" size={14} className="mt-0.5 text-secondary" />
+                    <span className="text-xs font-light text-on-surface-variant">{feature}</span>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                className={`w-full rounded-2xl py-4 font-label text-[10px] font-bold uppercase tracking-widest shadow-xl shadow-black/20 transition-all ${
+                  current
+                    ? 'cursor-default bg-surface-container-highest text-on-surface-variant'
+                    : planItem.name === 'PREMIUM'
+                      ? 'bg-secondary text-black hover:bg-secondary/90'
+                      : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'
+                }`}
+              >
+                {current ? 'Plan Actual' : `Activar ${planItem.name}`}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

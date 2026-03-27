@@ -1,0 +1,520 @@
+{
+  "plans": [
+    {
+      "name": "FREE",
+      "price_monthly_eur": 0,
+      "price_annual_eur": 0,
+      "description": "Base operativa para aprender fundamentos y consultar recetas e ingredientes esenciales.",
+      "features": [
+        "1 curso base de fundamentos",
+        "Recetas esenciales verificadas",
+        "Ingredientes base del laboratorio",
+        "Sin asistente generativo"
+      ]
+    },
+    {
+      "name": "PRO",
+      "price_monthly_eur": 39,
+      "price_annual_eur": 398,
+      "description": "Ruta profesional para cocina de restaurante con técnicas de control y estandarización.",
+      "features": [
+        "Cursos técnicos PRO",
+        "Recetas de servicio y precisión",
+        "Ingredientes hidrocoloides y emulsionantes",
+        "Escandallos y laboratorio operativo"
+      ]
+    },
+    {
+      "name": "PREMIUM",
+      "price_monthly_eur": 69,
+      "price_annual_eur": 662,
+      "description": "Colección avanzada para alta cocina, vanguardia y aplicaciones de mayor complejidad.",
+      "features": [
+        "Cursos avanzados con evaluación",
+        "Recetas de vanguardia premium",
+        "Técnicas y productos avanzados",
+        "Sommelier IA con respuestas fundamentadas"
+      ]
+    },
+    {
+      "name": "ENTERPRISE",
+      "price_monthly_eur": 149,
+      "price_annual_eur": 1341,
+      "description": "Operación multiusuario para grupos de restauración y escuelas con acceso total.",
+      "features": [
+        "Acceso completo a todo el catálogo",
+        "Control multiusuario",
+        "Operativa de sedes y analítica",
+        "Automatizaciones internas"
+      ]
+    }
+  ],
+  "ingredients": [
+    {
+      "name": "Agar-Agar",
+      "scientific_name": "Gelidium amansii",
+      "category": "TEXTURIZANTE",
+      "tier": "FREE",
+      "origin_region": "Costas de Asia y Mediterráneo",
+      "best_season": ["Todo el año"],
+      "culinary_notes": "Gelificante de origen vegetal con gel firme y corte limpio. Adecuado para geles calientes y elaboraciones con estabilidad térmica.",
+      "technical_data": {
+        "Dosificación orientativa": "4-10 g/L",
+        "Activación": "Hervor breve",
+        "Gelificación": "35-40 C",
+        "Uso clave": "Gel firme y láminas"
+      }
+    },
+    {
+      "name": "Lecitina de soja",
+      "scientific_name": "Phosphatidylcholine rich soy lecithin",
+      "category": "EMULSIFICANTE",
+      "tier": "FREE",
+      "origin_region": "Soja procesada",
+      "best_season": ["Todo el año"],
+      "culinary_notes": "Emulsionante y agente espumante para aires ligeros, especialmente eficaz en bases acuosas con sabor definido.",
+      "technical_data": {
+        "Dosificación orientativa": "2-8 g/L",
+        "Aplicación": "Aires y espumas ligeras",
+        "Solubilidad": "Alta en fase acuosa",
+        "Observación": "Batir en superficie"
+      }
+    },
+    {
+      "name": "Goma xantana",
+      "scientific_name": "Xanthomonas campestris fermentation product",
+      "category": "ESTABILIZANTE",
+      "tier": "PRO",
+      "origin_region": "Fermentación controlada",
+      "best_season": ["Todo el año"],
+      "culinary_notes": "Espesante de alta eficiencia en frío y caliente. Aporta viscosidad estable sin necesidad de cocción.",
+      "technical_data": {
+        "Dosificación orientativa": "0.5-3 g/L",
+        "Aplicación": "Salsas, vinagretas y bases fluidas",
+        "Comportamiento": "Pseudoplástico",
+        "Compatibilidad": "Buena con ácidos y sal"
+      }
+    },
+    {
+      "name": "Alginato de sodio",
+      "scientific_name": "Sodium alginate",
+      "category": "TEXTURIZANTE",
+      "tier": "PRO",
+      "origin_region": "Algas pardas",
+      "best_season": ["Todo el año"],
+      "culinary_notes": "Base de la esferificación básica e inversa. Requiere control de calcio, pH y reposo de la mezcla.",
+      "technical_data": {
+        "Dosificación orientativa": "5 g/L",
+        "Aplicación": "Esferificación",
+        "Hidratación": "Batido y reposo",
+        "Observación": "Evitar acidez excesiva"
+      }
+    },
+    {
+      "name": "Metilcelulosa",
+      "scientific_name": "Methyl cellulose",
+      "category": "TEXTURIZANTE",
+      "tier": "PREMIUM",
+      "origin_region": "Derivado de celulosa vegetal",
+      "best_season": ["Todo el año"],
+      "culinary_notes": "Gelifica en caliente y licua en frío. Útil para piezas calientes con estructura efímera y frituras aireadas.",
+      "technical_data": {
+        "Dosificación orientativa": "10-20 g/L",
+        "Aplicación": "Gelificación en caliente",
+        "Hidratación": "Disolución en frío",
+        "Observación": "Reposo prolongado para eliminar aire"
+      }
+    },
+    {
+      "name": "Iota carragenato",
+      "scientific_name": "Carrageenan iota",
+      "category": "TEXTURIZANTE",
+      "tier": "PREMIUM",
+      "origin_region": "Algas rojas",
+      "best_season": ["Todo el año"],
+      "culinary_notes": "Produce geles elásticos y brillantes, especialmente útiles en lácteos y sistemas con calcio moderado.",
+      "technical_data": {
+        "Dosificación orientativa": "2-8 g/L",
+        "Aplicación": "Geles elásticos",
+        "Compatibilidad": "Muy buena con lácteos",
+        "Textura": "Flexible"
+      }
+    }
+  ],
+  "techniques": [
+    {
+      "name": "Esferificación básica",
+      "tier": "PRO",
+      "description": "Técnica de encapsulación en la que una base con alginato entra en contacto con un baño cálcico para formar una membrana exterior fina.",
+      "difficulty": "Avanzado",
+      "science_basis": "Gelificación iónica entre alginato y calcio.",
+      "equipment_needed": "Balanza de precisión, batidora, colador, baños técnicos.",
+      "temperature_control": "Trabajar en frío o ambiente estable para mantener viscosidad y forma."
+    },
+    {
+      "name": "Cocción sous-vide",
+      "tier": "PRO",
+      "description": "Cocción al vacío a temperatura controlada para maximizar jugosidad, regularidad y rendimiento.",
+      "difficulty": "Intermedio",
+      "science_basis": "Control preciso de transferencia térmica y desnaturalización proteica.",
+      "equipment_needed": "Envasadora, roner o baño termostatizado, bolsas aptas.",
+      "temperature_control": "Crítico. Mantener temperatura exacta durante todo el proceso."
+    },
+    {
+      "name": "Gelificación en caliente con metilcelulosa",
+      "tier": "PREMIUM",
+      "description": "Formación de estructura al calentarse, con retorno a estado fluido al enfriar.",
+      "difficulty": "Experto",
+      "science_basis": "Gelificación termorreversible inversa propia de la metilcelulosa.",
+      "equipment_needed": "Batidora, abatidor o frío positivo, sartén o freidora controlada.",
+      "temperature_control": "Reposo en frío previo y cocción suficientemente alta para activar el gel."
+    },
+    {
+      "name": "Clarificación por congelación",
+      "tier": "PREMIUM",
+      "description": "Separación de agua limpia y compuestos solubles mediante descongelación lenta y filtrado por gravedad.",
+      "difficulty": "Avanzado",
+      "science_basis": "Separación física de fases por cristalización del agua y drenaje controlado.",
+      "equipment_needed": "Congelador, filtro fino, recipiente de goteo.",
+      "temperature_control": "Congelación completa y descongelación lenta en refrigeración."
+    }
+  ],
+  "recipes": [
+    {
+      "title": "Aire de cítricos con lecitina",
+      "description": "Preparación ligera y didáctica para introducir el uso de lecitina en elaboraciones aromáticas de servicio inmediato.",
+      "category": "Entrante",
+      "difficulty": "Básico",
+      "prep_time": "15 min",
+      "tier": "FREE",
+      "cover_image": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1000",
+      "tags": ["lecitina", "aire", "cítricos"],
+      "ingredients": [
+        { "name": "Zumo de naranja", "amount": "250 ml" },
+        { "name": "Zumo de limón", "amount": "50 ml" },
+        { "name": "Lecitina de soja", "amount": "3 g" },
+        { "name": "Sal fina", "amount": "1 g" }
+      ],
+      "steps": [
+        "Mezclar los zumos con la sal hasta obtener una base uniforme.",
+        "Añadir la lecitina y triturar inclinando el recipiente para incorporar aire.",
+        "Dejar reposar 30 segundos y recoger solo la espuma superficial para el pase."
+      ]
+    },
+    {
+      "title": "Gel de mango con agar",
+      "description": "Gel estable de fruta con corte limpio, útil para puntos, cubos o láminas de emplatado.",
+      "category": "Postre",
+      "difficulty": "Básico",
+      "prep_time": "25 min",
+      "tier": "FREE",
+      "cover_image": "https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?q=80&w=1000",
+      "tags": ["agar", "mango", "gel"],
+      "ingredients": [
+        { "name": "Puré de mango", "amount": "400 g" },
+        { "name": "Agua", "amount": "100 ml" },
+        { "name": "Agar-Agar", "amount": "4 g" },
+        { "name": "Azúcar", "amount": "20 g" }
+      ],
+      "steps": [
+        "Mezclar agua, puré y azúcar hasta homogeneizar.",
+        "Incorporar el agar en frío y llevar a ebullición suave durante 30 segundos.",
+        "Verter en bandeja, enfriar y cortar en el formato deseado."
+      ]
+    },
+    {
+      "title": "Huevo a baja temperatura con crema de patata",
+      "description": "Plato de precisión para servicio con textura cremosa y control proteico.",
+      "category": "Principal",
+      "difficulty": "Medio",
+      "prep_time": "50 min",
+      "tier": "PRO",
+      "cover_image": "https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=1000",
+      "tags": ["sous-vide", "huevo", "precisión"],
+      "ingredients": [
+        { "name": "Huevos", "amount": "4 u" },
+        { "name": "Patata", "amount": "500 g" },
+        { "name": "Mantequilla", "amount": "60 g" },
+        { "name": "Nata", "amount": "80 ml" },
+        { "name": "Sal fina", "amount": "5 g" }
+      ],
+      "steps": [
+        "Cocer los huevos a 64 C durante 45 minutos y reservar en templado.",
+        "Cocer la patata, escurrir y triturar con mantequilla, nata y sal hasta una crema lisa.",
+        "Servir la crema caliente y abrir el huevo en el último momento para conservar la textura."
+      ]
+    },
+    {
+      "title": "Vinagreta ligada con goma xantana",
+      "description": "Base estable para aliños y acabados con distribución uniforme de partículas y hierbas.",
+      "category": "Entrante",
+      "difficulty": "Medio",
+      "prep_time": "10 min",
+      "tier": "PRO",
+      "cover_image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?q=80&w=1000",
+      "tags": ["xantana", "vinagreta", "emulsión"],
+      "ingredients": [
+        { "name": "Agua", "amount": "120 ml" },
+        { "name": "Vinagre de jerez", "amount": "40 ml" },
+        { "name": "Aceite de oliva virgen extra", "amount": "120 ml" },
+        { "name": "Goma xantana", "amount": "1 g" },
+        { "name": "Sal", "amount": "2 g" }
+      ],
+      "steps": [
+        "Disolver la sal en el agua y el vinagre.",
+        "Añadir la xantana en lluvia y triturar hasta eliminar grumos.",
+        "Incorporar el aceite en hilo fino y ajustar la textura final para servicio."
+      ]
+    },
+    {
+      "title": "Esferas de aceituna estilo esférica",
+      "description": "Versión técnica inspirada en la aceituna líquida, con membrana fina y centro fluido.",
+      "category": "Entrante",
+      "difficulty": "Experto",
+      "prep_time": "90 min",
+      "tier": "PREMIUM",
+      "cover_image": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=1000",
+      "tags": ["esferificación", "aceituna", "vanguardia"],
+      "ingredients": [
+        { "name": "Jugo de aceituna verde", "amount": "250 ml" },
+        { "name": "Gluconolactato cálcico", "amount": "12 g" },
+        { "name": "Agua mineral", "amount": "1 L" },
+        { "name": "Alginato de sodio", "amount": "5 g" }
+      ],
+      "steps": [
+        "Mezclar el jugo con gluconolactato y dejar reposar para eliminar aire.",
+        "Preparar un baño de alginato en agua mineral y reposar hasta hidratación completa.",
+        "Dosificar semiesferas o cucharadas en el baño durante 2 minutos y lavar en agua limpia."
+      ]
+    },
+    {
+      "title": "Tempura etérea de hierbas con metilcelulosa",
+      "description": "Cobertura ligera y crujiente con estructura estable durante la fritura, pensada para hierbas y vegetales delicados.",
+      "category": "Entrante",
+      "difficulty": "Experto",
+      "prep_time": "40 min",
+      "tier": "PREMIUM",
+      "cover_image": "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?q=80&w=1000",
+      "tags": ["metilcelulosa", "fritura", "textura"],
+      "ingredients": [
+        { "name": "Agua fría", "amount": "300 ml" },
+        { "name": "Harina floja", "amount": "140 g" },
+        { "name": "Metilcelulosa", "amount": "12 g" },
+        { "name": "Sal", "amount": "3 g" },
+        { "name": "Hierbas frescas", "amount": "80 g" }
+      ],
+      "steps": [
+        "Hidratar la metilcelulosa en agua muy fría y dejar reposar hasta completa dispersión.",
+        "Añadir harina y sal mezclando lo justo para una pasta ligera.",
+        "Cubrir las hierbas y freír a 180 C en tandas breves hasta fijar estructura y color."
+      ]
+    }
+  ],
+  "courses": [
+    {
+      "title": "Fundamentos de la cocina molecular",
+      "description": "Curso base sobre texturas, control de fases y lenguaje técnico para entrar en cocina de vanguardia con rigor y método.",
+      "level": "Chef",
+      "duration": "4 h 30 min",
+      "tier": "FREE",
+      "tags": ["fundamentos", "texturas", "base"],
+      "modules": [
+        {
+          "title": "Materia y textura",
+          "content": "Introducción a estados de la materia, dispersiones y texturas habituales en cocina contemporánea.",
+          "lessons": [
+            { "title": "Soluciones, emulsiones y geles", "content": "Diferencias prácticas entre sistemas dispersos y su aplicación culinaria.", "duration": "18 min" },
+            { "title": "Variables de formulación", "content": "Influencia de temperatura, concentración y agitación en la textura final.", "duration": "22 min" }
+          ]
+        },
+        {
+          "title": "Hidrocoloides esenciales",
+          "content": "Uso básico de agar y lecitina en preparaciones introductorias.",
+          "lessons": [
+            { "title": "Agar-Agar en elaboraciones de fruta", "content": "Cómo hidratar, hervir y moldear un gel estable.", "duration": "20 min" },
+            { "title": "Lecitina y construcción de aires", "content": "Creación de espumas ligeras y criterios de estabilidad.", "duration": "16 min" }
+          ]
+        },
+        {
+          "title": "Diseño de mise en place",
+          "content": "Organización de pesadas, escalado de recetas y errores frecuentes en laboratorio culinario.",
+          "lessons": [
+            { "title": "Pesada y precisión", "content": "Importancia de la balanza de precisión y control de lotes.", "duration": "15 min" },
+            { "title": "Protocolos de trabajo limpio", "content": "Secuencia operativa para evitar fallos de hidratación y contaminación cruzada.", "duration": "17 min" }
+          ]
+        }
+      ],
+      "exam": [
+        { "question": "¿Qué propiedad define mejor un gel de agar?", "options": ["Se funde a 30 C", "Tiene buena estabilidad térmica", "No necesita hervor", "Solo funciona con calcio"], "correct_index": 1 },
+        { "question": "La lecitina se emplea principalmente para:", "options": ["Cristalizar azúcares", "Crear aires y estabilizar interfaces", "Fermentar masas", "Dar color"], "correct_index": 1 },
+        { "question": "¿Qué factor afecta de forma directa la textura?", "options": ["Solo el emplatado", "Concentración y temperatura", "El color del recipiente", "La hora del servicio"], "correct_index": 1 },
+        { "question": "La balanza de precisión es clave porque:", "options": ["Acelera el emplatado", "Evita variaciones de dosificación", "Mejora el color", "Reduce la acidez"], "correct_index": 1 },
+        { "question": "Un aire bien ejecutado se recoge:", "options": ["Del fondo del recipiente", "De la espuma superficial", "Tras congelar", "Con calor intenso"], "correct_index": 1 }
+      ]
+    },
+    {
+      "title": "Cocción al vacío y baja temperatura",
+      "description": "Programa orientado a cocina de restaurante para dominar seguridad, texturas y repetibilidad en cocciones controladas.",
+      "level": "Chef Elite",
+      "duration": "6 h 15 min",
+      "tier": "PRO",
+      "tags": ["sous-vide", "proteínas", "servicio"],
+      "modules": [
+        {
+          "title": "Principios térmicos",
+          "content": "Transferencia de calor y efectos sobre proteínas, pescado y vegetales.",
+          "lessons": [
+            { "title": "Desnaturalización proteica", "content": "Puntos de textura y riesgo de sobrecocción.", "duration": "25 min" },
+            { "title": "Lectura de tablas de cocción", "content": "Interpretación de tiempo, grosor y temperatura objetivo.", "duration": "18 min" }
+          ]
+        },
+        {
+          "title": "Seguridad alimentaria",
+          "content": "Cadena de frío, abatimiento y manipulación segura de producto cocinado al vacío.",
+          "lessons": [
+            { "title": "Peligros microbiológicos", "content": "Buenas prácticas para evitar proliferación bacteriana.", "duration": "21 min" },
+            { "title": "Abatimiento y regeneración", "content": "Metodología para producción y servicio diferido.", "duration": "19 min" }
+          ]
+        },
+        {
+          "title": "Aplicación en servicio",
+          "content": "Planificación de batches, regeneración y acabado a la minuta.",
+          "lessons": [
+            { "title": "Proteínas rojas y aves", "content": "Rangos útiles de trabajo y acabado final.", "duration": "23 min" },
+            { "title": "Huevos y vegetales", "content": "Puntos de textura y combinación con guarniciones.", "duration": "20 min" }
+          ]
+        }
+      ],
+      "exam": [
+        { "question": "La principal ventaja del sous-vide es:", "options": ["Mayor evaporación", "Control preciso de textura", "Uso obligatorio de humo", "Menor rendimiento"], "correct_index": 1 },
+        { "question": "Tras cocinar y no servir de inmediato, conviene:", "options": ["Dejar a temperatura ambiente", "Abatir rápido y conservar en frío", "Abrir la bolsa y secar", "Congelar sin etiquetar"], "correct_index": 1 },
+        { "question": "La cocción a baja temperatura actúa sobre:", "options": ["Solo el color", "Transferencia térmica y proteínas", "Solo la sal", "Solo la corteza"], "correct_index": 1 },
+        { "question": "Un error habitual en producción es:", "options": ["Etiquetar lotes", "No controlar espesores", "Regenerar con precisión", "Secar para marcar"], "correct_index": 1 },
+        { "question": "El acabado final suele buscar:", "options": ["Color y notas de Maillard", "Bajar temperatura", "Romper la pieza", "Eliminar jugos"], "correct_index": 0 }
+      ]
+    },
+    {
+      "title": "Sistemas de emulsión y espumas profesionales",
+      "description": "Recorrido técnico por espumas, aires y ligazones estables aplicadas a cocina salada y dulce.",
+      "level": "Chef",
+      "duration": "5 h 40 min",
+      "tier": "PRO",
+      "tags": ["espumas", "emulsión", "xantana"],
+      "modules": [
+        {
+          "title": "Física de la emulsión",
+          "content": "Estabilidad de interfases, papel del emulsionante y control de viscosidad.",
+          "lessons": [
+            { "title": "Fase continua y fase dispersa", "content": "Cómo estructurar una emulsión estable según composición.", "duration": "17 min" },
+            { "title": "Rotura y corrección", "content": "Diagnóstico de separación y formas de recuperación.", "duration": "19 min" }
+          ]
+        },
+        {
+          "title": "Espumas frías y calientes",
+          "content": "Criterios para trabajar con sifón y espumas sin sifón.",
+          "lessons": [
+            { "title": "Uso del sifón en cocina", "content": "Carga, filtrado y seguridad en servicio.", "duration": "22 min" },
+            { "title": "Aires con lecitina", "content": "Lectura del punto de aireación y estabilidad.", "duration": "16 min" }
+          ]
+        },
+        {
+          "title": "Control de textura",
+          "content": "Uso de xantana y otros estabilizantes para obtener densidad operativa.",
+          "lessons": [
+            { "title": "Viscosidad y boca", "content": "Ajuste de flujo según plato y temperatura.", "duration": "18 min" },
+            { "title": "Aplicación en salsas y aliños", "content": "Casos prácticos en partida y pase.", "duration": "18 min" }
+          ]
+        }
+      ],
+      "exam": [
+        { "question": "Una emulsión estable depende de:", "options": ["Interfase protegida", "Solo del color", "Uso de horno", "Exceso de aire"], "correct_index": 0 },
+        { "question": "La xantana ayuda sobre todo a:", "options": ["Subir acidez", "Controlar viscosidad", "Reducir aroma", "Oscurecer la salsa"], "correct_index": 1 },
+        { "question": "En un sifón conviene:", "options": ["No colar nunca", "Filtrar la mezcla antes de cargar", "Llenarlo hasta arriba", "Agitar solo al final del servicio"], "correct_index": 1 },
+        { "question": "La lecitina actúa bien en:", "options": ["Bases acuosas aireadas", "Solo masas de pan", "Solo caramelos", "Frituras secas"], "correct_index": 0 },
+        { "question": "Rotura de emulsión significa:", "options": ["Color más vivo", "Separación de fases", "Mayor viscosidad", "Menor sal"], "correct_index": 1 }
+      ]
+    },
+    {
+      "title": "Esferificación aplicada al servicio",
+      "description": "Curso avanzado para dominar esferificación básica e inversa, con enfoque operativo y corrección de incidencias.",
+      "level": "Master",
+      "duration": "7 h 10 min",
+      "tier": "PREMIUM",
+      "tags": ["esferificación", "alginato", "calcio"],
+      "modules": [
+        {
+          "title": "Sistema alginato-calcio",
+          "content": "Comprensión del mecanismo de membrana y variables críticas.",
+          "lessons": [
+            { "title": "pH, calcio y viscosidad", "content": "Cómo interactúan los tres parámetros para definir el resultado.", "duration": "24 min" },
+            { "title": "Preparación de baños técnicos", "content": "Formulación limpia y reposo correcto.", "duration": "20 min" }
+          ]
+        },
+        {
+          "title": "Esferificación básica",
+          "content": "Aplicación en productos sin calcio disponible.",
+          "lessons": [
+            { "title": "Formulación de base", "content": "Hidratación y filtrado para obtener esferas limpias.", "duration": "20 min" },
+            { "title": "Lavado y conservación corta", "content": "Cómo evitar engrosamiento de membrana.", "duration": "16 min" }
+          ]
+        },
+        {
+          "title": "Esferificación inversa",
+          "content": "Aplicación en líquidos grasos o con calcio añadido.",
+          "lessons": [
+            { "title": "Uso de gluconolactato", "content": "Ajuste de calcio sin notas agresivas.", "duration": "18 min" },
+            { "title": "Servicio y pase", "content": "Planificación para mantener centro líquido.", "duration": "16 min" }
+          ]
+        }
+      ],
+      "exam": [
+        { "question": "El alginato gelifica al entrar en contacto con:", "options": ["Azúcar", "Calcio", "Alcohol", "Grasa"], "correct_index": 1 },
+        { "question": "La esferificación inversa se usa mucho cuando:", "options": ["La base tiene calcio o grasa", "No hay agua", "Se busca un bizcocho", "No hay reposo"], "correct_index": 0 },
+        { "question": "Un baño bien hidratado requiere:", "options": ["Reposo", "Horno", "Congelación rápida", "Colorante"], "correct_index": 0 },
+        { "question": "Si la membrana engorda demasiado:", "options": ["Ha faltado lavado o sobra tiempo de baño", "Hay menos calcio", "La esfera está fría", "El plato está seco"], "correct_index": 0 },
+        { "question": "El gluconolactato cálcico sirve para:", "options": ["Aportar calcio con perfil más suave", "Dar color verde", "Secar la mezcla", "Fermentar"], "correct_index": 0 }
+      ]
+    },
+    {
+      "title": "Metilcelulosa y gelificación en caliente",
+      "description": "Programa premium centrado en comportamiento térmico inverso, formulación y aplicaciones en fritura y servicio.",
+      "level": "Master",
+      "duration": "5 h 55 min",
+      "tier": "PREMIUM",
+      "tags": ["metilcelulosa", "gelificación", "caliente"],
+      "modules": [
+        {
+          "title": "Comportamiento funcional",
+          "content": "Qué tipos de metilcelulosa existen y cómo cambia su respuesta térmica.",
+          "lessons": [
+            { "title": "Gelificación inversa", "content": "Por qué estructura al calentarse y fluye al enfriar.", "duration": "21 min" },
+            { "title": "Selección de grado", "content": "Lectura de fichas técnicas y viscosidad útil.", "duration": "19 min" }
+          ]
+        },
+        {
+          "title": "Formulación y reposo",
+          "content": "Método correcto de dispersión e hidratación en frío.",
+          "lessons": [
+            { "title": "Batido sin grumos", "content": "Protocolo de mezcla y reposo.", "duration": "18 min" },
+            { "title": "Control de aire incorporado", "content": "Cómo evitar defectos en fritura y geles.", "duration": "15 min" }
+          ]
+        },
+        {
+          "title": "Aplicaciones de cocina",
+          "content": "Casos reales de tempuras ligeras, piezas calientes y estructuras efímeras.",
+          "lessons": [
+            { "title": "Frituras técnicas", "content": "Uso como soporte de cobertura y estabilidad.", "duration": "20 min" },
+            { "title": "Montaje y servicio", "content": "Tiempos de activación y plato final.", "duration": "17 min" }
+          ]
+        }
+      ],
+      "exam": [
+        { "question": "La metilcelulosa se hidrata preferentemente:", "options": ["En frío", "En horno", "Solo con aceite", "A 100 C"], "correct_index": 0 },
+        { "question": "Su rasgo diferencial es:", "options": ["Gelificar en caliente", "Necesitar calcio", "Fermentar", "Crear espuma estable sin batir"], "correct_index": 0 },
+        { "question": "El reposo ayuda a:", "options": ["Eliminar aire y completar hidratación", "Quemar la mezcla", "Subir acidez", "Separar fases"], "correct_index": 0 },
+        { "question": "Una aplicación típica es:", "options": ["Cobertura ligera de fritura", "Caramelo seco", "Panificación", "Vinagreta"], "correct_index": 0 },
+        { "question": "Si la mezcla no activa bien, revisar:", "options": ["Temperatura de servicio y dosificación", "Color del bol", "Tamaño del plato", "Hora del día"], "correct_index": 0 }
+      ]
+    }
+  ]
+}
