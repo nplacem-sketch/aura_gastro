@@ -161,21 +161,21 @@ export default function CourseDetailPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto pb-20">
-      <header className="mb-12 border-b border-outline-variant/10 pb-12">
-        <div className="flex justify-between items-start mb-6">
+    <div className="mx-auto max-w-7xl pb-16 sm:pb-20">
+      <header className="mb-10 border-b border-outline-variant/10 pb-10 sm:mb-12 sm:pb-12">
+        <div className="mb-6 flex items-start justify-between">
           <div>
             <p className="font-label text-secondary text-[10px] uppercase tracking-[0.4em] mb-4">
               {course.level} | {course.tier} Plan
             </p>
-            <h1 className="text-6xl font-headline font-light text-on-surface">{course.title}</h1>
+            <h1 className="text-4xl font-headline font-light text-on-surface sm:text-5xl lg:text-6xl">{course.title}</h1>
           </div>
         </div>
-        <p className="text-on-surface-variant max-w-3xl font-light italic leading-relaxed text-lg">&quot;{course.description}&quot;</p>
+        <p className="max-w-3xl text-base font-light italic leading-relaxed text-on-surface-variant sm:text-lg">&quot;{course.description}&quot;</p>
       </header>
 
-      <div className="flex flex-col lg:flex-row gap-12">
-        <div className="w-full lg:w-96 space-y-8">
+      <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
+        <div className="w-full space-y-6 lg:w-96 lg:space-y-8">
           {modules.map((module, moduleIndex) => (
             <div key={module.id} className="space-y-4">
               <button
@@ -230,7 +230,7 @@ export default function CourseDetailPage() {
           )}
         </div>
 
-        <div className="flex-1 glass-panel p-16 rounded-[40px] border border-outline-variant/10 min-h-[600px] shadow-2xl relative overflow-hidden">
+        <div className="relative min-h-[520px] flex-1 overflow-hidden rounded-[28px] border border-outline-variant/10 glass-panel p-6 shadow-2xl sm:rounded-[40px] sm:p-10 lg:p-16">
           <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/5 blur-[100px] pointer-events-none" />
 
           {isOrderLocked && (

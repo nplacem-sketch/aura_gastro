@@ -43,8 +43,8 @@ export default function PlansPopup({
   const plans = (verifiedCatalog.plans as PlanRecord[]).filter((item) => item.name !== 'ENTERPRISE');
 
   return (
-    <div className="fixed inset-0 z-[140] flex items-center justify-center bg-black/70 p-6 backdrop-blur-xl">
-      <div className="relative w-full max-w-6xl rounded-[36px] border border-outline-variant/10 bg-[#121413] p-8 shadow-2xl shadow-black/50 md:p-10">
+    <div className="fixed inset-0 z-[140] flex items-center justify-center bg-black/70 p-3 backdrop-blur-xl sm:p-6">
+      <div className="relative max-h-[90vh] w-full max-w-6xl overflow-y-auto rounded-[28px] border border-outline-variant/10 bg-[#121413] p-5 shadow-2xl shadow-black/50 sm:rounded-[36px] sm:p-8 md:p-10">
         <button
           type="button"
           onClick={onClose}
@@ -54,11 +54,11 @@ export default function PlansPopup({
           <AppIcon name="close" size={16} />
         </button>
 
-        <div className="mb-8 max-w-2xl">
+        <div className="mb-6 max-w-2xl sm:mb-8">
           <p className="mb-3 font-label text-[10px] uppercase tracking-[0.4em] text-secondary">
             Acceso restringido
           </p>
-          <h2 className="text-4xl font-headline text-on-surface">
+          <h2 className="text-3xl font-headline text-on-surface sm:text-4xl">
             Esta zona requiere <span className="italic text-secondary">plan {normalizedRequiredTier}</span>
           </h2>
           <p className="mt-4 text-sm font-light leading-relaxed text-on-surface-variant">
@@ -66,7 +66,7 @@ export default function PlansPopup({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-5">
           {plans.map((planItem) => {
             const monthlyPrice = Number(planItem.price_monthly_eur || 0);
             const discountedPrice = getDiscountedMonthlyPrice(planItem.name, monthlyPrice);
@@ -83,7 +83,7 @@ export default function PlansPopup({
             return (
               <div
                 key={planItem.name}
-                className={`rounded-[28px] border p-6 transition-all ${
+                className={`rounded-[24px] border p-5 transition-all sm:rounded-[28px] sm:p-6 ${
                   recommended ? 'border-secondary/40 bg-secondary/8' : 'border-outline-variant/10 bg-surface-container-high/10'
                 }`}
               >
@@ -92,7 +92,7 @@ export default function PlansPopup({
                     <p className="font-label text-[10px] uppercase tracking-[0.35em] text-secondary">
                       {planItem.name}
                     </p>
-                    <h3 className="mt-3 text-3xl font-headline text-on-surface">{planItem.name}</h3>
+                    <h3 className="mt-3 text-2xl font-headline text-on-surface sm:text-3xl">{planItem.name}</h3>
                   </div>
                   {recommended && (
                     <span className="rounded-full bg-secondary px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-black">
@@ -103,11 +103,11 @@ export default function PlansPopup({
 
                 <div className="mb-4">
                   {monthlyPrice === 0 ? (
-                    <div className="text-4xl font-headline text-on-surface">Gratis</div>
+                    <div className="text-3xl font-headline text-on-surface sm:text-4xl">Gratis</div>
                   ) : hasIntroMonthlyGift(planItem.name) ? (
                     <>
                       <div className="flex items-end gap-3">
-                        <span className="text-4xl font-headline text-on-surface">{formatEuro(discountedPrice)}</span>
+                        <span className="text-3xl font-headline text-on-surface sm:text-4xl">{formatEuro(discountedPrice)}</span>
                         <span className="pb-1 text-sm text-on-surface-variant">primer mes</span>
                       </div>
                       <p className="mt-2 text-xs text-on-surface-variant">
@@ -116,7 +116,7 @@ export default function PlansPopup({
                       </p>
                     </>
                   ) : (
-                    <div className="text-4xl font-headline text-on-surface">{formatEuro(monthlyPrice)}/mes</div>
+                    <div className="text-3xl font-headline text-on-surface sm:text-4xl">{formatEuro(monthlyPrice)}/mes</div>
                   )}
                 </div>
 

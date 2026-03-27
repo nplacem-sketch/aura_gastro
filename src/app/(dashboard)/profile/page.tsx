@@ -158,6 +158,7 @@ export default function ProfilePage() {
   const [draftMessage, setDraftMessage] = useState('');
   const [messagingMessage, setMessagingMessage] = useState('');
   const [sendingMessage, setSendingMessage] = useState(false);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   const isAdmin = role === 'ADMIN';
   const canUploadCv = isAdmin || plan === 'PREMIUM' || plan === 'ENTERPRISE';
@@ -394,6 +395,39 @@ export default function ProfilePage() {
       setMessagingMessage(error.message || 'No se pudo enviar el mensaje.');
     } finally {
       setSendingMessage(false);
+    }
+  }
+
+  async function openBillingPortal() {
+    if (!accessToken) return;
+
+    setPortalLoading(true);
+    setProfileMessage('');
+
+    try {
+      const res = await fetch('/api/plans/portal', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.url) {
+        window.location.href = data.url;
+        return;
+      }
+
+      if (res.status === 400) {
+        window.location.href = '/plans';
+        return;
+      }
+
+      throw new Error(data.error || 'No se pudo abrir el portal de cliente.');
+    } catch (error: any) {
+      setProfileMessage(error.message || 'No se pudo abrir el portal de cliente.');
+    } finally {
+      setPortalLoading(false);
     }
   }
 
@@ -679,10 +713,15 @@ export default function ProfilePage() {
                   Tu plan actual determina el acceso a cursos, recetario, laboratorio, fichas técnicas y mensajería profesional.
                 </p>
               </div>
-              <Link href="/plans" className="inline-flex items-center gap-3 rounded-2xl bg-secondary px-5 py-3 font-label text-[10px] uppercase tracking-widest text-on-secondary transition-all hover:opacity-90">
+              <button
+                type="button"
+                onClick={() => void openBillingPortal()}
+                disabled={portalLoading}
+                className="inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-secondary px-5 py-3 font-label text-[10px] uppercase tracking-widest text-on-secondary transition-all hover:opacity-90 disabled:cursor-wait disabled:opacity-70 md:w-auto"
+              >
                 <AppIcon name="workspace_premium" size={14} />
-                Gestionar plan
-              </Link>
+                {portalLoading ? 'Abriendo portal...' : 'Gestionar plan'}
+              </button>
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

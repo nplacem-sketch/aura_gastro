@@ -103,16 +103,16 @@ export default function PlansPage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl pb-20">
-      <header className="mb-16 text-center">
+    <div className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 sm:pb-20">
+      <header className="mb-12 text-center sm:mb-16">
         <p className="mb-4 text-center font-label text-[10px] uppercase tracking-[0.4em] text-secondary">
           Inversión en excelencia
         </p>
-        <h1 className="mb-10 text-7xl font-headline font-light text-on-surface">
+        <h1 className="mb-8 text-4xl font-headline font-light text-on-surface sm:mb-10 sm:text-6xl lg:text-7xl">
           Niveles de <span className="italic text-secondary">Acceso</span>
         </h1>
 
-        <div className="mb-12 flex items-center justify-center gap-6">
+        <div className="mb-10 flex items-center justify-center gap-4 sm:mb-12 sm:gap-6">
           <span
             className={`font-label text-xs uppercase tracking-widest transition-all ${
               billingCycle === 'monthly' ? 'font-bold text-secondary' : 'text-on-surface-variant/40'
@@ -145,7 +145,7 @@ export default function PlansPage() {
           </div>
         </div>
 
-        <p className="mx-auto max-w-2xl font-light leading-relaxed text-on-surface-variant">
+        <p className="mx-auto max-w-2xl text-sm font-light leading-relaxed text-on-surface-variant sm:text-base">
           Cada plan ya tiene contenido real asignado por nivel: recetas, ingredientes, técnicas y cursos con módulos,
           lecciones y examen. Los planes PRO mensual y PREMIUM mensual ya muestran descontados los {TRIAL_GIFT_DAYS} días de regalo del primer pago.
         </p>
@@ -157,7 +157,7 @@ export default function PlansPage() {
         )}
       </header>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
         {plans.map((planItem) => {
           const monthly = planItem.price_monthly_eur;
           const yearly = planItem.price_annual_eur;
@@ -170,7 +170,7 @@ export default function PlansPage() {
           return (
             <div
               key={planItem.name}
-              className={`glass-panel relative flex flex-col rounded-[40px] border p-10 transition-all duration-500 hover:scale-[1.03] ${
+              className={`glass-panel relative flex flex-col rounded-[32px] border p-6 transition-all duration-500 sm:rounded-[40px] sm:p-10 hover:scale-[1.03] ${
                 popular ? 'border-primary/40 ring-1 ring-primary/20' : 'border-outline-variant/10'
               }`}
             >
@@ -181,9 +181,9 @@ export default function PlansPage() {
               )}
 
               <div>
-                <h3 className="mb-2 font-headline text-3xl tracking-tight text-on-surface">{planItem.name}</h3>
+                <h3 className="mb-2 font-headline text-2xl tracking-tight text-on-surface sm:text-3xl">{planItem.name}</h3>
                 <div className="mb-1 flex items-baseline gap-1">
-                  <span className="text-5xl font-headline font-bold text-on-surface">
+                  <span className="text-4xl font-headline font-bold text-on-surface sm:text-5xl">
                     {billingCycle === 'monthly' && hasIntroMonthlyGift(planItem.name)
                       ? formatEuro(discountedMonthly)
                       : formatEuro(effectiveMonthly)}
@@ -211,7 +211,7 @@ export default function PlansPage() {
                   </div>
                 )}
 
-                <p className="mt-4 h-16 overflow-hidden text-xs font-light leading-relaxed text-on-surface-variant">
+                <p className="mt-4 min-h-[72px] text-xs font-light leading-relaxed text-on-surface-variant">
                   {normalizeDisplayText(planItem.description)}
                 </p>
               </div>
