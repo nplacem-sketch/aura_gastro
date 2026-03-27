@@ -26,7 +26,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Plan no valido para checkout.' }, { status: 400 });
   }
 
-  const priceId = resolveStripePlanPriceId(plan, billingCycle);
+  const { data: planConfig } = await identitySvc()
+    .from('plans')
+    .select('stripe_price_monthly,stripe_price_annual')
+    .eq('name', plan)
+    .maybeSingle();
+
+  const configuredDbPriceId =
+    billingCycle === 'yearly'
+      ? planConfig?.stripe_price_annual || null
+      : planConfig?.stripe_price_monthly || null;
+
+  const priceId = resolveStripePlanPriceId(plan, billingCycle) || configuredDbPriceId;
   if (!priceId) {
     return NextResponse.json(
       { error: `Falta configurar el price ID de Stripe para ${plan} (${billingCycle}).` },

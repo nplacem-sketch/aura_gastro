@@ -67,6 +67,7 @@ export default function AcademyPage() {
               }`}
             >
               <div className="relative h-48 overflow-hidden bg-surface-container-high sm:h-64">
+                <Link href={`/academy/${course.id}`} className="absolute inset-0 z-40" aria-label={`Abrir ${course.title}`} />
                 <div className="absolute inset-0 z-10 bg-gradient-to-t from-surface via-transparent to-transparent" />
                 <div className="absolute right-4 top-4 z-20 sm:right-6 sm:top-6">
                   <span className={`rounded-full border px-3 py-1 text-[9px] font-label uppercase tracking-widest shadow-xl sm:px-4 sm:py-1.5 ${course.tier === 'PREMIUM' ? 'border-secondary bg-secondary text-black' : course.tier === 'PRO' ? 'border-primary/40 bg-primary/20 text-primary' : 'border-transparent bg-surface-container-highest text-on-surface-variant'}`}>
@@ -107,15 +108,9 @@ export default function AcademyPage() {
                     <span className="text-xs font-headline text-on-surface">Plan {course.tier}</span>
                   </div>
 
-                  {unlocked ? (
-                    <Link href={`/academy/${course.id}`} className="inline-flex items-center justify-center gap-3 rounded-2xl bg-surface-container-high px-6 py-3 font-label text-[10px] font-bold uppercase tracking-widest transition-all hover:bg-secondary hover:text-black sm:px-8 sm:py-4">
-                      Acceder <AppIcon name="arrow_forward" size={16} />
-                    </Link>
-                  ) : (
-                    <div className="flex items-center gap-2 font-label text-[9px] uppercase tracking-widest text-on-surface-variant/40">
-                      Bloqueado <AppIcon name="help" size={14} />
-                    </div>
-                  )}
+                  <Link href={`/academy/${course.id}`} className="relative z-50 inline-flex items-center justify-center gap-3 rounded-2xl bg-surface-container-high px-6 py-3 font-label text-[10px] font-bold uppercase tracking-widest transition-all hover:bg-secondary hover:text-black sm:px-8 sm:py-4">
+                    {unlocked ? 'Acceder' : 'Ver detalle'} <AppIcon name="arrow_forward" size={16} />
+                  </Link>
                 </div>
               </div>
             </div>
