@@ -15,7 +15,7 @@ export default function DashboardLayout({
         <Sidebar />
         <div className="flex-1 md:ml-[280px] flex flex-col">
           <TopBar />
-          <main className="pt-24 pb-12 px-8 md:px-12 flex-1">
+          <main className="flex-1 px-4 pb-12 pt-24 sm:px-6 md:px-12">
             {children}
 
             <footer className="mt-20 pt-8 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-6 text-[#afcdc3]/30">

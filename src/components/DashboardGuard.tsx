@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 
 import { useAuth } from '@/lib/auth-context';
 
-const PUBLIC_DASHBOARD_ROUTES = new Set(['/plans']);
+const PUBLIC_DASHBOARD_ROUTES = new Set(['/', '/plans']);
 
 export default function DashboardGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();

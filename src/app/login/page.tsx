@@ -1,10 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import { useAuth } from '@/lib/auth-context';
-import AppIcon from '@/components/AppIcon';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
+
+import AppIcon from '@/components/AppIcon';
+import { useAuth } from '@/lib/auth-context';
+
+const registerOptions = [
+  {
+    type: 'BUSINESS',
+    title: 'Empresa',
+    description: 'Alta societaria con datos fiscales, facturacion y direccion empresarial obligatorios.',
+  },
+  {
+    type: 'FREELANCER',
+    title: 'Autonomo',
+    description: 'Registro profesional independiente con datos fiscales y operativos obligatorios.',
+  },
+];
 
 export default function LoginPage() {
   const { signIn } = useAuth();
@@ -15,6 +29,15 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const registerLinks = useMemo(
+    () =>
+      registerOptions.map((option) => ({
+        ...option,
+        href: `/register?accountType=${option.type}`,
+      })),
+    [],
+  );
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -24,79 +47,119 @@ export default function LoginPage() {
       router.push('/');
       router.refresh();
     } catch (err: any) {
-      setError(err.message || 'Error al iniciar sesión. Verifica tus credenciales.');
+      setError(err.message || 'Error al iniciar sesion. Verifica tus credenciales.');
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#121413] flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Visual background elements */}
-      <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-secondary/10 to-transparent pointer-events-none"></div>
-      <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#121413] p-6">
+      <div className="pointer-events-none absolute left-0 top-0 h-[500px] w-full bg-gradient-to-b from-secondary/10 to-transparent" />
+      <div className="pointer-events-none absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-primary/5 blur-[100px]" />
 
-      <div className="w-full max-w-lg glass-panel p-12 rounded-[48px] border border-outline-variant/10 relative z-10 animate-scale-in">
-        <div className="text-center mb-12 pt-4">
-          <h1 className="text-4xl font-headline font-light text-on-surface mb-2">Acceso <span className="italic text-secondary">Maestro</span></h1>
-          <p className="text-on-surface-variant font-light text-sm">Inicia sesión en el ecosistema Aura Gastronomy.</p>
-        </div>
-
-        {error && (
-          <div className="mb-8 p-4 bg-error/10 border border-error/20 rounded-2xl text-error text-xs font-light animate-shake flex items-center gap-3">
-            <AppIcon name="help" size={16} />
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div className="space-y-2">
-            <label className="font-label text-[10px] uppercase tracking-widest text-secondary ml-1">Email</label>
-            <input 
-              type="email" 
-              placeholder="tu@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-[#1a1c1b] border border-outline-variant/10 rounded-2xl py-4 px-6 text-on-surface font-light focus:outline-none focus:border-secondary/30 transition-all shadow-xl"
-              required
-            />
+      <div className="relative z-10 grid w-full max-w-5xl gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="glass-panel rounded-[48px] border border-outline-variant/10 p-12">
+          <div className="mb-12 pt-4 text-center">
+            <h1 className="mb-2 text-4xl font-headline font-light text-on-surface">
+              Acceso <span className="italic text-secondary">Maestro</span>
+            </h1>
+            <p className="text-sm font-light text-on-surface-variant">
+              Inicia sesion en el ecosistema Aura Gastronomy.
+            </p>
           </div>
 
-          <div className="space-y-2">
-            <label className="font-label text-[10px] uppercase tracking-widest text-secondary ml-1">Contraseña</label>
-            <div className="relative">
-              <input 
-                type={showPassword ? "text" : "password"} 
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#1a1c1b] border border-outline-variant/10 rounded-2xl py-4 px-6 pr-14 text-on-surface font-light focus:outline-none focus:border-secondary/30 transition-all shadow-xl"
+          {error && (
+            <div className="mb-8 flex items-center gap-3 rounded-2xl border border-error/20 bg-error/10 p-4 text-xs font-light text-error">
+              <AppIcon name="help" size={16} />
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-2">
+              <label className="ml-1 font-label text-[10px] uppercase tracking-widest text-secondary">Email</label>
+              <input
+                type="email"
+                placeholder="tu@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-2xl border border-outline-variant/10 bg-[#1a1c1b] px-6 py-4 font-light text-on-surface shadow-xl transition-all focus:border-secondary/30 focus:outline-none"
                 required
               />
-              <button 
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-secondary transition-colors"
-                aria-label={showPassword ? "Ocultar contraseña" : "Ver contraseña"}
-              >
-                <AppIcon name={showPassword ? "science" : "lock"} size={18} />
-              </button>
             </div>
+
+            <div className="space-y-2">
+              <label className="ml-1 font-label text-[10px] uppercase tracking-widest text-secondary">Contrasena</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full rounded-2xl border border-outline-variant/10 bg-[#1a1c1b] px-6 py-4 pr-14 font-light text-on-surface shadow-xl transition-all focus:border-secondary/30 focus:outline-none"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors hover:text-secondary"
+                  aria-label={showPassword ? 'Ocultar contrasena' : 'Ver contrasena'}
+                >
+                  <AppIcon name={showPassword ? 'science' : 'lock'} size={18} />
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-2xl bg-secondary py-5 font-label text-[10px] font-bold uppercase tracking-widest text-black shadow-xl shadow-secondary/10 transition-all hover:scale-[1.02] hover:shadow-secondary/20 disabled:opacity-50"
+            >
+              {loading ? 'Validando credenciales...' : 'Iniciar sesion'}
+            </button>
+          </form>
+
+          <div className="mt-8 border-t border-outline-variant/5 pt-8 text-center">
+            <p className="text-xs font-light text-on-surface-variant">
+              ¿No tienes cuenta?{' '}
+              <Link href="/register" className="ml-1 text-secondary hover:underline">
+                Registrate gratis
+              </Link>
+            </p>
           </div>
-
-          <button 
-            type="submit"
-            disabled={loading}
-            className="w-full bg-secondary text-black py-5 rounded-2xl font-label text-[10px] uppercase tracking-widest font-bold shadow-xl shadow-secondary/10 hover:shadow-secondary/20 transition-all scale-100 hover:scale-[1.02] active:scale-95 disabled:opacity-50"
-          >
-            {loading ? 'Validando Credenciales...' : 'Iniciar Sesión'}
-          </button>
-        </form>
-
-        <div className="mt-8 pt-8 border-t border-outline-variant/5 text-center">
-          <p className="text-on-surface-variant text-xs font-light">
-            ¿No tienes cuenta? <Link href="/register" className="text-secondary hover:underline ml-1">Regístrate gratis</Link>
-          </p>
         </div>
+
+        <aside className="glass-panel rounded-[40px] border border-outline-variant/10 p-10">
+          <p className="mb-4 font-label text-[10px] uppercase tracking-[0.4em] text-secondary">
+            Alta profesional
+          </p>
+          <h2 className="mb-4 text-3xl font-headline font-light text-on-surface">
+            Registro para <span className="italic text-secondary">empresa o autonomo</span>
+          </h2>
+          <p className="mb-8 text-sm font-light leading-relaxed text-on-surface-variant">
+            Si el usuario es profesional, el alta pedira todos los datos empresariales antes de crear la cuenta.
+          </p>
+
+          <div className="space-y-4">
+            {registerLinks.map((option) => (
+              <Link
+                key={option.type}
+                href={option.href}
+                className="block rounded-[28px] border border-outline-variant/10 bg-[#1a1c1b] p-6 transition-all hover:border-secondary/30 hover:bg-[#202221]"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-2xl font-headline text-on-surface">{option.title}</p>
+                    <p className="mt-3 text-sm font-light leading-relaxed text-on-surface-variant">
+                      {option.description}
+                    </p>
+                  </div>
+                  <AppIcon name="arrow_forward" size={18} className="mt-1 text-secondary" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </aside>
       </div>
     </div>
   );

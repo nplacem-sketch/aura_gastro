@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 import AppIcon from '@/components/AppIcon';
+import PlansPopup from '@/components/PlansPopup';
 import { canAccessTier } from '@/lib/access';
 import { useAuth } from '@/lib/auth-context';
 import { recipesDb } from '@/lib/supabase';
@@ -22,6 +23,7 @@ export default function RecipesPage() {
   const { plan, role } = useAuth();
   const [recipes, setRecipes] = useState<RecipeCard[]>([]);
   const [loading, setLoading] = useState(true);
+  const [lockedTier, setLockedTier] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchRecipes() {
@@ -58,7 +60,7 @@ export default function RecipesPage() {
           </h1>
         </div>
         <button className="glass-panel group flex items-center gap-2 rounded-lg border border-secondary/20 px-6 py-3 font-label text-[10px] uppercase tracking-widest text-secondary transition-all hover:bg-secondary/10">
-          Nueva creación
+          Nueva creaciÃ³n
           <AppIcon name="add" size={16} className="transition-transform group-hover:rotate-90" />
         </button>
       </header>
@@ -75,7 +77,16 @@ export default function RecipesPage() {
                   canAccess ? 'border-outline-variant/10 hover:border-secondary/30' : 'border-outline-variant/10 opacity-80'
                 }`}
               >
-                <Link href={canAccess ? `/recipes/${recipe.id}` : '/plans'} className="absolute inset-0 z-40" />
+                {canAccess ? (
+                  <Link href={`/recipes/${recipe.id}`} className="absolute inset-0 z-40" />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setLockedTier(recipe.tier)}
+                    className="absolute inset-0 z-40"
+                    aria-label={`Ver planes para ${recipe.title}`}
+                  />
+                )}
 
                 <div className="relative min-h-[240px] bg-gradient-to-br from-[#191c1a] via-[#151816] to-[#101211] p-8">
                   <div className="absolute inset-0 opacity-70">
@@ -105,7 +116,7 @@ export default function RecipesPage() {
                           Contenido exclusivo
                         </p>
                         <p className="text-[11px] font-light text-on-surface-variant">
-                          Mejora tu plan para acceder a esta creación de vanguardia.
+                          Mejora tu plan para acceder a esta creaciÃ³n de vanguardia.
                         </p>
                       </div>
                     )}
@@ -114,7 +125,7 @@ export default function RecipesPage() {
                       {recipe.title}
                     </h3>
                     <p className="mb-8 line-clamp-3 text-sm font-light text-on-surface-variant">
-                      {recipe.description || 'Ficha culinaria lista para producción y servicio.'}
+                      {recipe.description || 'Ficha culinaria lista para producciÃ³n y servicio.'}
                     </p>
 
                     <div className="mt-auto flex items-center justify-between border-t border-outline-variant/10 pt-6 font-label text-[9px] uppercase tracking-widest text-[#afcdc3]/40">
@@ -144,11 +155,13 @@ export default function RecipesPage() {
               aria-label="Recetario"
             />
             <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant">
-              El recetario está vacío. Comienza tu primera creación.
+              El recetario estÃ¡ vacÃ­o. Comienza tu primera creaciÃ³n.
             </p>
           </div>
         )}
       </div>
+
+      <PlansPopup open={Boolean(lockedTier)} onClose={() => setLockedTier(null)} requiredTier={lockedTier ?? 'PRO'} />
     </div>
   );
 }

@@ -2,8 +2,9 @@
 
 import { useMemo, useState } from 'react';
 
-import { useAuth } from '@/lib/auth-context';
 import AppIcon from '@/components/AppIcon';
+import PlansPopup from '@/components/PlansPopup';
+import { useAuth } from '@/lib/auth-context';
 
 type Ingredient = {
   id: string;
@@ -28,6 +29,7 @@ export default function EscandallosPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [showPlansPopup, setShowPlansPopup] = useState(false);
 
   const stats = useMemo(() => {
     const total_cost = ingredients.reduce((acc, ing) => acc + ing.gross_weight * ing.price_per_kg, 0);
@@ -74,7 +76,7 @@ export default function EscandallosPage() {
 
   async function saveRecipe() {
     if (!isPremium && !isAdmin) {
-      alert('Esta función es exclusiva para usuarios PREMIUM.');
+      setShowPlansPopup(true);
       return;
     }
 
@@ -162,7 +164,7 @@ export default function EscandallosPage() {
               <div>
                 <div class="brand">Aura Gastronomy</div>
                 <h1>${recipeName}</h1>
-                <div class="subtitle">Escandallo técnico listo para impresión en PDF en formato DIN A4.</div>
+                <div class="subtitle">Escandallo tecnico listo para impresion en PDF en formato DIN A4.</div>
               </div>
               <div class="meta">
                 <div>Fecha: ${new Date().toLocaleDateString('es-ES')}</div>
@@ -177,7 +179,7 @@ export default function EscandallosPage() {
                 <div class="value">${stats.total_cost.toFixed(2)} EUR</div>
               </div>
               <div class="card">
-                <div class="label">Coste por ración</div>
+                <div class="label">Coste por racion</div>
                 <div class="value">${stats.cost_per_serving.toFixed(2)} EUR</div>
               </div>
               <div class="card">
@@ -202,7 +204,7 @@ export default function EscandallosPage() {
             </table>
 
             <div class="footer">
-              <div>Documento técnico generado desde Aura Master.</div>
+              <div>Documento tecnico generado desde Aura Master.</div>
               <div>Imprimir o guardar como PDF.</div>
             </div>
           </div>
@@ -222,7 +224,7 @@ export default function EscandallosPage() {
     <div className="max-w-[1400px] mx-auto pb-20">
       <header className="mb-16 flex justify-between items-start">
         <div>
-          <p className="font-label text-secondary text-[10px] uppercase tracking-[0.4em] mb-4">Ingeniería de menú · Aura Master</p>
+          <p className="font-label text-secondary text-[10px] uppercase tracking-[0.4em] mb-4">Ingenieria de menu · Aura Master</p>
           <input
             value={recipeName}
             onChange={(e) => setRecipeName(e.target.value)}
@@ -303,7 +305,7 @@ export default function EscandallosPage() {
 
             <button onClick={addIngredient} className="w-full py-6 border-t border-outline-variant/10 text-secondary font-label text-[9px] uppercase tracking-widest hover:bg-secondary/5 transition-all flex items-center justify-center gap-3">
               <AppIcon name="add" size={14} />
-              Añadir ingrediente al proceso
+              AÃ±adir ingrediente al proceso
             </button>
           </div>
 
@@ -312,15 +314,15 @@ export default function EscandallosPage() {
 
         <div className="space-y-6">
           <div className="glass-panel p-10 rounded-[40px] border border-outline-variant/10 shadow-3xl bg-gradient-to-br from-surface-container-high/80 to-transparent">
-            <h3 className="font-headline text-2xl mb-10 italic">Resumen técnico</h3>
+            <h3 className="font-headline text-2xl mb-10 italic">Resumen tÃ©cnico</h3>
 
             <div className="space-y-8 mb-12">
               <div className="flex justify-between items-center">
-                <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Coste total de producción</p>
+                <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Coste total de producciÃ³n</p>
                 <p className="text-4xl font-headline text-on-surface font-light">{stats.total_cost.toFixed(2)} EUR</p>
               </div>
               <div className="flex justify-between items-center border-y border-outline-variant/10 py-6">
-                <p className="font-label text-[10px] uppercase tracking-widest text-secondary font-bold">Coste por ración</p>
+                <p className="font-label text-[10px] uppercase tracking-widest text-secondary font-bold">Coste por raciÃ³n</p>
                 <p className="text-5xl font-headline text-secondary tracking-tighter">{stats.cost_per_serving.toFixed(2)} EUR</p>
               </div>
               <div className="flex justify-between items-center">
@@ -348,6 +350,8 @@ export default function EscandallosPage() {
           </div>
         </div>
       </main>
+
+      <PlansPopup open={showPlansPopup} onClose={() => setShowPlansPopup(false)} requiredTier="PREMIUM" />
     </div>
   );
 }

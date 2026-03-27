@@ -1,0 +1,150 @@
+'use client';
+
+import Link from 'next/link';
+
+import AppIcon from '@/components/AppIcon';
+import verifiedCatalog from '@/data/verified-catalog.json';
+import { canAccessTier, normalizePlan } from '@/lib/access';
+import { useAuth } from '@/lib/auth-context';
+import { formatEuro, getDiscountedMonthlyPrice, getMonthlyGiftSavings, hasIntroMonthlyGift, TRIAL_GIFT_DAYS } from '@/lib/pricing';
+
+type PlanRecord = {
+  name: string;
+  price_monthly_eur: number;
+  price_annual_eur: number;
+  description: string;
+  features: string[];
+};
+
+export default function PlansPopup({
+  open,
+  onClose,
+  requiredTier = 'PRO',
+}: {
+  open: boolean;
+  onClose: () => void;
+  requiredTier?: string;
+}) {
+  const { user, plan, role } = useAuth();
+
+  if (!open) return null;
+
+  const normalizedRequiredTier = normalizePlan(requiredTier);
+  const normalizedCurrentPlan = normalizePlan(plan);
+  const plans = (verifiedCatalog.plans as PlanRecord[]).filter((item) => item.name !== 'ENTERPRISE');
+
+  return (
+    <div className="fixed inset-0 z-[140] flex items-center justify-center bg-black/70 p-6 backdrop-blur-xl">
+      <div className="relative w-full max-w-6xl rounded-[36px] border border-outline-variant/10 bg-[#121413] p-8 shadow-2xl shadow-black/50 md:p-10">
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-5 top-5 rounded-full border border-outline-variant/10 p-2 text-on-surface-variant transition-all hover:border-secondary/30 hover:text-secondary"
+          aria-label="Cerrar popup de planes"
+        >
+          <AppIcon name="close" size={16} />
+        </button>
+
+        <div className="mb-8 max-w-2xl">
+          <p className="mb-3 font-label text-[10px] uppercase tracking-[0.4em] text-secondary">
+            Acceso restringido
+          </p>
+          <h2 className="text-4xl font-headline text-on-surface">
+            Esta zona requiere <span className="italic text-secondary">plan {normalizedRequiredTier}</span>
+          </h2>
+          <p className="mt-4 text-sm font-light leading-relaxed text-on-surface-variant">
+            Si quieres entrar en las áreas PRO o PREMIUM, elige uno de los planes disponibles. En PRO mensual y PREMIUM mensual ya verás descontados los {TRIAL_GIFT_DAYS} días de regalo del primer pago.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+          {plans.map((planItem) => {
+            const monthlyPrice = Number(planItem.price_monthly_eur || 0);
+            const discountedPrice = getDiscountedMonthlyPrice(planItem.name, monthlyPrice);
+            const savings = getMonthlyGiftSavings(planItem.name, monthlyPrice);
+            const current = normalizedCurrentPlan === planItem.name || (role === 'ADMIN' && planItem.name === 'PREMIUM');
+            const recommended = planItem.name === normalizedRequiredTier || (normalizedRequiredTier === 'PREMIUM' && planItem.name === 'PREMIUM');
+            const canEnter = canAccessTier(plan, planItem.name, role);
+
+            return (
+              <div
+                key={planItem.name}
+                className={`rounded-[28px] border p-6 transition-all ${
+                  recommended ? 'border-secondary/40 bg-secondary/8' : 'border-outline-variant/10 bg-surface-container-high/10'
+                }`}
+              >
+                <div className="mb-5 flex items-start justify-between gap-4">
+                  <div>
+                    <p className="font-label text-[10px] uppercase tracking-[0.35em] text-secondary">
+                      {planItem.name}
+                    </p>
+                    <h3 className="mt-3 text-3xl font-headline text-on-surface">{planItem.name}</h3>
+                  </div>
+                  {recommended && (
+                    <span className="rounded-full bg-secondary px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-black">
+                      Recomendado
+                    </span>
+                  )}
+                </div>
+
+                <div className="mb-4">
+                  {monthlyPrice === 0 ? (
+                    <div className="text-4xl font-headline text-on-surface">Gratis</div>
+                  ) : hasIntroMonthlyGift(planItem.name) ? (
+                    <>
+                      <div className="flex items-end gap-3">
+                        <span className="text-4xl font-headline text-on-surface">{formatEuro(discountedPrice)}</span>
+                        <span className="pb-1 text-sm text-on-surface-variant">primer mes</span>
+                      </div>
+                      <p className="mt-2 text-xs text-on-surface-variant">
+                        <span className="mr-2 line-through opacity-70">{formatEuro(monthlyPrice)}/mes</span>
+                        Ahorras {formatEuro(savings)} con {TRIAL_GIFT_DAYS} días de regalo.
+                      </p>
+                    </>
+                  ) : (
+                    <div className="text-4xl font-headline text-on-surface">{formatEuro(monthlyPrice)}/mes</div>
+                  )}
+                </div>
+
+                <p className="mb-5 min-h-[72px] text-sm font-light leading-relaxed text-on-surface-variant">
+                  {planItem.description}
+                </p>
+
+                <div className="mb-6 space-y-3">
+                  {planItem.features.map((feature) => (
+                    <div key={feature} className="flex items-start gap-3 text-xs text-on-surface-variant">
+                      <AppIcon name="check_circle" size={14} className="mt-0.5 text-secondary" />
+                      <span>{feature}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <Link
+                  href={
+                    current
+                      ? '/dashboard'
+                      : monthlyPrice === 0
+                        ? user
+                          ? '/dashboard'
+                          : '/register'
+                        : '/plans'
+                  }
+                  onClick={onClose}
+                  className={`inline-flex w-full items-center justify-center rounded-2xl px-5 py-4 font-label text-[10px] uppercase tracking-widest transition-all ${
+                    current
+                      ? 'bg-surface-container-highest text-on-surface-variant'
+                      : recommended || !canEnter
+                        ? 'bg-secondary text-black hover:opacity-90'
+                        : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'
+                  }`}
+                >
+                  {current ? 'Tu plan actual' : monthlyPrice === 0 ? (user ? 'Ir al dashboard' : 'Empezar gratis') : 'Ver planes'}
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}

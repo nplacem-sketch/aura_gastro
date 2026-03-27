@@ -6,6 +6,7 @@ import AppIcon from '@/components/AppIcon';
 import verifiedCatalog from '@/data/verified-catalog.json';
 import { normalizePlan } from '@/lib/access';
 import { useAuth } from '@/lib/auth-context';
+import { formatEuro, getDiscountedMonthlyPrice, getMonthlyGiftSavings, hasIntroMonthlyGift, TRIAL_GIFT_DAYS } from '@/lib/pricing';
 
 type PlanRecord = {
   name: string;
@@ -55,7 +56,7 @@ export default function PlansPage() {
     <div className="max-w-7xl mx-auto pb-20">
       <header className="mb-16 text-center">
         <p className="mb-4 text-center font-label text-[10px] uppercase tracking-[0.4em] text-secondary">
-          Inversión en Excelencia
+          InversiÃ³n en Excelencia
         </p>
         <h1 className="mb-10 text-7xl font-headline font-light text-on-surface">
           Niveles de <span className="italic text-secondary">Acceso</span>
@@ -94,8 +95,8 @@ export default function PlansPage() {
         </div>
 
         <p className="mx-auto max-w-2xl font-light leading-relaxed text-on-surface-variant">
-          Cada plan ya tiene contenido real asignado por nivel: recetas, ingredientes, técnicas y cursos con módulos,
-          lecciones y examen.
+          Cada plan ya tiene contenido real asignado por nivel: recetas, ingredientes, tÃ©cnicas y cursos con mÃ³dulos,
+          lecciones y examen. Los planes PRO mensual y PREMIUM mensual ya muestran descontados los {TRIAL_GIFT_DAYS} dÃ­as de regalo del primer pago.
         </p>
       </header>
 
@@ -104,6 +105,8 @@ export default function PlansPage() {
           const monthly = planItem.price_monthly_eur;
           const yearly = planItem.price_annual_eur;
           const effectiveMonthly = billingCycle === 'monthly' ? monthly : Math.round(yearly / 12);
+          const discountedMonthly = getDiscountedMonthlyPrice(planItem.name, monthly);
+          const savings = getMonthlyGiftSavings(planItem.name, monthly);
           const current = currentPlan === planItem.name || (role === 'ADMIN' && planItem.name === 'ENTERPRISE');
           const popular = planItem.name === 'PRO';
 
@@ -116,21 +119,37 @@ export default function PlansPage() {
             >
               {popular && (
                 <span className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1.5 font-label text-[9px] uppercase tracking-widest text-black shadow-lg">
-                  Más Popular
+                  MÃ¡s Popular
                 </span>
               )}
 
               <div className="mb-0">
                 <h3 className="mb-2 font-headline text-3xl tracking-tight text-on-surface">{planItem.name}</h3>
                 <div className="mb-1 flex items-baseline gap-1">
-                  <span className="text-5xl font-headline font-bold text-on-surface">{effectiveMonthly}€</span>
+                  <span className="text-5xl font-headline font-bold text-on-surface">
+                    {billingCycle === 'monthly' && hasIntroMonthlyGift(planItem.name)
+                      ? formatEuro(discountedMonthly)
+                      : formatEuro(effectiveMonthly)}
+                  </span>
                   <span className="text-sm font-light text-on-surface-variant">/ mes</span>
                 </div>
+
+                {billingCycle === 'monthly' && hasIntroMonthlyGift(planItem.name) && (
+                  <div className="mb-4">
+                    <p className="animate-fade-in text-[10px] font-bold uppercase tracking-widest text-secondary">
+                      Primer mes con {TRIAL_GIFT_DAYS} dÃ­as descontados
+                    </p>
+                    <p className="mt-2 text-xs text-on-surface-variant">
+                      <span className="mr-2 line-through">{formatEuro(monthly)}/mes</span>
+                      Ahorro de {formatEuro(savings)} sobre el precio mensual.
+                    </p>
+                  </div>
+                )}
 
                 {billingCycle === 'yearly' && planItem.name !== 'FREE' && (
                   <div className="mb-4">
                     <p className="animate-fade-in text-[10px] font-bold uppercase tracking-widest text-secondary">
-                      Pago único de {yearly}€ / año
+                      Pago Ãºnico de {formatEuro(yearly)} / aÃ±o
                     </p>
                   </div>
                 )}

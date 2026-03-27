@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useEffect, useMemo, useState } from 'react';
 
 import AppIcon from '@/components/AppIcon';
 import { useAuth } from '@/lib/auth-context';
@@ -59,8 +59,8 @@ export default function TopBar() {
   const hasNotifications = useMemo(() => unreadCount > 0, [unreadCount]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex h-24 items-center justify-between bg-gradient-to-b from-[#121413] to-transparent px-12 transition-all md:left-[280px]">
-      <div className="max-w-md flex-1">
+    <header className="fixed top-0 left-0 right-0 z-50 flex h-20 items-center justify-between bg-gradient-to-b from-[#121413] to-transparent pl-16 pr-4 transition-all sm:pr-6 md:left-[280px] md:h-24 md:px-12">
+      <div className="hidden max-w-md flex-1 sm:block">
         <div className="group relative">
           <AppIcon
             name="search"
@@ -75,18 +75,18 @@ export default function TopBar() {
         </div>
       </div>
 
-      <div className="ml-auto flex items-center gap-4">
+      <div className="ml-auto flex items-center gap-2 sm:gap-4">
         {!user ? (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Link
               href="/login"
               className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant transition-all hover:text-secondary"
             >
-              Iniciar sesión
+              Iniciar sesion
             </Link>
             <Link
               href="/register"
-              className="rounded-full bg-secondary px-6 py-2.5 font-label text-[10px] font-bold uppercase tracking-widest text-black shadow-lg shadow-secondary/10 transition-all hover:bg-secondary/80"
+              className="rounded-full bg-secondary px-4 py-2.5 font-label text-[10px] font-bold uppercase tracking-widest text-black shadow-lg shadow-secondary/10 transition-all hover:bg-secondary/80 sm:px-6"
             >
               Registrarse
             </Link>
@@ -95,7 +95,7 @@ export default function TopBar() {
           <>
             <Link
               href="/profile#mensajeria-privada"
-              className="inline-flex items-center gap-3 rounded-full border border-outline-variant/10 px-4 py-2 text-[11px] text-on-surface-variant transition-all hover:border-secondary/30 hover:text-secondary"
+              className="inline-flex items-center gap-2 rounded-full border border-outline-variant/10 px-3 py-2 text-[11px] text-on-surface-variant transition-all hover:border-secondary/30 hover:text-secondary sm:gap-3 sm:px-4"
             >
               <AppIcon name="forum" size={16} />
               <span className="hidden sm:inline">Mensajes</span>
@@ -116,7 +116,7 @@ export default function TopBar() {
               </button>
 
               {notificationsOpen && (
-                <div className="absolute right-0 top-10 w-[360px] rounded-[28px] border border-outline-variant/10 bg-[#171918] p-4 shadow-2xl shadow-black/40">
+                <div className="absolute right-0 top-10 w-[min(360px,calc(100vw-24px))] rounded-[28px] border border-outline-variant/10 bg-[#171918] p-4 shadow-2xl shadow-black/40">
                   <div className="mb-3 flex items-center justify-between px-2">
                     <div>
                       <p className="font-label text-[10px] uppercase tracking-[0.3em] text-secondary">
@@ -172,7 +172,7 @@ export default function TopBar() {
 
             <Link
               href="/profile"
-              className="group ml-2 flex cursor-pointer items-center gap-3 rounded-full px-3 py-1.5 transition-all hover:bg-surface-container-low/50"
+              className="group ml-1 flex cursor-pointer items-center gap-2 rounded-full px-2 py-1.5 transition-all hover:bg-surface-container-low/50 sm:ml-2 sm:gap-3 sm:px-3"
             >
               <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border-2 border-transparent bg-surface-container-highest transition-all group-hover:border-secondary/50">
                 {user.user_metadata?.avatar_url ? (

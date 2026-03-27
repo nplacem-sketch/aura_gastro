@@ -144,7 +144,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setPlan('FREE');
     setRole('USER');
     propagateSession(null);
-    window.location.href = '/login';
+    window.location.href = '/';
   };
 
   const isPro = plan !== 'FREE';
