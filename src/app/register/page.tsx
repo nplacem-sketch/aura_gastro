@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 
 import AppIcon from '@/components/AppIcon';
 import { useAuth } from '@/lib/auth-context';
@@ -15,7 +15,7 @@ const ACCOUNT_OPTIONS: Array<{ value: AccountType; label: string; description: s
   { value: 'FREELANCER', label: 'Autonomo', description: 'Alta profesional independiente con datos fiscales.' },
 ];
 
-export default function RegisterPage() {
+function RegisterPageContent() {
   const { signUp } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -290,5 +290,13 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#121413]" />}>
+      <RegisterPageContent />
+    </Suspense>
   );
 }
