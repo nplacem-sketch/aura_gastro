@@ -126,6 +126,16 @@ function truncate(text: string, max = 120) {
   return `${text.slice(0, max - 1)}…`;
 }
 
+async function readApiResponse<T>(res: Response): Promise<T> {
+  const text = await res.text();
+
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new Error(text || 'Respuesta no valida del servidor.');
+  }
+}
+
 async function fileToDataUrl(file: File) {
   return await new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
@@ -182,7 +192,7 @@ export default function ProfilePage() {
         ]);
 
         if (!profileRes.ok) throw new Error('No se pudo cargar el perfil.');
-        const nextProfile = await profileRes.json();
+        const nextProfile = await readApiResponse<ProfileDetails>(profileRes);
         if (!cancelled) setProfile(nextProfile);
 
         if (requestsRes) {
@@ -232,7 +242,6 @@ export default function ProfilePage() {
       await supabase().auth.updateUser({
         data: {
           full_name: nextProfile.full_name,
-          avatar_url: nextProfile.avatar_url,
         },
       });
     } catch {}
@@ -253,7 +262,7 @@ export default function ProfilePage() {
         },
         body: JSON.stringify(payload),
       });
-      const data = await res.json();
+      const data = await readApiResponse<ProfileDetails & { error?: string }>(res);
       if (!res.ok) throw new Error(data.error || 'No se pudo actualizar el perfil.');
 
       setProfile(data);
@@ -318,7 +327,7 @@ export default function ProfilePage() {
 
       setRequests((current) => [data.request, ...current]);
       setRequestForm({ type: 'COURSE', title: '', quantity: 1, targetPlans: ['PREMIUM'], details: '' });
-      setRequestMessage('Solicitud registrada en la cola editorial.');
+      setRequestMessage(data.message || 'Solicitud procesada correctamente.');
     } catch (error: any) {
       setRequestMessage(error.message || 'No se pudo registrar la solicitud.');
     } finally {
@@ -748,12 +757,12 @@ export default function ProfilePage() {
                 <div>
                   <h3 className="text-2xl font-headline text-on-surface">Solicitar nuevo contenido</h3>
                   <p className="mt-2 text-sm font-light text-on-surface-variant">
-                    Desde aquí puedes pedir más cursos, recetas, ingredientes, técnicas, fichas técnicas o escandallos para la siguiente oleada editorial.
+                    Desde aquí puedes pedir más cursos, recetas, ingredientes, técnicas, fichas técnicas o escandallos, y saltar al panel para crear, bloquear o borrar miembros.
                   </p>
                 </div>
                 <Link href="/admin" className="inline-flex items-center gap-3 rounded-2xl border border-secondary/20 px-5 py-3 font-label text-[10px] uppercase tracking-widest text-secondary transition-all hover:bg-secondary/10">
                   <AppIcon name="arrow_forward" size={14} />
-                  Gestión avanzada
+                  Miembros y empresas
                 </Link>
               </div>
 

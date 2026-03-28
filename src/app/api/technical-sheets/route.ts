@@ -72,7 +72,6 @@ export async function POST(req: Request) {
     yield_text: body.yield_text || null,
     ingredients,
     method,
-    plating_notes: body.plating_notes || null,
     allergens: Array.isArray(body.allergens) ? body.allergens : [],
     cost_summary: body.cost_summary && typeof body.cost_summary === 'object' ? body.cost_summary : {},
     source_recipe_id: body.source_recipe_id || null,

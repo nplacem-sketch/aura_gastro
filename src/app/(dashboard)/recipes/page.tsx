@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import AppIcon from '@/components/AppIcon';
+import LockedContentOverlay from '@/components/LockedContentOverlay';
 import PlansPopup from '@/components/PlansPopup';
 import { canAccessTier } from '@/lib/access';
 import { useAuth } from '@/lib/auth-context';
@@ -61,7 +62,7 @@ export default function RecipesPage() {
           </h1>
         </div>
         <button className="glass-panel group flex items-center gap-2 rounded-lg border border-secondary/20 px-6 py-3 font-label text-[10px] uppercase tracking-widest text-secondary transition-all hover:bg-secondary/10">
-          Nueva creación
+          Nueva creacion
           <AppIcon name="add" size={16} className="transition-transform group-hover:rotate-90" />
         </button>
       </header>
@@ -101,7 +102,9 @@ export default function RecipesPage() {
                         className={`rounded-md px-2 py-0.5 font-label text-[8px] uppercase tracking-widest ${
                           recipe.tier === 'PREMIUM'
                             ? 'bg-secondary text-on-secondary'
-                            : 'bg-surface-container-highest text-on-surface'
+                            : recipe.tier === 'PRO'
+                              ? 'bg-primary/20 text-primary'
+                              : 'bg-surface-container-highest text-on-surface'
                         }`}
                       >
                         {recipe.tier}
@@ -112,21 +115,18 @@ export default function RecipesPage() {
                     </div>
 
                     {!canAccess && (
-                      <div className="mb-6 rounded-2xl border border-secondary/20 bg-black/30 p-4 text-center backdrop-blur-sm">
-                        <p className="mb-2 font-label text-[10px] uppercase tracking-[0.2em] text-on-surface">
-                          Contenido exclusivo
-                        </p>
-                        <p className="text-[11px] font-light text-on-surface-variant">
-                          Mejora tu plan para acceder a esta creación de vanguardia.
-                        </p>
-                      </div>
+                      <LockedContentOverlay
+                        tier={recipe.tier}
+                        title="Receta reservada"
+                        description="Esta elaboracion pertenece a un plan superior. Al tocarla podras suscribirte desde el popup."
+                      />
                     )}
 
                     <h3 className="mb-4 font-headline text-2xl leading-tight text-on-surface transition-colors group-hover:text-secondary">
                       {normalizeDisplayText(recipe.title)}
                     </h3>
                     <p className="mb-8 line-clamp-3 text-sm font-light text-on-surface-variant">
-                      {normalizeDisplayText(recipe.description) || 'Ficha culinaria lista para producción y servicio.'}
+                      {normalizeDisplayText(recipe.description) || 'Ficha culinaria lista para produccion y servicio.'}
                     </p>
 
                     <div className="mt-auto flex items-center justify-between border-t border-outline-variant/10 pt-6 font-label text-[9px] uppercase tracking-widest text-[#afcdc3]/40">
@@ -156,7 +156,7 @@ export default function RecipesPage() {
               aria-label="Recetario"
             />
             <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant">
-              El recetario está vacío. Comienza tu primera creación.
+              El recetario esta vacio. Comienza tu primera creacion.
             </p>
           </div>
         )}

@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 
 import AppIcon from '@/components/AppIcon';
+import LockedContentOverlay from '@/components/LockedContentOverlay';
+import PlansPopup from '@/components/PlansPopup';
 import { canAccessTier } from '@/lib/access';
 import { useAuth } from '@/lib/auth-context';
 import { labDb } from '@/lib/supabase';
@@ -31,6 +33,7 @@ export default function LabPage() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('ALL');
   const [selected, setSelected] = useState<Ingredient | null>(null);
+  const [lockedTier, setLockedTier] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const PAGE_SIZE = 48;
 
@@ -97,7 +100,10 @@ export default function LabPage() {
   }
 
   async function selectIngredient(item: Ingredient) {
-    if (!canAccessTier(plan, resolveTier(item), role)) return;
+    if (!canAccessTier(plan, resolveTier(item), role)) {
+      setLockedTier(resolveTier(item));
+      return;
+    }
 
     setSelected(item);
 
@@ -340,11 +346,11 @@ export default function LabPage() {
             >
               <div className="absolute top-0 left-0 w-full h-1 bg-secondary/0 group-hover:bg-secondary/40 animate-pulse transition-all"></div>
               {!accessible && (
-                <div className="absolute inset-0 z-20 bg-black/60 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
-                  <AppIcon name="lock" size={28} className="text-secondary mb-3 opacity-60" />
-                  <p className="font-label text-[10px] uppercase tracking-widest text-on-surface mb-2">Acceso {accessTier}</p>
-                  <p className="text-[10px] text-on-surface-variant">Actualiza tu plan para abrir esta ficha validada.</p>
-                </div>
+                <LockedContentOverlay
+                  tier={accessTier}
+                  title="Ingrediente no accesible con tu plan"
+                  description="La ficha sigue visible, pero al intentar abrirla mostraremos los planes para activarla."
+                />
               )}
 
               <div className="flex justify-between items-start mb-8">
@@ -403,6 +409,8 @@ export default function LabPage() {
           <span className="font-label text-[10px] uppercase tracking-[0.5em]">Nuevo protocolo</span>
         </div>
       </div>
+
+      <PlansPopup open={Boolean(lockedTier)} onClose={() => setLockedTier(null)} requiredTier={lockedTier ?? 'PRO'} />
     </div>
   );
 }

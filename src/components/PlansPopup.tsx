@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import AppIcon from '@/components/AppIcon';
@@ -36,6 +37,17 @@ export default function PlansPopup({
   const { user, plan, role } = useAuth();
   const router = useRouter();
 
+  useEffect(() => {
+    if (!open) return;
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') onClose();
+    }
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [onClose, open]);
+
   if (!open) return null;
 
   const normalizedRequiredTier = normalizePlan(requiredTier);
@@ -43,8 +55,14 @@ export default function PlansPopup({
   const plans = (verifiedCatalog.plans as PlanRecord[]).filter((item) => item.name !== 'ENTERPRISE');
 
   return (
-    <div className="fixed inset-0 z-[140] flex items-center justify-center bg-black/70 p-3 backdrop-blur-xl sm:p-6">
-      <div className="relative max-h-[90vh] w-full max-w-6xl overflow-y-auto rounded-[28px] border border-outline-variant/10 bg-[#121413] p-5 shadow-2xl shadow-black/50 sm:rounded-[36px] sm:p-8 md:p-10">
+    <div
+      className="fixed inset-0 z-[140] flex items-center justify-center bg-black/70 p-3 backdrop-blur-xl sm:p-6"
+      onClick={onClose}
+    >
+      <div
+        className="relative max-h-[90vh] w-full max-w-6xl overflow-y-auto rounded-[28px] border border-outline-variant/10 bg-[#121413] p-5 shadow-2xl shadow-black/50 sm:rounded-[36px] sm:p-8 md:p-10"
+        onClick={(event) => event.stopPropagation()}
+      >
         <button
           type="button"
           onClick={onClose}

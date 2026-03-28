@@ -181,18 +181,6 @@ export default function RecipeDetailPage() {
         </div>
 
         <div className="space-y-8">
-          <div className="rounded-3xl border border-secondary/10 glass-panel p-8">
-            <h4 className="mb-6 font-label text-[10px] uppercase tracking-widest text-secondary">
-              Ficha de maridaje
-            </h4>
-            <p className="mb-6 text-sm font-light leading-relaxed text-on-surface-variant">
-              Como maridaje recomendado para esta creacion sugerimos una seleccion basada en el perfil organoleptico y los contrastes tecnicos.
-            </p>
-            <button className="w-full rounded-xl border border-secondary/30 py-4 font-label text-[10px] uppercase tracking-widest text-secondary transition-all hover:bg-secondary/10">
-              Consultar maridaje
-            </button>
-          </div>
-
           <div className="rounded-3xl border border-outline-variant/10 glass-panel p-8">
             <h4 className="mb-6 font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
               Registro de autoria

@@ -17,6 +17,23 @@ async function runIdentitySql(statements) {
   }
 }
 
+function sanitizeUserMetadata(metadata) {
+  if (!metadata) {
+    return {
+      avatar_url: null,
+      cv_url: null,
+      cv_name: null,
+    };
+  }
+  const { avatar_url: _avatarUrl, cv_url: _cvUrl, cv_name: _cvName, ...rest } = metadata;
+  return {
+    ...rest,
+    avatar_url: null,
+    cv_url: null,
+    cv_name: null,
+  };
+}
+
 async function setupAdmin() {
   const adminClient = createClient(
     process.env.SUPABASE_IDENTITY_URL || process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -33,6 +50,10 @@ async function setupAdmin() {
   const email = 'admin@auragastronomy.com';
   const password = 'V@llado212g';
   const fullName = 'Jesus Fernandez (ADMIN)';
+  const role = 'ADMIN';
+  const plan = 'ENTERPRISE';
+  const status = 'ACTIVE';
+  const subscriptionStatus = 'active';
 
   console.log('--- Configurando acceso total para la cuenta administradora ---');
 
@@ -48,7 +69,7 @@ async function setupAdmin() {
       password,
       email_confirm: true,
       user_metadata: { full_name: fullName },
-      app_metadata: { role: 'ADMIN', plan: 'ENTERPRISE' },
+      app_metadata: { role, plan, status, subscription_status: subscriptionStatus },
     });
     if (error) throw error;
     user = data.user;
@@ -57,8 +78,8 @@ async function setupAdmin() {
     const { data, error } = await adminClient.auth.admin.updateUserById(user.id, {
       password,
       email_confirm: true,
-      user_metadata: { ...(user.user_metadata || {}), full_name: fullName },
-      app_metadata: { ...(user.app_metadata || {}), role: 'ADMIN', plan: 'ENTERPRISE' },
+      user_metadata: { ...sanitizeUserMetadata(user.user_metadata || {}), full_name: fullName },
+      app_metadata: { ...(user.app_metadata || {}), role, plan, status, subscription_status: subscriptionStatus },
     });
     if (error) throw error;
     user = data.user;
@@ -68,8 +89,10 @@ async function setupAdmin() {
     id: user.id,
     email,
     full_name: fullName,
-    role: 'ADMIN',
-    plan: 'ENTERPRISE',
+    role,
+    plan,
+    status,
+    subscription_status: subscriptionStatus,
   };
 
   const { error: profileError } = await adminClient.from('profiles').upsert(profilePayload, { onConflict: 'id' });
@@ -83,7 +106,7 @@ async function setupAdmin() {
 
   const { data: profileCheck, error: profileCheckError } = await adminClient
     .from('profiles')
-    .select('id,email,role,plan')
+    .select('id,email,role,plan,status,subscription_status')
     .eq('id', user.id)
     .single();
 

@@ -35,7 +35,7 @@ export default function PlansPage() {
   useEffect(() => {
     async function fetchPlans() {
       try {
-        const res = await fetch('/api/plans', { cache: 'no-store' });
+        const res = await fetch('/api/plans');
         if (!res.ok) return;
 
         const data = await res.json();

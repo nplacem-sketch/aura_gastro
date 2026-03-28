@@ -14,7 +14,6 @@ type TechnicalSheet = {
   yield_text?: string | null;
   ingredients: Array<{ name?: string; amount?: string; quantity?: string; unit?: string }>;
   method: string;
-  plating_notes?: string | null;
   allergens?: string[] | null;
   intolerances?: string[] | null;
   cost_summary?: Record<string, any> | null;
@@ -37,7 +36,6 @@ const emptyForm = {
   yield_text: '10 PAX',
   ingredientsText: '',
   method: '',
-  plating_notes: '',
   allergens: '',
 };
 
@@ -119,7 +117,6 @@ export default function FichasTecnicasPage() {
         yield_text: form.yield_text,
         ingredients,
         method: form.method,
-        plating_notes: form.plating_notes,
         allergens: form.allergens.split(',').map((value) => value.trim()).filter(Boolean),
       }),
     });
@@ -152,7 +149,6 @@ export default function FichasTecnicasPage() {
         .map((item) => `${item.name || 'Ingrediente'}: ${item.gross_weight || 0} ${item.unit || 'kg'}`)
         .join('\n'),
       method,
-      plating_notes: '',
       allergens: '',
     });
     setShowCreate(true);
@@ -216,18 +212,12 @@ export default function FichasTecnicasPage() {
                 <div>Rendimiento: ${sheet.yield_text || 'Pendiente'}</div>
               </div>
             </div>
-            <div class="grid">
-              <div class="card">
-                <div class="label">Ingredientes</div>
-                <table>
-                  <thead><tr><th>Ingrediente</th><th>Cantidad</th></tr></thead>
-                  <tbody>${ingredientsRows}</tbody>
-                </table>
-              </div>
-              <div class="card">
-                <div class="label">Acabado y servicio</div>
-                <div class="step-text">${sheet.plating_notes || 'Sin observaciones.'}</div>
-              </div>
+            <div class="card" style="margin-bottom: 8mm;">
+              <div class="label">Ingredientes</div>
+              <table>
+                <thead><tr><th>Ingrediente</th><th>Cantidad</th></tr></thead>
+                <tbody>${ingredientsRows}</tbody>
+              </table>
             </div>
             <div class="card">
               <div class="label">Método de elaboración</div>
@@ -285,7 +275,6 @@ export default function FichasTecnicasPage() {
             <input value={form.plan_tier} onChange={(e) => setForm((prev) => ({ ...prev, plan_tier: e.target.value.toUpperCase() }))} placeholder="Plan" className="bg-surface-container-high rounded-2xl px-5 py-4 outline-none" />
             <textarea value={form.ingredientsText} onChange={(e) => setForm((prev) => ({ ...prev, ingredientsText: e.target.value }))} placeholder="Ingredientes, una línea por ingrediente. Ejemplo: Fondo oscuro: 2 L" className="lg:col-span-2 min-h-[180px] bg-surface-container-high rounded-2xl px-5 py-4 outline-none" />
             <textarea value={form.method} onChange={(e) => setForm((prev) => ({ ...prev, method: e.target.value }))} placeholder="Método de elaboración paso a paso" className="lg:col-span-2 min-h-[220px] bg-surface-container-high rounded-2xl px-5 py-4 outline-none" />
-            <textarea value={form.plating_notes} onChange={(e) => setForm((prev) => ({ ...prev, plating_notes: e.target.value }))} placeholder="Notas de acabado y emplatado" className="min-h-[120px] bg-surface-container-high rounded-2xl px-5 py-4 outline-none" />
             <textarea value={form.allergens} onChange={(e) => setForm((prev) => ({ ...prev, allergens: e.target.value }))} placeholder="Alérgenos separados por coma" className="min-h-[120px] bg-surface-container-high rounded-2xl px-5 py-4 outline-none" />
           </div>
           <div className="mt-6 flex flex-wrap gap-4">
@@ -362,13 +351,6 @@ export default function FichasTecnicasPage() {
                   ))}
                 </div>
               </section>
-
-              {selectedSheet.plating_notes && (
-                <section className="rounded-[28px] border border-secondary/20 bg-secondary/5 p-6">
-                  <h3 className="font-label text-secondary text-[10px] uppercase tracking-widest mb-3">Acabado y servicio</h3>
-                  <p className="text-on-surface-variant leading-relaxed">{selectedSheet.plating_notes}</p>
-                </section>
-              )}
 
               <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="rounded-[28px] border border-outline-variant/10 p-6">

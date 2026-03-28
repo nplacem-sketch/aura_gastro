@@ -1,12 +1,12 @@
 /**
- * Seed AURA GASTRONOMY shards with local Ollama (model: kimi) and insert into Supabase shards:
+ * Seed AURA GASTRONOMY shards with local Ollama and insert into Supabase shards:
  * - LAB: 100 ingredients, 750 techniques
  * - RECIPES: 100 recipes (+ recipe_steps)
  * - ACADEMY: 1 course FREE, 2 courses PRO, 4 courses PREMIUM (+ modules + exams)
  *
  * Requirements (.env.local):
  * - OLLAMA_HOST (default http://localhost:11434)
- * - OLLAMA_MODEL (default kimi)
+ * - OLLAMA_MODEL (default gemma3:4b)
  * - SUPABASE_LAB_URL + SUPABASE_LAB_SERVICE_KEY
  * - SUPABASE_RECIPES_URL + SUPABASE_RECIPES_SERVICE_KEY
  * - SUPABASE_ACADEMY_URL + SUPABASE_ACADEMY_SERVICE_KEY
@@ -20,7 +20,7 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env.local') });
 const { createClient } = require('@supabase/supabase-js');
 
 const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://localhost:11434';
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'kimi';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma3:4b';
 
 function requireEnv(name) {
   const v = process.env[name];
@@ -147,7 +147,7 @@ async function tableCount(client, table) {
 
 async function seedIngredients(count = 100) {
   const batch = 15;
-  const system = `Eres Kimi, especialista del Aura Lab de AURA GASTRONOMY.
+  const system = `Eres el especialista del Aura Lab de AURA GASTRONOMY.
 Devuelves SOLO JSON valido, sin markdown, sin texto extra. Idioma: español profesional.`;
 
   let safety = 0;
@@ -207,7 +207,7 @@ Devuelve ESTRICTAMENTE:
 
 async function seedTechniques(count = 750) {
   const batch = 30;
-  const system = `Eres Kimi, instructor tecnico de AURA GASTRONOMY.
+  const system = `Eres el instructor tecnico de AURA GASTRONOMY.
 Devuelves SOLO JSON valido, sin markdown, sin texto extra. Idioma: español profesional.`;
 
   let safety = 0;
@@ -267,7 +267,7 @@ async function seedRecipes(count = 100) {
   }
 
   const batch = 6;
-  const system = `Eres Kimi, el Redactor Jefe de AURA GASTRONOMY.
+  const system = `Eres el redactor jefe de AURA GASTRONOMY.
 Devuelves SOLO JSON valido, sin markdown, sin texto extra. Idioma: español profesional.`;
 
   let created = 0;
@@ -357,7 +357,7 @@ async function seedCourses() {
     { tier: 'PREMIUM', count: 4 },
   ];
 
-  const system = `Eres Kimi, el diseñador curricular de AURA GASTRONOMY.
+  const system = `Eres el disenador curricular de AURA GASTRONOMY.
 Devuelves SOLO JSON valido, sin markdown, sin texto extra. Idioma: español profesional.`;
 
   let total = 0;

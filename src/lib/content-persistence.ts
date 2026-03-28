@@ -51,7 +51,7 @@ async function persistRecipe(topic: string, tier: string, generated: Record<stri
       prep_time: generated.prep_time ?? null,
       cover_image: generated.cover_image ?? null,
       is_premium: tier !== 'FREE',
-      is_ai_generated: false,
+      is_ai_generated: true,
       tier,
       tags: normalizeTextArray(generated.tags),
     })
@@ -112,7 +112,7 @@ async function persistCourse(topic: string, tier: string, generated: Record<stri
       duration: generated.duration ?? null,
       tier,
       is_premium: tier !== 'FREE',
-      is_ai_generated: false,
+      is_ai_generated: true,
       status: 'published',
       author: generated.author ?? 'Equipo AURA GASTRONOMY',
       tags: normalizeTextArray(generated.tags),

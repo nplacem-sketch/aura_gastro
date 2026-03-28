@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import AppIcon from '@/components/AppIcon';
 import PlansPopup from '@/components/PlansPopup';
@@ -18,6 +18,8 @@ type Ingredient = {
 export default function EscandallosPage() {
   const { isPremium, isAdmin, session } = useAuth();
   const authHeaders: HeadersInit = session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {};
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const latestSearchRef = useRef('');
 
   const [pax, setPax] = useState(10);
   const [recipeName, setRecipeName] = useState('Risotto de Setas Silvestres');
@@ -42,20 +44,43 @@ export default function EscandallosPage() {
 
   async function searchIngredients(query: string) {
     setSearchQuery(query);
+    latestSearchRef.current = query;
+
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+      searchTimeoutRef.current = null;
+    }
+
     if (query.length < 2) {
       setSearchResults([]);
+      setIsSearching(false);
       return;
     }
 
     setIsSearching(true);
-    try {
-      const res = await fetch(`/api/lab/search?q=${encodeURIComponent(query)}`, { headers: authHeaders });
-      const data = await res.json();
-      setSearchResults(data || []);
-    } finally {
-      setIsSearching(false);
-    }
+    searchTimeoutRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/lab/search?q=${encodeURIComponent(query)}`, { headers: authHeaders });
+        const data = await res.json();
+
+        if (latestSearchRef.current === query) {
+          setSearchResults(data || []);
+        }
+      } finally {
+        if (latestSearchRef.current === query) {
+          setIsSearching(false);
+        }
+      }
+    }, 180);
   }
+
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
 
   function selectIngredient(ing: any, targetId: string) {
     setIngredients((current) =>

@@ -1,9 +1,8 @@
-import type { OllamaMessage } from '@/lib/ollama';
-import { askOllama } from '@/lib/ollama';
+import { askOllama, type OllamaMessage } from '@/lib/ollama';
 
 type AIResponse = {
   content: string;
-  provider: 'groq' | 'openrouter' | 'ollama';
+  provider: 'groq' | 'ollama';
   model: string;
 };
 
@@ -34,51 +33,36 @@ async function callGroq(messages: OllamaMessage[]): Promise<AIResponse> {
   };
 }
 
-async function callOpenRouter(messages: OllamaMessage[]): Promise<AIResponse> {
-  const model = process.env.OPENROUTER_MODEL || 'deepseek/deepseek-chat-v3-0324:free';
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000',
-      'X-Title': 'AURA GASTRONOMY',
-    },
-    body: JSON.stringify({
-      model,
-      temperature: 0.1,
-      messages,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`OpenRouter error: ${await response.text()}`);
-  }
-
-  const data = await response.json();
+async function callOllama(messages: OllamaMessage[]): Promise<AIResponse> {
   return {
-    content: data.choices?.[0]?.message?.content ?? '',
-    provider: 'openrouter',
-    model,
+    content: await askOllama(messages),
+    provider: 'ollama',
+    model: process.env.OLLAMA_MODEL || 'gemma3:4b',
   };
 }
 
 export async function completeText(messages: OllamaMessage[]) {
-  if (process.env.GROQ_API_KEY) {
-    return callGroq(messages);
-  }
+  const errors: string[] = [];
 
-  if (process.env.OPENROUTER_API_KEY) {
-    return callOpenRouter(messages);
+  if (process.env.GROQ_API_KEY) {
+    try {
+      return await callGroq(messages);
+    } catch (error: any) {
+      errors.push(error?.message || 'Groq request failed.');
+    }
   }
 
   if (process.env.OLLAMA_HOST) {
-    return {
-      content: await askOllama(messages),
-      provider: 'ollama' as const,
-      model: process.env.OLLAMA_MODEL || 'kimi',
-    };
+    try {
+      return await callOllama(messages);
+    } catch (error: any) {
+      errors.push(error?.message || 'Ollama request failed.');
+    }
   }
 
-  throw new Error('No AI provider configured');
+  if (errors.length > 0) {
+    throw new Error(errors.join(' | '));
+  }
+
+  throw new Error('No AI provider configured. Configure GROQ_API_KEY or OLLAMA_HOST.');
 }

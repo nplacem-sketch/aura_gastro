@@ -84,7 +84,7 @@ export async function GET(req: Request) {
       businessIds.length > 0
         ? identitySvc().from('businesses').select('id,name').in('id', businessIds)
         : Promise.resolve({ data: [], error: null } as any),
-      identitySvc().from('profiles').select('plan').eq('id', userId).maybeSingle(),
+      identitySvc().from('profiles').select('plan,cv_url').eq('id', userId).maybeSingle(),
       role === 'ADMIN'
         ? identitySvc().from('content_requests').select('id', { count: 'exact', head: true }).eq('status', 'PENDING')
         : Promise.resolve({ count: 0, error: null } as any),
@@ -128,7 +128,7 @@ export async function GET(req: Request) {
       });
     }
 
-    if ((profileRes.data?.plan === 'PREMIUM' || profileRes.data?.plan === 'ENTERPRISE' || role === 'ADMIN') && !auth.user.user_metadata?.cv_url) {
+    if ((profileRes.data?.plan === 'PREMIUM' || profileRes.data?.plan === 'ENTERPRISE' || role === 'ADMIN') && !profileRes.data?.cv_url) {
       notifications.push({
         id: 'cv-reminder',
         type: 'PROFILE',

@@ -1,74 +1,92 @@
 const { createClient } = require('@supabase/supabase-js');
-const fs = require('fs');
 require('dotenv').config({ path: '.env.local' });
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_LAB_URL, process.env.SUPABASE_LAB_SERVICE_KEY);
-const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
+const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://localhost:11434';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma3:4b';
+
+async function askOllama(system, user) {
+  const response = await fetch(`${OLLAMA_HOST}/api/chat`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: OLLAMA_MODEL,
+      stream: false,
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user', content: user },
+      ],
+      options: {
+        temperature: 0.1,
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Ollama error: ${response.status} ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data.message?.content ?? '';
+}
 
 async function auditIngredients() {
-  console.log('--- Iniciando Auditoría Gastronómica ---');
-  
-  // 1. Fetch ingredients in chunks
+  console.log('--- Iniciando auditoria gastronomica con Ollama ---');
+
   const { data: ingredients, error } = await supabase.from('ingredients').select('id, name');
   if (error) {
     console.error('Error fetching ingredients:', error);
     return;
   }
-  
+
   console.log(`Total ingredientes a revisar: ${ingredients.length}`);
-  
-  // 2. Process in batches for LLM
+
   const batchSize = 100;
   const fakeIds = [];
-  
+
   for (let i = 0; i < ingredients.length; i += batchSize) {
     const batch = ingredients.slice(i, i + batchSize);
-    const names = batch.map(ing => ing.name).join(', ');
-    
-    console.log(`Auditando lote ${Math.floor(i/batchSize) + 1}...`);
-    
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENROUTER_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'meta-llama/llama-3.3-70b-instruct',
-        messages: [
-          {
-            role: 'system',
-            content: 'Eres un experto en botánica, micología y gastronomía técnica. Tu tarea es identificar "ingredientes falsos" o inventados de una lista. Responde SOLAMENTE con una lista separada por comas de los nombres que NO existen realmente o son errores técnicos.'
-          },
-          {
-            role: 'user',
-            content: `Revisa estos ingredientes: ${names}`
-          }
-        ]
-      })
-    });
-    
-    const result = await response.json();
-    const fakeNames = result.choices[0].message.content.split(',').map(n => n.trim().toLowerCase());
-    
+    const names = batch.map((ingredient) => ingredient.name).join(', ');
+
+    console.log(`Auditando lote ${Math.floor(i / batchSize) + 1}...`);
+
+    const content = await askOllama(
+      'Eres un experto en botanica, micologia y gastronomia tecnica. Responde solo con una lista separada por comas de nombres que no existen realmente o son errores tecnicos.',
+      `Revisa estos ingredientes: ${names}`,
+    );
+
+    const fakeNames = content
+      .split(',')
+      .map((name) => name.trim().toLowerCase())
+      .filter(Boolean);
+
     console.log('Fake names identified:', fakeNames);
-    
+
     const matchingIds = batch
-      .filter(ing => fakeNames.includes(ing.name.toLowerCase()))
-      .map(ing => ing.id);
-      
+      .filter((ingredient) => fakeNames.includes(String(ingredient.name || '').toLowerCase()))
+      .map((ingredient) => ingredient.id);
+
     fakeIds.push(...matchingIds);
   }
-  
-  // 3. Delete fake ingredients
+
   if (fakeIds.length > 0) {
     console.log(`Eliminando ${fakeIds.length} ingredientes falsos...`);
-    const { error: delError } = await supabase.from('ingredients').delete().in('id', fakeIds);
-    if (delError) console.error('Error deleting ingredients:', delError);
-    else console.log('Saneo completado con éxito.');
-  } else {
-    console.log('No se encontraron ingredientes falsos.');
+    const { error: deleteError } = await supabase.from('ingredients').delete().in('id', fakeIds);
+    if (deleteError) {
+      console.error('Error deleting ingredients:', deleteError);
+      return;
+    }
+
+    console.log('Saneo completado con exito.');
+    return;
   }
+
+  console.log('No se encontraron ingredientes falsos.');
 }
 
-auditIngredients();
+auditIngredients().catch((error) => {
+  console.error('Audit failed:', error);
+  process.exit(1);
+});

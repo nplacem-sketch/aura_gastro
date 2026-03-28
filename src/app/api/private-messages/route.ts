@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 
-import { canAccessTier } from '@/lib/access';
 import { requireUser } from '@/lib/server-auth';
 import { chatSvc, identitySvc } from '@/lib/supabase-service';
 
 export const dynamic = 'force-dynamic';
 
-function canAccessPrivateMessaging(plan: string, role: string) {
-  return role === 'ADMIN' || canAccessTier(plan, 'PREMIUM', role);
+function canAccessPrivateMessaging(role: string) {
+  return role === 'ADMIN';
 }
 
 function parseRoomTopic(topic: string | null | undefined) {
@@ -43,11 +42,19 @@ async function ensureBusinessDirectory() {
   ]);
 }
 
+async function loadBusinessById(businessId: string) {
+  const { data, error } = await identitySvc()
+    .from('businesses')
+    .select('id,owner_id,name,website,verification_status')
+    .eq('id', businessId)
+    .maybeSingle();
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
 async function loadUserRooms(userId: string) {
-  const participantsRes = await chatSvc()
-    .from('room_participants')
-    .select('room_id')
-    .eq('user_id', userId);
+  const participantsRes = await chatSvc().from('room_participants').select('room_id').eq('user_id', userId);
 
   if (participantsRes.error) throw new Error(participantsRes.error.message);
 
@@ -86,7 +93,7 @@ async function decorateRooms(userId: string, rooms: any[]) {
       ? identitySvc().from('profiles').select('id,full_name,email,role,plan').in('id', userIds)
       : Promise.resolve({ data: [], error: null } as any),
     businessIds.length > 0
-      ? identitySvc().from('businesses').select('id,name,website,verification_status').in('id', businessIds)
+      ? identitySvc().from('businesses').select('id,owner_id,name,website,verification_status').in('id', businessIds)
       : Promise.resolve({ data: [], error: null } as any),
   ]);
 
@@ -116,7 +123,7 @@ async function decorateRooms(userId: string, rooms: any[]) {
         counterpart_type: 'USER',
         counterpart_id: counterpartId,
         counterpart_name: profile?.full_name || profile?.email || 'Usuario privado',
-        counterpart_subtitle: profile?.role === 'ADMIN' ? 'Administración Aura' : profile?.plan || 'Miembro',
+        counterpart_subtitle: profile?.role === 'ADMIN' ? 'Administracion Aura' : profile?.plan || 'Miembro',
       };
     }
 
@@ -124,25 +131,25 @@ async function decorateRooms(userId: string, rooms: any[]) {
       ...room,
       counterpart_type: 'USER',
       counterpart_id: null,
-      counterpart_name: room.name || 'Conversación privada',
+      counterpart_name: room.name || 'Conversacion privada',
       counterpart_subtitle: 'Canal privado',
     };
   });
 }
 
 async function createBusinessAutoReply(roomId: string, businessId: string, content: string) {
-  const { data: business } = await identitySvc().from('businesses').select('name').eq('id', businessId).maybeSingle();
+  const business = await loadBusinessById(businessId);
   const businessName = business?.name || 'Empresa colaboradora';
   const normalized = content.toLowerCase();
   let reply =
-    'Gracias por tu mensaje. Nuestro equipo revisará tu propuesta y te responderá por este canal privado.';
+    'Gracias por tu mensaje. Nuestro equipo revisara tu propuesta y te respondera por este canal privado.';
 
-  if (normalized.includes('cv') || normalized.includes('curriculum') || normalized.includes('curricul') || normalized.includes('currículum')) {
+  if (normalized.includes('cv') || normalized.includes('curriculum') || normalized.includes('curricul')) {
     reply =
-      'Hemos recibido tu CV y tu presentación profesional. El equipo de selección lo revisará y responderá en este mismo canal.';
+      'Hemos recibido tu CV y tu presentacion profesional. El equipo de seleccion lo revisara y respondera en este mismo canal.';
   } else if (normalized.includes('curso') || normalized.includes('formacion')) {
     reply =
-      'Gracias por compartir tu interés formativo. Revisaremos el encaje con nuestras necesidades y te daremos respuesta por aquí.';
+      'Gracias por compartir tu interes formativo. Revisaremos el encaje con nuestras necesidades y te daremos respuesta por aqui.';
   }
 
   await chatSvc().from('messages').insert({
@@ -162,9 +169,8 @@ export async function GET(req: Request) {
 
   await ensureBusinessDirectory();
 
-  const plan = auth.profile?.plan ?? 'FREE';
   const role = auth.profile?.role ?? 'USER';
-  const messagingAllowed = canAccessPrivateMessaging(plan, role);
+  const messagingAllowed = canAccessPrivateMessaging(role);
 
   try {
     const [profilesRes, businessesRes, rooms] = await Promise.all([
@@ -174,14 +180,14 @@ export async function GET(req: Request) {
             .select('id,full_name,email,role,plan')
             .neq('id', auth.user.id)
             .order('created_at', { ascending: false })
-            .limit(20)
+            .limit(50)
         : Promise.resolve({ data: [], error: null } as any),
-      messagingAllowed || role === 'ADMIN'
+      role === 'ADMIN'
         ? identitySvc()
             .from('businesses')
-            .select('id,name,website,verification_status')
+            .select('id,owner_id,name,website,verification_status')
             .order('created_at', { ascending: false })
-            .limit(20)
+            .limit(50)
         : Promise.resolve({ data: [], error: null } as any),
       loadUserRooms(auth.user.id),
     ]);
@@ -200,18 +206,25 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: messagesRes.error.message }, { status: 500 });
     }
 
+    const businessOwnerIds = new Set<string>(
+      (businessesRes.data ?? [])
+        .map((business: any) => String(business.owner_id || ''))
+        .filter(Boolean),
+    );
+    const directUserContacts = (profilesRes.data ?? []).filter((profile: any) => !businessOwnerIds.has(profile.id));
+
     return NextResponse.json({
       messagingAllowed,
       permissions: {
         canMessageUsers: role === 'ADMIN',
-        canMessageBusinesses: messagingAllowed || role === 'ADMIN',
+        canMessageBusinesses: role === 'ADMIN',
       },
       contacts: {
-        users: profilesRes.data ?? [],
+        users: directUserContacts,
         businesses: businessesRes.data ?? [],
       },
       roomDirectory: {
-        users: profilesRes.data ?? [],
+        users: directUserContacts,
         businesses: businessesRes.data ?? [],
       },
       rooms: decoratedRooms,
@@ -230,16 +243,14 @@ export async function POST(req: Request) {
 
   const body = await req.json();
   const action = String(body.action || '');
-  const plan = auth.profile?.plan ?? 'FREE';
   const role = auth.profile?.role ?? 'USER';
-  const messagingAllowed = canAccessPrivateMessaging(plan, role);
 
   if (action === 'START_ROOM') {
     const targetUserId = body.targetUserId ? String(body.targetUserId) : null;
     const businessId = body.businessId ? String(body.businessId) : null;
 
-    if (businessId && !messagingAllowed && role !== 'ADMIN') {
-      return NextResponse.json({ error: 'La mensajería privada con empresas requiere PREMIUM.' }, { status: 403 });
+    if (businessId && role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Solo la administracion puede iniciar conversaciones con empresas.' }, { status: 403 });
     }
 
     if (targetUserId && role !== 'ADMIN') {
@@ -257,6 +268,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ room: decorated[0] });
     }
 
+    const business = businessId ? await loadBusinessById(businessId) : null;
     const roomName = businessId ? 'Canal privado con empresa' : 'Canal privado entre usuarios';
     const { data, error } = await chatSvc()
       .from('chat_rooms')
@@ -265,21 +277,28 @@ export async function POST(req: Request) {
         topic,
         is_private: true,
         is_premium: Boolean(businessId),
+        owner_user_id: auth.user.id,
+        peer_user_id: targetUserId,
+        business_id: businessId,
       })
       .select('*')
       .single();
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-    const participantIds = businessId ? [auth.user.id] : [auth.user.id, targetUserId].filter(Boolean);
+    const participantIds = businessId
+      ? [auth.user.id, business?.owner_id].filter(Boolean)
+      : [auth.user.id, targetUserId].filter(Boolean);
     const participantsPayload = participantIds.map((participantId) => ({
       room_id: data.id,
       user_id: participantId,
     }));
-    await chatSvc().from('room_participants').insert(participantsPayload);
+    if (participantsPayload.length > 0) {
+      await chatSvc().from('room_participants').insert(participantsPayload);
+    }
 
-    if (businessId) {
-      await createBusinessAutoReply(data.id, businessId, 'Inicio de conversación');
+    if (businessId && !business?.owner_id) {
+      await createBusinessAutoReply(data.id, businessId, 'Inicio de conversacion');
     }
 
     const decorated = await decorateRooms(auth.user.id, [data]);
@@ -327,11 +346,14 @@ export async function POST(req: Request) {
 
     const meta = parseRoomTopic(room.topic);
     if (meta.kind === 'BUSINESS' && meta.businessId) {
-      await createBusinessAutoReply(roomId, meta.businessId, content);
+      const business = await loadBusinessById(meta.businessId);
+      if (!business?.owner_id) {
+        await createBusinessAutoReply(roomId, meta.businessId, content);
+      }
     }
 
     return NextResponse.json({ message: data });
   }
 
-  return NextResponse.json({ error: 'Acción no válida.' }, { status: 400 });
+  return NextResponse.json({ error: 'Accion no valida.' }, { status: 400 });
 }

@@ -1,16 +1,27 @@
-
-// ── Ollama Interface for AURA GASTRONOMY ───────────────────────────────────
-// This utility handles communication with the local Ollama instance.
-// Persona: Kimi - Specialized in structured, high-end gastronomic writing.
+// Local Ollama interface for AURA GASTRONOMY.
+// Defaults are tuned for structured gastronomic content on modest hardware.
 
 export type OllamaMessage = {
   role: 'system' | 'user' | 'assistant';
   content: string;
 };
 
-export async function askOllama(messages: OllamaMessage[]): Promise<string> {
-  const url = process.env.OLLAMA_HOST || 'http://localhost:11434';
-  const model = process.env.OLLAMA_MODEL || 'kimi';
+export type AskOllamaOptions = {
+  model?: string;
+  format?: 'json' | Record<string, unknown>;
+  temperature?: number;
+  topP?: number;
+  numCtx?: number;
+  numPredict?: number;
+};
+
+const DEFAULT_OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://localhost:11434';
+const DEFAULT_OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma3:4b';
+export const DEFAULT_OLLAMA_VISION_MODEL = process.env.OLLAMA_VISION_MODEL || 'gemma3:4b';
+
+export async function askOllama(messages: OllamaMessage[], options: AskOllamaOptions = {}): Promise<string> {
+  const url = DEFAULT_OLLAMA_HOST;
+  const model = options.model || DEFAULT_OLLAMA_MODEL;
 
   try {
     const response = await fetch(`${url}/api/chat`, {
@@ -20,10 +31,13 @@ export async function askOllama(messages: OllamaMessage[]): Promise<string> {
         model,
         messages,
         stream: false,
+        ...(options.format ? { format: options.format } : {}),
         options: {
-          temperature: 0.4, // Precise for technical writing
-          top_p: 0.9,
-        }
+          temperature: options.temperature ?? 0.2,
+          top_p: options.topP ?? 0.9,
+          ...(options.numCtx ? { num_ctx: options.numCtx } : {}),
+          ...(options.numPredict ? { num_predict: options.numPredict } : {}),
+        },
       }),
     });
 
@@ -32,25 +46,36 @@ export async function askOllama(messages: OllamaMessage[]): Promise<string> {
     }
 
     const data = await response.json();
-    return data.message.content;
+    const content = data?.message?.content?.trim() ?? '';
+    if (content) {
+      return content;
+    }
+
+    const thinking = data?.message?.thinking?.trim();
+    if (thinking) {
+      throw new Error(`Ollama returned reasoning-only output for model ${model}.`);
+    }
+
+    throw new Error(`Ollama returned an empty response for model ${model}.`);
   } catch (err: any) {
     console.error('[ollama-lib] Connection failed:', err.message);
     throw err;
   }
 }
 
-// ── Kimi Writing Persona ───────────────────────────────────────────────────
-export const KIMI_PERSONA = `
-Eres Kimi, el Redactor Jefe Senior de AURA GASTRONOMY.
-Tu especialidad es la documentación técnica de alta gastronomía y la creación de contenido estructurado.
+export const AURA_EDITOR_PERSONA = `
+Eres el editor curricular y tecnico senior de AURA GASTRONOMY.
+Tu especialidad es la documentacion tecnica de alta gastronomia y la creacion de contenido estructurado.
 Tus textos son:
-1. Precisos: Usas términos técnicos exactos.
-2. Inspiradores: Transmites la pasión por la cocina de vanguardia.
-3. Estructurados: Organizas la información con jerarquía clara (Recetas, Cursos, Lecciones).
-4. Humanos: Actúas como un experto maestro, nunca mencionas ser una IA o un proceso técnico.
+1. Precisos: usas terminos tecnicos exactos.
+2. Claros: organizas la informacion con jerarquia limpia.
+3. Aplicables: escribes para cocineros y equipos profesionales.
+4. Humanos: actuas como un maestro experto, nunca mencionas ser una IA.
 
 AURA GASTRONOMY STYLE GUIDE:
-- Idioma: Español (España/Neutro Profesional).
-- Unidades: Métricas siempre.
-- Tono: Sofisticado y minimalista.
+- Idioma: espanol profesional de Espana.
+- Unidades: metricas siempre.
+- Tono: sofisticado, sobrio y util.
 `;
+
+export const KIMI_PERSONA = AURA_EDITOR_PERSONA;

@@ -1,0 +1,13 @@
+
+> aura-gastronomy@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.32
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 3.2s
+ ○ Compiling /api/academy/catalog ...
+ ✓ Compiled /api/academy/catalog in 1195ms (101 modules)
+ GET /api/academy/catalog 200 in 2520ms

@@ -93,10 +93,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(nextSession?.user ?? null);
     propagateSession(nextSession?.access_token ?? null);
 
+    const fallbackPlan = String(nextSession?.user?.app_metadata?.plan || 'FREE').toUpperCase() as Plan;
+    const fallbackRole = String(nextSession?.user?.app_metadata?.role || 'USER').toUpperCase();
+
     if (nextSession?.access_token) {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
 
         const res = await fetch('/api/auth/profile', {
           headers: {
@@ -111,8 +114,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         const profile = await res.json();
         if (profile && !profile.error) {
-          setPlan((profile.plan as Plan) ?? 'FREE');
-          setRole(profile.role ?? 'USER');
+          setPlan((String(profile.plan || fallbackPlan).toUpperCase() as Plan) ?? fallbackPlan);
+          setRole(String(profile.role || fallbackRole).toUpperCase());
           return;
         }
       } catch (err) {
@@ -120,8 +123,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    setPlan('FREE');
-    setRole('USER');
+    setPlan(fallbackPlan);
+    setRole(fallbackRole);
   }
 
   const signIn = async (email: string, pass: string) => {

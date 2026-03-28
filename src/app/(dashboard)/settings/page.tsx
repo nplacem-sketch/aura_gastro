@@ -27,6 +27,16 @@ type Preferences = {
 
 const STORAGE_KEY = 'aura-settings-preferences';
 
+async function readApiResponse<T>(res: Response): Promise<T> {
+  const text = await res.text();
+
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new Error(text || 'Respuesta no valida del servidor.');
+  }
+}
+
 async function fileToDataUrl(file: File) {
   return await new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
@@ -72,7 +82,7 @@ export default function SettingsPage() {
           },
           cache: 'no-store',
         });
-        const data = await res.json();
+        const data = await readApiResponse<any>(res);
         if (!res.ok) throw new Error(data.error || 'No se pudo cargar la configuración.');
 
         if (!cancelled) {
@@ -104,14 +114,13 @@ export default function SettingsPage() {
       },
       body: JSON.stringify(payload),
     });
-    const data = await res.json();
+    const data = await readApiResponse<any>(res);
     if (!res.ok) throw new Error(data.error || 'No se pudo guardar el perfil.');
 
     setProfile(data);
     await supabase().auth.updateUser({
       data: {
         full_name: data.full_name,
-        avatar_url: data.avatar_url,
       },
     });
   }
