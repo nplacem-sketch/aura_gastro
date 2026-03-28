@@ -7,7 +7,7 @@ import { useAuth } from '@/lib/auth-context';
 export default function ChatPage() {
   const { session } = useAuth();
   const [messages, setMessages] = useState([
-    { role: 'ai', content: 'Chef, bienvenido al espacio de consulta técnica. Soy su Especialista Sommelier. ¿En qué perfil organoléptico trabajamos hoy?' }
+    { role: 'ai', content: 'Chef, bienvenido al entorno de consulta. Soy tu sistema de Ayuda Directa. ¿En qué perfil técnico u operativo trabajamos hoy?' }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -47,7 +47,7 @@ export default function ChatPage() {
     <div className="max-w-5xl mx-auto h-[calc(100vh-160px)] flex flex-col">
       <header className="mb-8 p-6 glass-panel rounded-2xl border-l-4 border-secondary flex justify-between items-center shadow-lg">
         <div>
-          <h1 className="text-3xl font-headline text-on-surface">Maestro <span className="italic text-secondary">Sommelier</span></h1>
+          <h1 className="text-3xl font-headline text-on-surface">Ayuda <span className="italic text-secondary">Directa</span></h1>
           <p className="font-label text-[10px] text-[#afcdc3]/40 uppercase tracking-[0.3em] mt-1">Soporte Estratégico de Alta Gastronomía</p>
         </div>
         <div className="flex gap-4">

@@ -138,7 +138,7 @@ export default function RecipeDetailPage() {
               </div>
             )}
 
-            <h3 className="mb-8 text-3xl font-headline text-on-surface">Escandallo molecular</h3>
+            <h3 className="mb-8 text-3xl font-headline text-on-surface">Ingredientes</h3>
             <div className="space-y-4">
               {ingredients.length > 0 ? (
                 ingredients.map((ingredient) => (
@@ -151,7 +151,7 @@ export default function RecipeDetailPage() {
                 ))
               ) : (
                 <p className="border-b border-outline-variant/5 py-4 text-[10px] uppercase tracking-widest text-on-surface-variant/40">
-                  No se han registrado componentes tecnicos para esta creacion.
+                  No se han registrado ingredientes para esta creacion.
                 </p>
               )}
             </div>
