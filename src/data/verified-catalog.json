@@ -56,7 +56,9 @@
       "category": "TEXTURIZANTE",
       "tier": "FREE",
       "origin_region": "Costas de Asia y Mediterráneo",
-      "best_season": ["Todo el año"],
+      "best_season": [
+        "Todo el año"
+      ],
       "culinary_notes": "Gelificante de origen vegetal con gel firme y corte limpio. Adecuado para geles calientes y elaboraciones con estabilidad térmica.",
       "technical_data": {
         "Dosificación orientativa": "4-10 g/L",
@@ -71,7 +73,9 @@
       "category": "EMULSIFICANTE",
       "tier": "FREE",
       "origin_region": "Soja procesada",
-      "best_season": ["Todo el año"],
+      "best_season": [
+        "Todo el año"
+      ],
       "culinary_notes": "Emulsionante y agente espumante para aires ligeros, especialmente eficaz en bases acuosas con sabor definido.",
       "technical_data": {
         "Dosificación orientativa": "2-8 g/L",
@@ -86,7 +90,9 @@
       "category": "ESTABILIZANTE",
       "tier": "PRO",
       "origin_region": "Fermentación controlada",
-      "best_season": ["Todo el año"],
+      "best_season": [
+        "Todo el año"
+      ],
       "culinary_notes": "Espesante de alta eficiencia en frío y caliente. Aporta viscosidad estable sin necesidad de cocción.",
       "technical_data": {
         "Dosificación orientativa": "0.5-3 g/L",
@@ -101,7 +107,9 @@
       "category": "TEXTURIZANTE",
       "tier": "PRO",
       "origin_region": "Algas pardas",
-      "best_season": ["Todo el año"],
+      "best_season": [
+        "Todo el año"
+      ],
       "culinary_notes": "Base de la esferificación básica e inversa. Requiere control de calcio, pH y reposo de la mezcla.",
       "technical_data": {
         "Dosificación orientativa": "5 g/L",
@@ -116,7 +124,9 @@
       "category": "TEXTURIZANTE",
       "tier": "PREMIUM",
       "origin_region": "Derivado de celulosa vegetal",
-      "best_season": ["Todo el año"],
+      "best_season": [
+        "Todo el año"
+      ],
       "culinary_notes": "Gelifica en caliente y licua en frío. Útil para piezas calientes con estructura efímera y frituras aireadas.",
       "technical_data": {
         "Dosificación orientativa": "10-20 g/L",
@@ -131,7 +141,9 @@
       "category": "TEXTURIZANTE",
       "tier": "PREMIUM",
       "origin_region": "Algas rojas",
-      "best_season": ["Todo el año"],
+      "best_season": [
+        "Todo el año"
+      ],
       "culinary_notes": "Produce geles elásticos y brillantes, especialmente útiles en lácteos y sistemas con calcio moderado.",
       "technical_data": {
         "Dosificación orientativa": "2-8 g/L",
@@ -188,12 +200,28 @@
       "prep_time": "15 min",
       "tier": "FREE",
       "cover_image": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1000",
-      "tags": ["lecitina", "aire", "cítricos"],
+      "tags": [
+        "lecitina",
+        "aire",
+        "cítricos"
+      ],
       "ingredients": [
-        { "name": "Zumo de naranja", "amount": "250 ml" },
-        { "name": "Zumo de limón", "amount": "50 ml" },
-        { "name": "Lecitina de soja", "amount": "3 g" },
-        { "name": "Sal fina", "amount": "1 g" }
+        {
+          "name": "Zumo de naranja",
+          "amount": "250 ml"
+        },
+        {
+          "name": "Zumo de limón",
+          "amount": "50 ml"
+        },
+        {
+          "name": "Lecitina de soja",
+          "amount": "3 g"
+        },
+        {
+          "name": "Sal fina",
+          "amount": "1 g"
+        }
       ],
       "steps": [
         "Mezclar los zumos con la sal hasta obtener una base uniforme.",
@@ -209,12 +237,28 @@
       "prep_time": "25 min",
       "tier": "FREE",
       "cover_image": "https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?q=80&w=1000",
-      "tags": ["agar", "mango", "gel"],
+      "tags": [
+        "agar",
+        "mango",
+        "gel"
+      ],
       "ingredients": [
-        { "name": "Puré de mango", "amount": "400 g" },
-        { "name": "Agua", "amount": "100 ml" },
-        { "name": "Agar-Agar", "amount": "4 g" },
-        { "name": "Azúcar", "amount": "20 g" }
+        {
+          "name": "Puré de mango",
+          "amount": "400 g"
+        },
+        {
+          "name": "Agua",
+          "amount": "100 ml"
+        },
+        {
+          "name": "Agar-Agar",
+          "amount": "4 g"
+        },
+        {
+          "name": "Azúcar",
+          "amount": "20 g"
+        }
       ],
       "steps": [
         "Mezclar agua, puré y azúcar hasta homogeneizar.",
@@ -230,13 +274,32 @@
       "prep_time": "50 min",
       "tier": "PRO",
       "cover_image": "https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=1000",
-      "tags": ["sous-vide", "huevo", "precisión"],
+      "tags": [
+        "sous-vide",
+        "huevo",
+        "precisión"
+      ],
       "ingredients": [
-        { "name": "Huevos", "amount": "4 u" },
-        { "name": "Patata", "amount": "500 g" },
-        { "name": "Mantequilla", "amount": "60 g" },
-        { "name": "Nata", "amount": "80 ml" },
-        { "name": "Sal fina", "amount": "5 g" }
+        {
+          "name": "Huevos",
+          "amount": "4 u"
+        },
+        {
+          "name": "Patata",
+          "amount": "500 g"
+        },
+        {
+          "name": "Mantequilla",
+          "amount": "60 g"
+        },
+        {
+          "name": "Nata",
+          "amount": "80 ml"
+        },
+        {
+          "name": "Sal fina",
+          "amount": "5 g"
+        }
       ],
       "steps": [
         "Cocer los huevos a 64 C durante 45 minutos y reservar en templado.",
@@ -252,13 +315,32 @@
       "prep_time": "10 min",
       "tier": "PRO",
       "cover_image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?q=80&w=1000",
-      "tags": ["xantana", "vinagreta", "emulsión"],
+      "tags": [
+        "xantana",
+        "vinagreta",
+        "emulsión"
+      ],
       "ingredients": [
-        { "name": "Agua", "amount": "120 ml" },
-        { "name": "Vinagre de jerez", "amount": "40 ml" },
-        { "name": "Aceite de oliva virgen extra", "amount": "120 ml" },
-        { "name": "Goma xantana", "amount": "1 g" },
-        { "name": "Sal", "amount": "2 g" }
+        {
+          "name": "Agua",
+          "amount": "120 ml"
+        },
+        {
+          "name": "Vinagre de jerez",
+          "amount": "40 ml"
+        },
+        {
+          "name": "Aceite de oliva virgen extra",
+          "amount": "120 ml"
+        },
+        {
+          "name": "Goma xantana",
+          "amount": "1 g"
+        },
+        {
+          "name": "Sal",
+          "amount": "2 g"
+        }
       ],
       "steps": [
         "Disolver la sal en el agua y el vinagre.",
@@ -274,12 +356,28 @@
       "prep_time": "90 min",
       "tier": "PREMIUM",
       "cover_image": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=1000",
-      "tags": ["esferificación", "aceituna", "vanguardia"],
+      "tags": [
+        "esferificación",
+        "aceituna",
+        "vanguardia"
+      ],
       "ingredients": [
-        { "name": "Jugo de aceituna verde", "amount": "250 ml" },
-        { "name": "Gluconolactato cálcico", "amount": "12 g" },
-        { "name": "Agua mineral", "amount": "1 L" },
-        { "name": "Alginato de sodio", "amount": "5 g" }
+        {
+          "name": "Jugo de aceituna verde",
+          "amount": "250 ml"
+        },
+        {
+          "name": "Gluconolactato cálcico",
+          "amount": "12 g"
+        },
+        {
+          "name": "Agua mineral",
+          "amount": "1 L"
+        },
+        {
+          "name": "Alginato de sodio",
+          "amount": "5 g"
+        }
       ],
       "steps": [
         "Mezclar el jugo con gluconolactato y dejar reposar para eliminar aire.",
@@ -295,13 +393,32 @@
       "prep_time": "40 min",
       "tier": "PREMIUM",
       "cover_image": "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?q=80&w=1000",
-      "tags": ["metilcelulosa", "fritura", "textura"],
+      "tags": [
+        "metilcelulosa",
+        "fritura",
+        "textura"
+      ],
       "ingredients": [
-        { "name": "Agua fría", "amount": "300 ml" },
-        { "name": "Harina floja", "amount": "140 g" },
-        { "name": "Metilcelulosa", "amount": "12 g" },
-        { "name": "Sal", "amount": "3 g" },
-        { "name": "Hierbas frescas", "amount": "80 g" }
+        {
+          "name": "Agua fría",
+          "amount": "300 ml"
+        },
+        {
+          "name": "Harina floja",
+          "amount": "140 g"
+        },
+        {
+          "name": "Metilcelulosa",
+          "amount": "12 g"
+        },
+        {
+          "name": "Sal",
+          "amount": "3 g"
+        },
+        {
+          "name": "Hierbas frescas",
+          "amount": "80 g"
+        }
       ],
       "steps": [
         "Hidratar la metilcelulosa en agua muy fría y dejar reposar hasta completa dispersión.",
@@ -317,39 +434,112 @@
       "level": "Chef",
       "duration": "4 h 30 min",
       "tier": "FREE",
-      "tags": ["fundamentos", "texturas", "base"],
+      "tags": [
+        "fundamentos",
+        "texturas",
+        "base"
+      ],
       "modules": [
         {
           "title": "Materia y textura",
           "content": "Introducción a estados de la materia, dispersiones y texturas habituales en cocina contemporánea.",
           "lessons": [
-            { "title": "Soluciones, emulsiones y geles", "content": "Diferencias prácticas entre sistemas dispersos y su aplicación culinaria.", "duration": "18 min" },
-            { "title": "Variables de formulación", "content": "Influencia de temperatura, concentración y agitación en la textura final.", "duration": "22 min" }
+            {
+              "title": "Soluciones, emulsiones y geles",
+              "content": "Diferencias prácticas entre sistemas dispersos y su aplicación culinaria.",
+              "duration": "18 min"
+            },
+            {
+              "title": "Variables de formulación",
+              "content": "Influencia de temperatura, concentración y agitación en la textura final.",
+              "duration": "22 min"
+            }
           ]
         },
         {
           "title": "Hidrocoloides esenciales",
           "content": "Uso básico de agar y lecitina en preparaciones introductorias.",
           "lessons": [
-            { "title": "Agar-Agar en elaboraciones de fruta", "content": "Cómo hidratar, hervir y moldear un gel estable.", "duration": "20 min" },
-            { "title": "Lecitina y construcción de aires", "content": "Creación de espumas ligeras y criterios de estabilidad.", "duration": "16 min" }
+            {
+              "title": "Agar-Agar en elaboraciones de fruta",
+              "content": "Cómo hidratar, hervir y moldear un gel estable.",
+              "duration": "20 min"
+            },
+            {
+              "title": "Lecitina y construcción de aires",
+              "content": "Creación de espumas ligeras y criterios de estabilidad.",
+              "duration": "16 min"
+            }
           ]
         },
         {
           "title": "Diseño de mise en place",
           "content": "Organización de pesadas, escalado de recetas y errores frecuentes en laboratorio culinario.",
           "lessons": [
-            { "title": "Pesada y precisión", "content": "Importancia de la balanza de precisión y control de lotes.", "duration": "15 min" },
-            { "title": "Protocolos de trabajo limpio", "content": "Secuencia operativa para evitar fallos de hidratación y contaminación cruzada.", "duration": "17 min" }
+            {
+              "title": "Pesada y precisión",
+              "content": "Importancia de la balanza de precisión y control de lotes.",
+              "duration": "15 min"
+            },
+            {
+              "title": "Protocolos de trabajo limpio",
+              "content": "Secuencia operativa para evitar fallos de hidratación y contaminación cruzada.",
+              "duration": "17 min"
+            }
           ]
         }
       ],
       "exam": [
-        { "question": "¿Qué propiedad define mejor un gel de agar?", "options": ["Se funde a 30 C", "Tiene buena estabilidad térmica", "No necesita hervor", "Solo funciona con calcio"], "correct_index": 1 },
-        { "question": "La lecitina se emplea principalmente para:", "options": ["Cristalizar azúcares", "Crear aires y estabilizar interfaces", "Fermentar masas", "Dar color"], "correct_index": 1 },
-        { "question": "¿Qué factor afecta de forma directa la textura?", "options": ["Solo el emplatado", "Concentración y temperatura", "El color del recipiente", "La hora del servicio"], "correct_index": 1 },
-        { "question": "La balanza de precisión es clave porque:", "options": ["Acelera el emplatado", "Evita variaciones de dosificación", "Mejora el color", "Reduce la acidez"], "correct_index": 1 },
-        { "question": "Un aire bien ejecutado se recoge:", "options": ["Del fondo del recipiente", "De la espuma superficial", "Tras congelar", "Con calor intenso"], "correct_index": 1 }
+        {
+          "question": "¿Qué propiedad define mejor un gel de agar?",
+          "options": [
+            "Se funde a 30 C",
+            "Tiene buena estabilidad térmica",
+            "No necesita hervor",
+            "Solo funciona con calcio"
+          ],
+          "correct_index": 1
+        },
+        {
+          "question": "La lecitina se emplea principalmente para:",
+          "options": [
+            "Cristalizar azúcares",
+            "Crear aires y estabilizar interfaces",
+            "Fermentar masas",
+            "Dar color"
+          ],
+          "correct_index": 1
+        },
+        {
+          "question": "¿Qué factor afecta de forma directa la textura?",
+          "options": [
+            "Solo el emplatado",
+            "Concentración y temperatura",
+            "El color del recipiente",
+            "La hora del servicio"
+          ],
+          "correct_index": 1
+        },
+        {
+          "question": "La balanza de precisión es clave porque:",
+          "options": [
+            "Acelera el emplatado",
+            "Evita variaciones de dosificación",
+            "Mejora el color",
+            "Reduce la acidez"
+          ],
+          "correct_index": 1
+        },
+        {
+          "question": "Un aire bien ejecutado se recoge:",
+          "options": [
+            "Del fondo del recipiente",
+            "De la espuma superficial",
+            "Tras congelar",
+            "Con calor intenso"
+          ],
+          "correct_index": 1
+        }
       ]
     },
     {
@@ -358,39 +548,112 @@
       "level": "Chef Elite",
       "duration": "6 h 15 min",
       "tier": "PRO",
-      "tags": ["sous-vide", "proteínas", "servicio"],
+      "tags": [
+        "sous-vide",
+        "proteínas",
+        "servicio"
+      ],
       "modules": [
         {
           "title": "Principios térmicos",
           "content": "Transferencia de calor y efectos sobre proteínas, pescado y vegetales.",
           "lessons": [
-            { "title": "Desnaturalización proteica", "content": "Puntos de textura y riesgo de sobrecocción.", "duration": "25 min" },
-            { "title": "Lectura de tablas de cocción", "content": "Interpretación de tiempo, grosor y temperatura objetivo.", "duration": "18 min" }
+            {
+              "title": "Desnaturalización proteica",
+              "content": "Puntos de textura y riesgo de sobrecocción.",
+              "duration": "25 min"
+            },
+            {
+              "title": "Lectura de tablas de cocción",
+              "content": "Interpretación de tiempo, grosor y temperatura objetivo.",
+              "duration": "18 min"
+            }
           ]
         },
         {
           "title": "Seguridad alimentaria",
           "content": "Cadena de frío, abatimiento y manipulación segura de producto cocinado al vacío.",
           "lessons": [
-            { "title": "Peligros microbiológicos", "content": "Buenas prácticas para evitar proliferación bacteriana.", "duration": "21 min" },
-            { "title": "Abatimiento y regeneración", "content": "Metodología para producción y servicio diferido.", "duration": "19 min" }
+            {
+              "title": "Peligros microbiológicos",
+              "content": "Buenas prácticas para evitar proliferación bacteriana.",
+              "duration": "21 min"
+            },
+            {
+              "title": "Abatimiento y regeneración",
+              "content": "Metodología para producción y servicio diferido.",
+              "duration": "19 min"
+            }
           ]
         },
         {
           "title": "Aplicación en servicio",
           "content": "Planificación de batches, regeneración y acabado a la minuta.",
           "lessons": [
-            { "title": "Proteínas rojas y aves", "content": "Rangos útiles de trabajo y acabado final.", "duration": "23 min" },
-            { "title": "Huevos y vegetales", "content": "Puntos de textura y combinación con guarniciones.", "duration": "20 min" }
+            {
+              "title": "Proteínas rojas y aves",
+              "content": "Rangos útiles de trabajo y acabado final.",
+              "duration": "23 min"
+            },
+            {
+              "title": "Huevos y vegetales",
+              "content": "Puntos de textura y combinación con guarniciones.",
+              "duration": "20 min"
+            }
           ]
         }
       ],
       "exam": [
-        { "question": "La principal ventaja del sous-vide es:", "options": ["Mayor evaporación", "Control preciso de textura", "Uso obligatorio de humo", "Menor rendimiento"], "correct_index": 1 },
-        { "question": "Tras cocinar y no servir de inmediato, conviene:", "options": ["Dejar a temperatura ambiente", "Abatir rápido y conservar en frío", "Abrir la bolsa y secar", "Congelar sin etiquetar"], "correct_index": 1 },
-        { "question": "La cocción a baja temperatura actúa sobre:", "options": ["Solo el color", "Transferencia térmica y proteínas", "Solo la sal", "Solo la corteza"], "correct_index": 1 },
-        { "question": "Un error habitual en producción es:", "options": ["Etiquetar lotes", "No controlar espesores", "Regenerar con precisión", "Secar para marcar"], "correct_index": 1 },
-        { "question": "El acabado final suele buscar:", "options": ["Color y notas de Maillard", "Bajar temperatura", "Romper la pieza", "Eliminar jugos"], "correct_index": 0 }
+        {
+          "question": "La principal ventaja del sous-vide es:",
+          "options": [
+            "Mayor evaporación",
+            "Control preciso de textura",
+            "Uso obligatorio de humo",
+            "Menor rendimiento"
+          ],
+          "correct_index": 1
+        },
+        {
+          "question": "Tras cocinar y no servir de inmediato, conviene:",
+          "options": [
+            "Dejar a temperatura ambiente",
+            "Abatir rápido y conservar en frío",
+            "Abrir la bolsa y secar",
+            "Congelar sin etiquetar"
+          ],
+          "correct_index": 1
+        },
+        {
+          "question": "La cocción a baja temperatura actúa sobre:",
+          "options": [
+            "Solo el color",
+            "Transferencia térmica y proteínas",
+            "Solo la sal",
+            "Solo la corteza"
+          ],
+          "correct_index": 1
+        },
+        {
+          "question": "Un error habitual en producción es:",
+          "options": [
+            "Etiquetar lotes",
+            "No controlar espesores",
+            "Regenerar con precisión",
+            "Secar para marcar"
+          ],
+          "correct_index": 1
+        },
+        {
+          "question": "El acabado final suele buscar:",
+          "options": [
+            "Color y notas de Maillard",
+            "Bajar temperatura",
+            "Romper la pieza",
+            "Eliminar jugos"
+          ],
+          "correct_index": 0
+        }
       ]
     },
     {
@@ -399,39 +662,112 @@
       "level": "Chef",
       "duration": "5 h 40 min",
       "tier": "PRO",
-      "tags": ["espumas", "emulsión", "xantana"],
+      "tags": [
+        "espumas",
+        "emulsión",
+        "xantana"
+      ],
       "modules": [
         {
           "title": "Física de la emulsión",
           "content": "Estabilidad de interfases, papel del emulsionante y control de viscosidad.",
           "lessons": [
-            { "title": "Fase continua y fase dispersa", "content": "Cómo estructurar una emulsión estable según composición.", "duration": "17 min" },
-            { "title": "Rotura y corrección", "content": "Diagnóstico de separación y formas de recuperación.", "duration": "19 min" }
+            {
+              "title": "Fase continua y fase dispersa",
+              "content": "Cómo estructurar una emulsión estable según composición.",
+              "duration": "17 min"
+            },
+            {
+              "title": "Rotura y corrección",
+              "content": "Diagnóstico de separación y formas de recuperación.",
+              "duration": "19 min"
+            }
           ]
         },
         {
           "title": "Espumas frías y calientes",
           "content": "Criterios para trabajar con sifón y espumas sin sifón.",
           "lessons": [
-            { "title": "Uso del sifón en cocina", "content": "Carga, filtrado y seguridad en servicio.", "duration": "22 min" },
-            { "title": "Aires con lecitina", "content": "Lectura del punto de aireación y estabilidad.", "duration": "16 min" }
+            {
+              "title": "Uso del sifón en cocina",
+              "content": "Carga, filtrado y seguridad en servicio.",
+              "duration": "22 min"
+            },
+            {
+              "title": "Aires con lecitina",
+              "content": "Lectura del punto de aireación y estabilidad.",
+              "duration": "16 min"
+            }
           ]
         },
         {
           "title": "Control de textura",
           "content": "Uso de xantana y otros estabilizantes para obtener densidad operativa.",
           "lessons": [
-            { "title": "Viscosidad y boca", "content": "Ajuste de flujo según plato y temperatura.", "duration": "18 min" },
-            { "title": "Aplicación en salsas y aliños", "content": "Casos prácticos en partida y pase.", "duration": "18 min" }
+            {
+              "title": "Viscosidad y boca",
+              "content": "Ajuste de flujo según plato y temperatura.",
+              "duration": "18 min"
+            },
+            {
+              "title": "Aplicación en salsas y aliños",
+              "content": "Casos prácticos en partida y pase.",
+              "duration": "18 min"
+            }
           ]
         }
       ],
       "exam": [
-        { "question": "Una emulsión estable depende de:", "options": ["Interfase protegida", "Solo del color", "Uso de horno", "Exceso de aire"], "correct_index": 0 },
-        { "question": "La xantana ayuda sobre todo a:", "options": ["Subir acidez", "Controlar viscosidad", "Reducir aroma", "Oscurecer la salsa"], "correct_index": 1 },
-        { "question": "En un sifón conviene:", "options": ["No colar nunca", "Filtrar la mezcla antes de cargar", "Llenarlo hasta arriba", "Agitar solo al final del servicio"], "correct_index": 1 },
-        { "question": "La lecitina actúa bien en:", "options": ["Bases acuosas aireadas", "Solo masas de pan", "Solo caramelos", "Frituras secas"], "correct_index": 0 },
-        { "question": "Rotura de emulsión significa:", "options": ["Color más vivo", "Separación de fases", "Mayor viscosidad", "Menor sal"], "correct_index": 1 }
+        {
+          "question": "Una emulsión estable depende de:",
+          "options": [
+            "Interfase protegida",
+            "Solo del color",
+            "Uso de horno",
+            "Exceso de aire"
+          ],
+          "correct_index": 0
+        },
+        {
+          "question": "La xantana ayuda sobre todo a:",
+          "options": [
+            "Subir acidez",
+            "Controlar viscosidad",
+            "Reducir aroma",
+            "Oscurecer la salsa"
+          ],
+          "correct_index": 1
+        },
+        {
+          "question": "En un sifón conviene:",
+          "options": [
+            "No colar nunca",
+            "Filtrar la mezcla antes de cargar",
+            "Llenarlo hasta arriba",
+            "Agitar solo al final del servicio"
+          ],
+          "correct_index": 1
+        },
+        {
+          "question": "La lecitina actúa bien en:",
+          "options": [
+            "Bases acuosas aireadas",
+            "Solo masas de pan",
+            "Solo caramelos",
+            "Frituras secas"
+          ],
+          "correct_index": 0
+        },
+        {
+          "question": "Rotura de emulsión significa:",
+          "options": [
+            "Color más vivo",
+            "Separación de fases",
+            "Mayor viscosidad",
+            "Menor sal"
+          ],
+          "correct_index": 1
+        }
       ]
     },
     {
@@ -440,39 +776,112 @@
       "level": "Master",
       "duration": "7 h 10 min",
       "tier": "PREMIUM",
-      "tags": ["esferificación", "alginato", "calcio"],
+      "tags": [
+        "esferificación",
+        "alginato",
+        "calcio"
+      ],
       "modules": [
         {
           "title": "Sistema alginato-calcio",
           "content": "Comprensión del mecanismo de membrana y variables críticas.",
           "lessons": [
-            { "title": "pH, calcio y viscosidad", "content": "Cómo interactúan los tres parámetros para definir el resultado.", "duration": "24 min" },
-            { "title": "Preparación de baños técnicos", "content": "Formulación limpia y reposo correcto.", "duration": "20 min" }
+            {
+              "title": "pH, calcio y viscosidad",
+              "content": "Cómo interactúan los tres parámetros para definir el resultado.",
+              "duration": "24 min"
+            },
+            {
+              "title": "Preparación de baños técnicos",
+              "content": "Formulación limpia y reposo correcto.",
+              "duration": "20 min"
+            }
           ]
         },
         {
           "title": "Esferificación básica",
           "content": "Aplicación en productos sin calcio disponible.",
           "lessons": [
-            { "title": "Formulación de base", "content": "Hidratación y filtrado para obtener esferas limpias.", "duration": "20 min" },
-            { "title": "Lavado y conservación corta", "content": "Cómo evitar engrosamiento de membrana.", "duration": "16 min" }
+            {
+              "title": "Formulación de base",
+              "content": "Hidratación y filtrado para obtener esferas limpias.",
+              "duration": "20 min"
+            },
+            {
+              "title": "Lavado y conservación corta",
+              "content": "Cómo evitar engrosamiento de membrana.",
+              "duration": "16 min"
+            }
           ]
         },
         {
           "title": "Esferificación inversa",
           "content": "Aplicación en líquidos grasos o con calcio añadido.",
           "lessons": [
-            { "title": "Uso de gluconolactato", "content": "Ajuste de calcio sin notas agresivas.", "duration": "18 min" },
-            { "title": "Servicio y pase", "content": "Planificación para mantener centro líquido.", "duration": "16 min" }
+            {
+              "title": "Uso de gluconolactato",
+              "content": "Ajuste de calcio sin notas agresivas.",
+              "duration": "18 min"
+            },
+            {
+              "title": "Servicio y pase",
+              "content": "Planificación para mantener centro líquido.",
+              "duration": "16 min"
+            }
           ]
         }
       ],
       "exam": [
-        { "question": "El alginato gelifica al entrar en contacto con:", "options": ["Azúcar", "Calcio", "Alcohol", "Grasa"], "correct_index": 1 },
-        { "question": "La esferificación inversa se usa mucho cuando:", "options": ["La base tiene calcio o grasa", "No hay agua", "Se busca un bizcocho", "No hay reposo"], "correct_index": 0 },
-        { "question": "Un baño bien hidratado requiere:", "options": ["Reposo", "Horno", "Congelación rápida", "Colorante"], "correct_index": 0 },
-        { "question": "Si la membrana engorda demasiado:", "options": ["Ha faltado lavado o sobra tiempo de baño", "Hay menos calcio", "La esfera está fría", "El plato está seco"], "correct_index": 0 },
-        { "question": "El gluconolactato cálcico sirve para:", "options": ["Aportar calcio con perfil más suave", "Dar color verde", "Secar la mezcla", "Fermentar"], "correct_index": 0 }
+        {
+          "question": "El alginato gelifica al entrar en contacto con:",
+          "options": [
+            "Azúcar",
+            "Calcio",
+            "Alcohol",
+            "Grasa"
+          ],
+          "correct_index": 1
+        },
+        {
+          "question": "La esferificación inversa se usa mucho cuando:",
+          "options": [
+            "La base tiene calcio o grasa",
+            "No hay agua",
+            "Se busca un bizcocho",
+            "No hay reposo"
+          ],
+          "correct_index": 0
+        },
+        {
+          "question": "Un baño bien hidratado requiere:",
+          "options": [
+            "Reposo",
+            "Horno",
+            "Congelación rápida",
+            "Colorante"
+          ],
+          "correct_index": 0
+        },
+        {
+          "question": "Si la membrana engorda demasiado:",
+          "options": [
+            "Ha faltado lavado o sobra tiempo de baño",
+            "Hay menos calcio",
+            "La esfera está fría",
+            "El plato está seco"
+          ],
+          "correct_index": 0
+        },
+        {
+          "question": "El gluconolactato cálcico sirve para:",
+          "options": [
+            "Aportar calcio con perfil más suave",
+            "Dar color verde",
+            "Secar la mezcla",
+            "Fermentar"
+          ],
+          "correct_index": 0
+        }
       ]
     },
     {
@@ -481,39 +890,1372 @@
       "level": "Master",
       "duration": "5 h 55 min",
       "tier": "PREMIUM",
-      "tags": ["metilcelulosa", "gelificación", "caliente"],
+      "tags": [
+        "metilcelulosa",
+        "gelificación",
+        "caliente"
+      ],
       "modules": [
         {
           "title": "Comportamiento funcional",
           "content": "Qué tipos de metilcelulosa existen y cómo cambia su respuesta térmica.",
           "lessons": [
-            { "title": "Gelificación inversa", "content": "Por qué estructura al calentarse y fluye al enfriar.", "duration": "21 min" },
-            { "title": "Selección de grado", "content": "Lectura de fichas técnicas y viscosidad útil.", "duration": "19 min" }
+            {
+              "title": "Gelificación inversa",
+              "content": "Por qué estructura al calentarse y fluye al enfriar.",
+              "duration": "21 min"
+            },
+            {
+              "title": "Selección de grado",
+              "content": "Lectura de fichas técnicas y viscosidad útil.",
+              "duration": "19 min"
+            }
           ]
         },
         {
           "title": "Formulación y reposo",
           "content": "Método correcto de dispersión e hidratación en frío.",
           "lessons": [
-            { "title": "Batido sin grumos", "content": "Protocolo de mezcla y reposo.", "duration": "18 min" },
-            { "title": "Control de aire incorporado", "content": "Cómo evitar defectos en fritura y geles.", "duration": "15 min" }
+            {
+              "title": "Batido sin grumos",
+              "content": "Protocolo de mezcla y reposo.",
+              "duration": "18 min"
+            },
+            {
+              "title": "Control de aire incorporado",
+              "content": "Cómo evitar defectos en fritura y geles.",
+              "duration": "15 min"
+            }
           ]
         },
         {
           "title": "Aplicaciones de cocina",
           "content": "Casos reales de tempuras ligeras, piezas calientes y estructuras efímeras.",
           "lessons": [
-            { "title": "Frituras técnicas", "content": "Uso como soporte de cobertura y estabilidad.", "duration": "20 min" },
-            { "title": "Montaje y servicio", "content": "Tiempos de activación y plato final.", "duration": "17 min" }
+            {
+              "title": "Frituras técnicas",
+              "content": "Uso como soporte de cobertura y estabilidad.",
+              "duration": "20 min"
+            },
+            {
+              "title": "Montaje y servicio",
+              "content": "Tiempos de activación y plato final.",
+              "duration": "17 min"
+            }
           ]
         }
       ],
       "exam": [
-        { "question": "La metilcelulosa se hidrata preferentemente:", "options": ["En frío", "En horno", "Solo con aceite", "A 100 C"], "correct_index": 0 },
-        { "question": "Su rasgo diferencial es:", "options": ["Gelificar en caliente", "Necesitar calcio", "Fermentar", "Crear espuma estable sin batir"], "correct_index": 0 },
-        { "question": "El reposo ayuda a:", "options": ["Eliminar aire y completar hidratación", "Quemar la mezcla", "Subir acidez", "Separar fases"], "correct_index": 0 },
-        { "question": "Una aplicación típica es:", "options": ["Cobertura ligera de fritura", "Caramelo seco", "Panificación", "Vinagreta"], "correct_index": 0 },
-        { "question": "Si la mezcla no activa bien, revisar:", "options": ["Temperatura de servicio y dosificación", "Color del bol", "Tamaño del plato", "Hora del día"], "correct_index": 0 }
+        {
+          "question": "La metilcelulosa se hidrata preferentemente:",
+          "options": [
+            "En frío",
+            "En horno",
+            "Solo con aceite",
+            "A 100 C"
+          ],
+          "correct_index": 0
+        },
+        {
+          "question": "Su rasgo diferencial es:",
+          "options": [
+            "Gelificar en caliente",
+            "Necesitar calcio",
+            "Fermentar",
+            "Crear espuma estable sin batir"
+          ],
+          "correct_index": 0
+        },
+        {
+          "question": "El reposo ayuda a:",
+          "options": [
+            "Eliminar aire y completar hidratación",
+            "Quemar la mezcla",
+            "Subir acidez",
+            "Separar fases"
+          ],
+          "correct_index": 0
+        },
+        {
+          "question": "Una aplicación típica es:",
+          "options": [
+            "Cobertura ligera de fritura",
+            "Caramelo seco",
+            "Panificación",
+            "Vinagreta"
+          ],
+          "correct_index": 0
+        },
+        {
+          "question": "Si la mezcla no activa bien, revisar:",
+          "options": [
+            "Temperatura de servicio y dosificación",
+            "Color del bol",
+            "Tamaño del plato",
+            "Hora del día"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Fundamentos de Seguridad Alimentaria y APPCC",
+      "description": "Programa oficial de formacion Aura Gastronomy. Fundamentos de Seguridad Alimentaria y APPCC.",
+      "level": "Iniciacion",
+      "tier": "FREE",
+      "duration": "15-30h",
+      "tags": [
+        "FREE",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Fundamentos de Seguridad Alimentaria y APPCC",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Fundamentos de Seguridad Alimentaria y APPCC, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Bases de la Cocina Mediterranea: Arroces y Guisos",
+      "description": "Programa oficial de formacion Aura Gastronomy. Bases de la Cocina Mediterranea: Arroces y Guisos.",
+      "level": "Iniciacion",
+      "tier": "FREE",
+      "duration": "15-30h",
+      "tags": [
+        "FREE",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Bases de la Cocina Mediterranea: Arroces y Guisos",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Bases de la Cocina Mediterranea: Arroces y Guisos, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Iniciacion a la Reposteria: Masas Quebradas y Cremas",
+      "description": "Programa oficial de formacion Aura Gastronomy. Iniciacion a la Reposteria: Masas Quebradas y Cremas.",
+      "level": "Iniciacion",
+      "tier": "FREE",
+      "duration": "15-30h",
+      "tags": [
+        "FREE",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Iniciacion a la Reposteria: Masas Quebradas y Cremas",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Iniciacion a la Reposteria: Masas Quebradas y Cremas, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Corte y Manipulacion Profesional de Cuchilleria",
+      "description": "Programa oficial de formacion Aura Gastronomy. Corte y Manipulacion Profesional de Cuchilleria.",
+      "level": "Iniciacion",
+      "tier": "FREE",
+      "duration": "15-30h",
+      "tags": [
+        "FREE",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Corte y Manipulacion Profesional de Cuchilleria",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Corte y Manipulacion Profesional de Cuchilleria, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Conservacion de Alimentos: Frio, Congelacion y Curado",
+      "description": "Programa oficial de formacion Aura Gastronomy. Conservacion de Alimentos: Frio, Congelacion y Curado.",
+      "level": "Iniciacion",
+      "tier": "FREE",
+      "duration": "15-30h",
+      "tags": [
+        "FREE",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Conservacion de Alimentos: Frio, Congelacion y Curado",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Conservacion de Alimentos: Frio, Congelacion y Curado, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Cocina al Vacio (Sous-Vide) para Restaurantes",
+      "description": "Programa oficial de formacion Aura Gastronomy. Cocina al Vacio (Sous-Vide) para Restaurantes.",
+      "level": "Professional",
+      "tier": "PRO",
+      "duration": "15-30h",
+      "tags": [
+        "PRO",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Cocina al Vacio (Sous-Vide) para Restaurantes",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Cocina al Vacio (Sous-Vide) para Restaurantes, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Fermentaciones Contemporaneas: Kombucha y Miso",
+      "description": "Programa oficial de formacion Aura Gastronomy. Fermentaciones Contemporaneas: Kombucha y Miso.",
+      "level": "Professional",
+      "tier": "PRO",
+      "duration": "15-30h",
+      "tags": [
+        "PRO",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Fermentaciones Contemporaneas: Kombucha y Miso",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Fermentaciones Contemporaneas: Kombucha y Miso, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Charcuteria Fina: Galantinas y Terrinas Modernas",
+      "description": "Programa oficial de formacion Aura Gastronomy. Charcuteria Fina: Galantinas y Terrinas Modernas.",
+      "level": "Professional",
+      "tier": "PRO",
+      "duration": "15-30h",
+      "tags": [
+        "PRO",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Charcuteria Fina: Galantinas y Terrinas Modernas",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Charcuteria Fina: Galantinas y Terrinas Modernas, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Pasteleria de Restaurante y Postres al Plato",
+      "description": "Programa oficial de formacion Aura Gastronomy. Pasteleria de Restaurante y Postres al Plato.",
+      "level": "Professional",
+      "tier": "PRO",
+      "duration": "15-30h",
+      "tags": [
+        "PRO",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Pasteleria de Restaurante y Postres al Plato",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Pasteleria de Restaurante y Postres al Plato, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Gestion de Costes y Escandallos para el Chef",
+      "description": "Programa oficial de formacion Aura Gastronomy. Gestion de Costes y Escandallos para el Chef.",
+      "level": "Professional",
+      "tier": "PRO",
+      "duration": "15-30h",
+      "tags": [
+        "PRO",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Gestion de Costes y Escandallos para el Chef",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Gestion de Costes y Escandallos para el Chef, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Tecnicas de Pescados: Del Ronqueo a la Maduracion",
+      "description": "Programa oficial de formacion Aura Gastronomy. Tecnicas de Pescados: Del Ronqueo a la Maduracion.",
+      "level": "Professional",
+      "tier": "PRO",
+      "duration": "15-30h",
+      "tags": [
+        "PRO",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Tecnicas de Pescados: Del Ronqueo a la Maduracion",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Tecnicas de Pescados: Del Ronqueo a la Maduracion, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Ahumados y Cocina de Humo (Draft)",
+      "description": "Programa oficial de formacion Aura Gastronomy. Ahumados y Cocina de Humo (Draft).",
+      "level": "Professional",
+      "tier": "PRO",
+      "duration": "15-30h",
+      "tags": [
+        "PRO",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Ahumados y Cocina de Humo (Draft)",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Ahumados y Cocina de Humo (Draft), ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Maridaje y Analisis Sensorial de Vinos Tecnicos",
+      "description": "Programa oficial de formacion Aura Gastronomy. Maridaje y Analisis Sensorial de Vinos Tecnicos.",
+      "level": "Professional",
+      "tier": "PRO",
+      "duration": "15-30h",
+      "tags": [
+        "PRO",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Maridaje y Analisis Sensorial de Vinos Tecnicos",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Maridaje y Analisis Sensorial de Vinos Tecnicos, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Cocina Vegetariana de Alta Gama",
+      "description": "Programa oficial de formacion Aura Gastronomy. Cocina Vegetariana de Alta Gama.",
+      "level": "Professional",
+      "tier": "PRO",
+      "duration": "15-30h",
+      "tags": [
+        "PRO",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Cocina Vegetariana de Alta Gama",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Cocina Vegetariana de Alta Gama, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Arquitectura del Menu Degustacion",
+      "description": "Programa oficial de formacion Aura Gastronomy. Arquitectura del Menu Degustacion.",
+      "level": "Professional",
+      "tier": "PRO",
+      "duration": "15-30h",
+      "tags": [
+        "PRO",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Arquitectura del Menu Degustacion",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Arquitectura del Menu Degustacion, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Ingenieria Gastronomica: Espumas, Aires y Geles",
+      "description": "Programa oficial de formacion Aura Gastronomy. Ingenieria Gastronomica: Espumas, Aires y Geles.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Ingenieria Gastronomica: Espumas, Aires y Geles",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Ingenieria Gastronomica: Espumas, Aires y Geles, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Texturantes de Vanguardia: Agar, Kappa, Metil",
+      "description": "Programa oficial de formacion Aura Gastronomy. Texturantes de Vanguardia: Agar, Kappa, Metil.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Texturantes de Vanguardia: Agar, Kappa, Metil",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Texturantes de Vanguardia: Agar, Kappa, Metil, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Esferificaciones y Encapsulados (Quimica Culinaria)",
+      "description": "Programa oficial de formacion Aura Gastronomy. Esferificaciones y Encapsulados (Quimica Culinaria).",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Esferificaciones y Encapsulados (Quimica Culinaria)",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Esferificaciones y Encapsulados (Quimica Culinaria), ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Liofilizacion y Deshidrataciones Extremas",
+      "description": "Programa oficial de formacion Aura Gastronomy. Liofilizacion y Deshidrataciones Extremas.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Liofilizacion y Deshidrataciones Extremas",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Liofilizacion y Deshidrataciones Extremas, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Criotecnia y Cocina con Nitrogeno Liquido",
+      "description": "Programa oficial de formacion Aura Gastronomy. Criotecnia y Cocina con Nitrogeno Liquido.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Criotecnia y Cocina con Nitrogeno Liquido",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Criotecnia y Cocina con Nitrogeno Liquido, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Destilados y Rotovap en el Laboratorio de Cocina",
+      "description": "Programa oficial de formacion Aura Gastronomy. Destilados y Rotovap en el Laboratorio de Cocina.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Destilados y Rotovap en el Laboratorio de Cocina",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Destilados y Rotovap en el Laboratorio de Cocina, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Psicopercepcion del Sabor y Neurogastronomia",
+      "description": "Programa oficial de formacion Aura Gastronomy. Psicopercepcion del Sabor y Neurogastronomia.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Psicopercepcion del Sabor y Neurogastronomia",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Psicopercepcion del Sabor y Neurogastronomia, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Estructuracion de Grasas y Emulsiones No Convencionales",
+      "description": "Programa oficial de formacion Aura Gastronomy. Estructuracion de Grasas y Emulsiones No Convencionales.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Estructuracion de Grasas y Emulsiones No Convencionales",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Estructuracion de Grasas y Emulsiones No Convencionales, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Clarificaciones Avanzadas: Del Sifon a la Spinzall",
+      "description": "Programa oficial de formacion Aura Gastronomy. Clarificaciones Avanzadas: Del Sifon a la Spinzall.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Clarificaciones Avanzadas: Del Sifon a la Spinzall",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Clarificaciones Avanzadas: Del Sifon a la Spinzall, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Fermentaciones Koji y Envejecimiento de Proteinas",
+      "description": "Programa oficial de formacion Aura Gastronomy. Fermentaciones Koji y Envejecimiento de Proteinas.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Fermentaciones Koji y Envejecimiento de Proteinas",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Fermentaciones Koji y Envejecimiento de Proteinas, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Tecnicas de Cocina Japonesa Kaiseki de Vanguardia",
+      "description": "Programa oficial de formacion Aura Gastronomy. Tecnicas de Cocina Japonesa Kaiseki de Vanguardia.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Tecnicas de Cocina Japonesa Kaiseki de Vanguardia",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Tecnicas de Cocina Japonesa Kaiseki de Vanguardia, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Manejo de Enenzimas (Transglutaminasa, Pectinasa)",
+      "description": "Programa oficial de formacion Aura Gastronomy. Manejo de Enenzimas (Transglutaminasa, Pectinasa).",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Manejo de Enenzimas (Transglutaminasa, Pectinasa)",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Manejo de Enenzimas (Transglutaminasa, Pectinasa), ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Parrilla de Precision: Control de Terpenos y Reaccion Maillard",
+      "description": "Programa oficial de formacion Aura Gastronomy. Parrilla de Precision: Control de Terpenos y Reaccion Maillard.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Parrilla de Precision: Control de Terpenos y Reaccion Maillard",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Parrilla de Precision: Control de Terpenos y Reaccion Maillard, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Diseno de Experiencia Gastronomica 360",
+      "description": "Programa oficial de formacion Aura Gastronomy. Diseno de Experiencia Gastronomica 360.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Diseno de Experiencia Gastronomica 360",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Diseno de Experiencia Gastronomica 360, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Biodiversidad y Nuevos Ingredientes Marinos",
+      "description": "Programa oficial de formacion Aura Gastronomy. Biodiversidad y Nuevos Ingredientes Marinos.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Biodiversidad y Nuevos Ingredientes Marinos",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Biodiversidad y Nuevos Ingredientes Marinos, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Liquidos Estructurados y Cocteleria Molecular",
+      "description": "Programa oficial de formacion Aura Gastronomy. Liquidos Estructurados y Cocteleria Molecular.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Liquidos Estructurados y Cocteleria Molecular",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Liquidos Estructurados y Cocteleria Molecular, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Pasteleria Evolutiva: Sin Azucares ni Gluten Tecnicos",
+      "description": "Programa oficial de formacion Aura Gastronomy. Pasteleria Evolutiva: Sin Azucares ni Gluten Tecnicos.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Pasteleria Evolutiva: Sin Azucares ni Gluten Tecnicos",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Pasteleria Evolutiva: Sin Azucares ni Gluten Tecnicos, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Micologia Gastronomica: Perfiles de Humina",
+      "description": "Programa oficial de formacion Aura Gastronomy. Micologia Gastronomica: Perfiles de Humina.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Micologia Gastronomica: Perfiles de Humina",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Micologia Gastronomica: Perfiles de Humina, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Gestion de Equipos y Liderazgo de Brigade",
+      "description": "Programa oficial de formacion Aura Gastronomy. Gestion de Equipos y Liderazgo de Brigade.",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Gestion de Equipos y Liderazgo de Brigade",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Gestion de Equipos y Liderazgo de Brigade, ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
+      ]
+    },
+    {
+      "title": "Sostenibilidad y Residuo Cero (Cradle to Cradle)",
+      "description": "Programa oficial de formacion Aura Gastronomy. Sostenibilidad y Residuo Cero (Cradle to Cradle).",
+      "level": "Maestro",
+      "tier": "PREMIUM",
+      "duration": "15-30h",
+      "tags": [
+        "PREMIUM",
+        "verificado",
+        "oficial"
+      ],
+      "modules": [
+        {
+          "title": "Fundamentos Cilinarios de Sostenibilidad y Residuo Cero (Cradle to Cradle)",
+          "content": "Introduccion y bases operativas.",
+          "lessons": [
+            {
+              "title": "Leccion 1",
+              "duration": "15m"
+            }
+          ]
+        }
+      ],
+      "exam": [
+        {
+          "question": "Sobre Sostenibilidad y Residuo Cero (Cradle to Cradle), ¿Cual es el punto critico?",
+          "options": [
+            "Control de temperatura",
+            "Emplatado",
+            "Servicio",
+            "Precio"
+          ],
+          "correct_index": 0
+        }
       ]
     }
   ]
