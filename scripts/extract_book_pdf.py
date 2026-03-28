@@ -130,7 +130,7 @@ def main() -> int:
         "images": images,
         "ocr_used": len(images) > 0 and len(extracted_text) > 0,
     }
-    print(json.dumps(payload, ensure_ascii=False))
+    print(json.dumps(payload, ensure_ascii=True))
     return 0
 
 

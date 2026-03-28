@@ -108,50 +108,41 @@ async function processCourses() {
     // Limitamos el texto a ~3000 caracteres para no exceder los límites de tokens gratuitos (TPM)
     const contextText = extractedText.substring(0, 3000);
 
-    const systemPrompt = `
-Eres un educador gastronómico de élite mundial diseñando un currículo.
-Utiliza la información del siguiente EXTRACTO BIBLIOGRÁFICO para inspirarte y sacar hechos reales, químicos o históricos que agreguen peso y veracidad técnica a las lecciones. REESTRUCTURA Y NO COPIES LITERALMENTE. NO inventes hechos falsos ni alucines.
+    for (let l = 0; l < allLessons.length; l++) {
+      const lesson = allLessons[l];
+      console.log(`    -> [Lección ${l+1}/${allLessons.length}] ${lesson.title}`);
 
-EXTRACTO DE LIBRO:
-${contextText || '(Sin extracto disponible, usa base técnica genérica)'}
-`;
+      const systemPrompt = `Eres un educador gastronómico y chef de vanguardia mundial dictando el curso "${course.title}".`;
+      
+      const userPrompt = `
+Crea el contenido teórico PROFESIONAL para la lección **"${lesson.title}"** (módulo: "${lesson.module_title}").
 
-    const userPrompt = `
-Genera el contenido para ${allLessons.length} lecciones del curso "${course.title}" (Nivel ${course.tier}).
 MUY IMPORTANTE: 
-1. Cada lección OBLIGATORIAMENTE debe ser ÚNICA y de 250 a 400 palabras. PROHIBIDO repetir párrafos entre lecciones.
-2. Contenido puramente profesional: técnicas, parámetros (temperaturas exactas, tiempos, ph), reacciones químicas o físicas descritas en el libro. 
+1. Redacta de 150 a 300 palabras estructuradas (Markdown, listas o negritas si aplica).
+2. Tienes EXTRICTA PROHIBICIÓN de usar intros genéricas repetitivas como "En este módulo veremos...". Ve directamente a la parte técnica dura (grados, pH, emulsiones, proteínas, técnicas contemporáneas).
+3. Utiliza conceptos avanzados reales que encuentres en el siguiente extracto bibliográfico (si es relevante) o de tu base interna si es mejor:
+   
+EXTRACTO BIBLIOGRÁFICO:
+${contextText || '(Usa tu conocimiento premium técnico)'}
 
-Lecciones a generar:
-${allLessons.map(l => `- ID [${l.id}] Módulo: ${l.module_title} - Lección: ${l.title}`).join('\\n')}
-
-Devuelve un JSON estricto con esta estructura:
+Devuelve un JSON estrictamente válido con esta estructura:
 {
-  "lessons": [
-    {
-      "id": "el ID exacto correspondiente",
-      "content": "El contenido teórico en formato Markdown. No empieces con el ID. Desarrolla introduccion, aplicación y técnica usando la bibliografia."
-    }
-  ]
+  "content": "Contenido puramente técnico y asombroso en Markdown Markdown aquí"
 }
 `;
 
-    const result = await askGroq(userPrompt, systemPrompt);
-    if (result && result.lessons) {
-      for (const resLesson of result.lessons) {
-        if (!resLesson.id || !resLesson.content) continue;
-        const validId = allLessons.find(l => l.id === resLesson.id);
-        if (validId) {
-          await aDb.from('lessons').update({ content: resLesson.content }).eq('id', validId.id);
-        }
+      const result = await askGroq(userPrompt, systemPrompt);
+      
+      if (result && result.content) {
+        await aDb.from('lessons').update({ content: result.content }).eq('id', lesson.id);
+        console.log(`      ✓ Guardada`);
+      } else {
+        console.log(`      x Falló el formato`);
       }
-      console.log(`  -> Actualizadas ${result.lessons.length} lecciones con éxito vía Groq.`);
-    } else {
-      console.log(`  -> ERROR: No se generó contenido para el curso.`);
+      
+      // Espera de 4 a 6 segundos para oxigenar la API de Groq y no golpear RATE LIMITS (30 rpm).
+      await new Promise(r => setTimeout(r, 5000));
     }
-    
-    // Pausa para evitar Rate Limits drásticos
-    await new Promise(r => setTimeout(r, 4000));
   }
 }
 
