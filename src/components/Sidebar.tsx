@@ -38,11 +38,11 @@ export default function Sidebar() {
   const menuItems = [
     { name: 'Dashboard', icon: 'dashboard', href: '/', tier: null },
     { name: 'Academia', icon: 'school', href: '/academy', tier: null },
-    { name: 'Sommelier', icon: 'wine_bar', href: '/chat', tier: null },
     { name: 'Recetario', icon: 'menu_book', href: '/recipes', tier: 'PRO' },
     { name: 'Laboratorio', icon: 'biotech', href: '/lab', tier: 'PRO' },
     { name: 'Escandallos', icon: 'receipt', href: '/escandallos', tier: 'PREMIUM' },
     { name: 'Fichas Tecnicas', icon: 'description', href: '/fichas-tecnicas', tier: 'PREMIUM' },
+    { name: 'Ayuda En Directo', icon: 'support_agent', href: '/chat', tier: null },
     ...(isAdmin ? [{ name: 'Administracion', icon: 'admin_panel_settings', href: '/admin', tier: null }] : []),
     { name: 'Perfil', icon: 'person_outline', href: '/profile', tier: null },
     { name: 'Configuracion', icon: 'settings', href: '/settings', tier: null },
