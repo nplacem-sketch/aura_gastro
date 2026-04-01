@@ -135,7 +135,7 @@ export default function MagicEditorOverlay() {
         {editingNode && (
           <div className="bg-surface-container-high border border-outline-variant/20 rounded-2xl p-6 w-[400px] shadow-2xl animate-scale-in origin-bottom-right">
             <h4 className="font-label text-[10px] uppercase tracking-widest text-secondary mb-4 flex items-center gap-2">
-              <AppIcon name="edit_document" size={14} />
+              <AppIcon name="edit" size={14} />
               Reescribir Código Fuente
             </h4>
             
@@ -181,7 +181,7 @@ export default function MagicEditorOverlay() {
               : 'bg-surface-container-high text-secondary border border-secondary/20 hover:border-secondary'
             }`}
         >
-          <AppIcon name={isActive ? 'close' : 'design_services'} size={18} />
+          <AppIcon name={isActive ? 'close' : 'edit'} size={18} />
           {isActive ? 'Cerrar Modo Estático' : 'Editor de Código en Vivo'}
         </button>
       </div>
