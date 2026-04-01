@@ -135,6 +135,11 @@ export default function CommunityPage() {
 
   const handleLike = async (post: Post) => {
     if (!user) return;
+    if (user.id === post.author_id) {
+      alert('¡Chef! No puedes darte Like a ti mismo.');
+      return;
+    }
+
     const response = await fetch('/api/community/like', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -165,81 +170,83 @@ export default function CommunityPage() {
   };
 
   const mainPosts = posts.filter(p => !p.parent_id);
-  const getReplies = (postId: string) => posts.filter(p => p.parent_id === postId).reverse();
+  const getReplies = (postId: string) => posts.filter(p => p.parent_id === postId).sort((a,b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
   return (
-    <div className="flex h-screen bg-[#121413] text-on-surface overflow-hidden">
+    <div className="flex h-screen bg-[#121413] text-on-surface overflow-hidden selection:bg-secondary/30">
       <div className="flex-1 flex justify-center overflow-y-auto px-4 py-8">
-        <div className="w-full flex flex-col lg:flex-row gap-8 max-w-6xl justify-center">
+        <div className="w-full flex flex-col lg:flex-row gap-12 max-w-7xl justify-center">
           
           {/* Main Feed Column */}
-          <div className="flex-1 max-w-2xl space-y-6">
-            <header className="flex items-center justify-between pb-4 border-b border-outline-variant/10">
+          <div className="flex-1 max-w-2xl space-y-10">
+            <header className="flex items-end justify-between pb-6 border-b border-outline-variant/10">
               <div>
-                <h1 className="text-2xl font-headline tracking-wide uppercase">Comunidad</h1>
-                <p className="text-[10px] text-secondary tracking-widest uppercase mt-1">Conecta con el mundo gastronómico</p>
+                <h1 className="text-3xl font-headline tracking-widest uppercase text-[#e2e3e0]">Comunidad</h1>
+                <p className="text-[9px] text-secondary/60 tracking-[0.4em] uppercase mt-2 font-medium">The Global Chef Network</p>
               </div>
-              <AppIcon name="forum" className="text-secondary" />
+              <div className="p-2 border border-secondary/10 rounded-full animate-float">
+                <AppIcon name="forum" className="text-secondary" size={24} />
+              </div>
             </header>
 
-            {/* Create Input Area */}
-            <div className="glass-panel p-6 rounded-[32px] border border-secondary/10 relative overflow-hidden">
+            {/* Create Input Area - Ultra Minimalist */}
+            <div className="bg-surface-container-low/20 rounded-[40px] border border-white/5 p-8 relative overflow-hidden backdrop-blur-xl group hover:border-secondary/10 transition-colors">
               {replyingTo && (
-                <div className="mb-4 p-3 bg-surface-container-high rounded-xl border border-secondary/20 flex justify-between items-center text-xs">
-                  <span className="text-on-surface-variant italic">Respondiendo a: <b>{replyingTo.author_name}</b></span>
-                  <button onClick={() => setReplyingTo(null)} className="text-error opacity-70 hover:opacity-100 transition-opacity"><AppIcon name="close" size={14}/></button>
+                <div className="mb-6 px-4 py-2 bg-secondary/5 rounded-full border border-secondary/10 flex justify-between items-center text-[10px] tracking-widest uppercase">
+                  <span className="text-secondary/70">Respondiendo a <b className="text-secondary">{replyingTo.author_name}</b></span>
+                  <button onClick={() => setReplyingTo(null)} className="hover:text-error transition-colors"><AppIcon name="close" size={14}/></button>
                 </div>
               )}
-              <div className="flex gap-4">
-                <div className="w-12 h-12 rounded-full bg-surface-container-highest border border-secondary/20 flex items-center justify-center font-bold text-secondary uppercase shrink-0">
+              <div className="flex gap-6">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-surface-container-high to-surface-container-lowest border border-white/5 flex items-center justify-center font-bold text-secondary/80 uppercase shrink-0 shadow-inner">
                   {user?.email?.charAt(0) || 'U'}
                 </div>
                 <div className="flex-1">
                   <textarea
-                    className="w-full bg-transparent border-none focus:ring-0 resize-none text-base placeholder:text-on-surface-variant font-light min-h-[80px]"
-                    placeholder={replyingTo ? "Añade un comentario..." : "¿Qué estás creando hoy, Chef?"}
+                    className="w-full bg-transparent border-none focus:ring-0 resize-none text-[17px] placeholder:text-on-surface-variant/40 font-light min-h-[100px] leading-relaxed"
+                    placeholder={replyingTo ? "Comparte tu opinión técnica..." : "¿Qué hay en tu mesa de trabajo?"}
                     value={newContent}
                     onChange={e => setNewContent(e.target.value.slice(0, MAX_CHARS))}
                   />
                   
                   {mediaFiles.length > 0 && (
-                    <div className="mt-4 grid grid-cols-2 gap-2">
+                    <div className="mt-6 grid grid-cols-2 gap-3">
                       {mediaFiles.map((f, i) => (
-                        <div key={i} className="relative aspect-video rounded-xl overflow-hidden bg-black/40 border border-secondary/20 group">
+                        <div key={i} className="relative aspect-video rounded-3xl overflow-hidden bg-[#0a0a0a] border border-white/5 group shadow-2xl">
                           {f.type.startsWith('video/') ? (
-                            <div className="flex items-center justify-center h-full"><AppIcon name="videocam" size={40} className="text-secondary opacity-50"/></div>
+                            <div className="flex items-center justify-center h-full"><AppIcon name="videocam" size={32} className="text-secondary opacity-30"/></div>
                           ) : (
-                            <img src={URL.createObjectURL(f)} alt="preview" className="w-full h-full object-cover"/>
+                            <img src={URL.createObjectURL(f)} alt="preview" className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-700"/>
                           )}
                           <button 
                             onClick={() => setMediaFiles(prev => prev.filter((_, idx) => idx !== i))}
-                            className="absolute top-2 right-2 p-1.5 bg-black/60 rounded-full hover:bg-error transition-colors"
+                            className="absolute top-3 right-3 p-2 bg-black/80 rounded-full hover:bg-error transition-all scale-75 group-hover:scale-100"
                           >
-                            <AppIcon name="close" size={12}/>
+                            <AppIcon name="close" size={14}/>
                           </button>
                         </div>
                       ))}
                     </div>
                   )}
 
-                  <div className="flex justify-between items-center mt-4 pt-4 border-t border-outline-variant/5">
-                    <div className="flex gap-1">
+                  <div className="flex justify-between items-center mt-6 pt-6 border-t border-white/5">
+                    <div className="flex gap-2">
                       <input type="file" ref={fileInputRef} onChange={handleFileSelect} multiple className="hidden" accept="image/*,video/*"/>
-                      <button onClick={() => fileInputRef.current?.click()} className="p-2.5 text-secondary/60 hover:text-secondary hover:bg-secondary/5 rounded-full transition-all">
-                        <AppIcon name="attach_file" size={18} />
+                      <button onClick={() => fileInputRef.current?.click()} className="w-10 h-10 flex items-center justify-center text-secondary/40 hover:text-secondary hover:bg-secondary/5 rounded-full transition-all border border-transparent hover:border-secondary/10">
+                        <AppIcon name="attach_file" size={20} />
                       </button>
                     </div>
                     
-                    <div className="flex items-center gap-4">
-                      <span className={`text-[10px] font-mono tracking-tighter ${newContent.length >= MAX_CHARS ? 'text-error' : 'text-on-surface-variant'}`}>
+                    <div className="flex items-center gap-6">
+                      <span className={`text-[11px] font-mono tracking-widest ${newContent.length >= MAX_CHARS ? 'text-error' : 'text-on-surface-variant/30'}`}>
                         {newContent.length} / {MAX_CHARS}
                       </span>
                       <button
                         onClick={handlePost}
                         disabled={(!newContent.trim() && mediaFiles.length === 0) || isUploading}
-                        className="bg-secondary text-on-secondary px-8 py-2.5 rounded-full font-bold uppercase text-[10px] tracking-widest disabled:opacity-30 transition-all active:scale-95 flex items-center gap-2"
+                        className="bg-secondary text-on-secondary px-10 py-3 rounded-full font-bold uppercase text-[10px] tracking-[0.2em] disabled:opacity-20 transition-all hover:scale-105 shadow-lg shadow-secondary/10 flex items-center justify-center min-w-[140px]"
                       >
-                        {isUploading ? <div className="w-3 h-3 border-2 border-on-secondary border-t-transparent rounded-full animate-spin"></div> : (replyingTo ? 'Comentar' : 'Publicar')}
+                        {isUploading ? <div className="w-4 h-4 border-2 border-on-secondary border-t-transparent rounded-full animate-spin"></div> : (replyingTo ? 'Comentar' : 'Publicar')}
                       </button>
                     </div>
                   </div>
@@ -247,128 +254,156 @@ export default function CommunityPage() {
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-2">
               {loading ? (
-                <div className="flex justify-center items-center py-20 animate-pulse text-secondary text-xs uppercase tracking-widest font-headline">Sincronizando universo culinario...</div>
+                <div className="flex flex-col items-center justify-center py-32 space-y-4">
+                  <div className="w-12 h-12 border-2 border-secondary/20 border-t-secondary rounded-full animate-spin"></div>
+                  <div className="text-secondary/40 text-[10px] uppercase tracking-[0.3em] font-medium animate-pulse">Sincronizando hilos culinarios...</div>
+                </div>
               ) : (
                 mainPosts.map(post => (
-                  <div key={post.id} className="space-y-3">
-                    {/* MAIN POST */}
-                    <div className="glass-panel p-6 rounded-[32px] border border-secondary/5 flex gap-4 backdrop-blur-md">
-                      <div className="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant/10 flex items-center justify-center font-bold text-on-surface-variant uppercase shrink-0">
-                        {post.author_name.charAt(0)}
+                  <div key={post.id} className="relative group">
+                    {/* MAIN POST CARD */}
+                    <div className="relative z-10 glass-panel p-8 rounded-[40px] border border-white/5 flex gap-6 hover:bg-surface-container-low/30 transition-all duration-500 mb-2">
+                      <div className="relative group/avatar shrink-0">
+                        <div className="w-12 h-12 rounded-full border border-secondary/20 overflow-hidden bg-surface-container-high transition-transform group-hover/avatar:scale-110 duration-500">
+                           <div className="w-full h-full flex items-center justify-center font-bold text-secondary uppercase text-sm">
+                             {post.author_name.charAt(0)}
+                           </div>
+                        </div>
                       </div>
+                      
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-baseline justify-between mb-1">
-                          <div className="flex items-center gap-2 overflow-hidden">
-                            <span className="font-bold text-on-surface truncate max-w-[120px]">{post.author_name}</span>
-                            {post.author_role === 'ADMIN' && <AppIcon name="workspace_premium" size={12} className="text-secondary shrink-0" />}
-                            <span className="text-[10px] font-mono text-on-surface-variant opacity-40 shrink-0">
-                              {new Date(post.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-3 overflow-hidden">
+                            <span className="font-bold text-[#f0f0f0] truncate text-[15px]">{post.author_name}</span>
+                            {post.author_role === 'ADMIN' && <AppIcon name="workspace_premium" size={13} className="text-secondary shrink-0" />}
+                            <span className="text-[10px] font-mono text-on-surface-variant/40 tracking-tighter">
+                              {new Date(post.created_at).toLocaleDateString([], {day:'2-digit', month:'short'})} · {new Date(post.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                             </span>
                           </div>
                         </div>
                         
-                        <p className="text-on-surface-variant font-light text-[15px] leading-relaxed whitespace-pre-wrap mb-4">
+                        <p className="text-on-surface-variant font-light text-[16px] leading-[1.65] whitespace-pre-wrap mb-6 max-w-[95%]">
                           {post.content}
                         </p>
 
                         {post.media_urls && post.media_urls.length > 0 && (
-                          <div className={`grid gap-2 mb-4 ${post.media_urls.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                          <div className={`grid gap-3 mb-6 ${post.media_urls.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
                             {post.media_urls.map((url, i) => (
-                              <div key={i} className="relative rounded-2xl overflow-hidden bg-black/20 border border-outline-variant/10 aspect-video">
+                              <div key={i} className="relative rounded-[32px] overflow-hidden bg-black/40 border border-white/5 aspect-[4/3] group/media">
                                 {post.media_type === 'video' ? (
                                   <video src={url} className="w-full h-full object-cover" controls/>
                                 ) : (
-                                  <img src={url} alt="content" className="w-full h-full object-cover"/>
+                                  <img src={url} alt="content" className="w-full h-full object-cover transition-transform duration-[2s] group-hover/media:scale-110"/>
                                 )}
                               </div>
                             ))}
                           </div>
                         )}
 
-                        <div className="flex items-center gap-3">
-                          <button onClick={() => handleLike(post)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-secondary/10 group transition-all">
-                            <AppIcon name="thumb_up" size={14} className="text-on-surface-variant group-hover:text-secondary"/>
-                            <span className="text-[11px] font-mono text-on-surface-variant group-hover:text-secondary">{post.likes_count}</span>
+                        <div className="flex items-center gap-8 border-t border-white/5 pt-6">
+                          <button onClick={() => handleLike(post)} className="flex items-center gap-2 group/btn">
+                             <div className="p-2.5 rounded-full group-hover/btn:bg-secondary/10 transition-colors">
+                               <AppIcon name="thumb_up" size={16} className="text-on-surface-variant/40 group-hover/btn:text-secondary transition-colors"/>
+                             </div>
+                             <span className="text-[12px] font-mono text-on-surface-variant/40 group-hover/btn:text-secondary">{post.likes_count}</span>
                           </button>
-                          <button onClick={() => setReplyingTo(post)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-primary/10 group transition-all">
-                            <AppIcon name="forum" size={14} className="text-on-surface-variant group-hover:text-primary"/>
-                            <span className="text-[11px] font-mono text-on-surface-variant group-hover:text-primary">{getReplies(post.id).length}</span>
+                          
+                          <button onClick={() => setReplyingTo(post)} className="flex items-center gap-2 group/btn">
+                             <div className="p-2.5 rounded-full group-hover/btn:bg-primary/10 transition-colors">
+                               <AppIcon name="forum" size={16} className="text-on-surface-variant/40 group-hover/btn:text-primary transition-colors"/>
+                             </div>
+                             <span className="text-[12px] font-mono text-on-surface-variant/40 group-hover/btn:text-primary">{getReplies(post.id).length}</span>
                           </button>
-                          <button onClick={() => sharePost(post)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-surface-container-high group transition-all ml-auto">
-                            <AppIcon name="arrow_forward" size={14} className="text-on-surface-variant"/>
+
+                          <button onClick={() => sharePost(post)} className="ml-auto w-10 h-10 flex items-center justify-center hover:bg-white/5 rounded-full text-on-surface-variant/40 transition-colors">
+                            <AppIcon name="arrow_forward" size={16}/>
                           </button>
                         </div>
                       </div>
                     </div>
 
-                    {/* REPLIES LOOP */}
-                    {getReplies(post.id).map(reply => (
-                      <div key={reply.id} className="ml-12 glass-panel p-4 rounded-[24px] border-l-2 border-secondary/20 flex gap-3 bg-surface-container-low/40">
-                        <div className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-[10px] text-on-surface-variant uppercase shrink-0">
-                          {reply.author_name.charAt(0)}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-baseline gap-2 mb-0.5">
-                            <span className="font-bold text-[13px] text-on-surface truncate">{reply.author_name}</span>
-                            <span className="text-[9px] font-mono text-on-surface-variant opacity-40">
-                              {new Date(reply.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                            </span>
-                          </div>
-                          <p className="text-on-surface-variant font-light text-[13px] leading-relaxed mb-3">
-                            {reply.content}
-                          </p>
+                    {/* THREAD LINE IF HAS REPLIES */}
+                    {getReplies(post.id).length > 0 && (
+                      <div className="absolute left-[54px] top-[100px] bottom-0 w-px bg-gradient-to-b from-secondary/40 via-secondary/10 to-transparent mb-[-20px] pointer-events-none opacity-50" />
+                    )}
 
-                          {reply.media_urls && reply.media_urls.length > 0 && (
-                            <div className="grid grid-cols-2 gap-1.5 mb-3">
-                              {reply.media_urls.map((url, i) => (
-                                <div key={i} className="relative rounded-xl overflow-hidden bg-black/20 aspect-video">
-                                  {reply.media_type === 'video' ? <video src={url} className="w-full h-full object-cover" /> : <img src={url} className="w-full h-full object-cover" />}
+                    {/* REPLIES NESTED */}
+                    <div className="space-y-2 mt-4 ml-8">
+                       {getReplies(post.id).map((reply, ridx, rarr) => (
+                         <div key={reply.id} className="relative group/reply pb-4">
+                            {/* Horizontal connector line */}
+                            <div className="absolute left-[-22px] top-[30px] w-[22px] h-px bg-secondary/30" />
+                            
+                            <div className="glass-panel p-6 rounded-[32px] border border-white/5 flex gap-4 bg-surface-container-low/20 backdrop-blur-3xl group-hover/reply:border-secondary/20 transition-all duration-300">
+                              <div className="w-10 h-10 rounded-full border border-secondary/10 bg-surface-container-high flex items-center justify-center font-bold text-[10px] text-secondary/60 uppercase shrink-0 transform scale-90">
+                                {reply.author_name.charAt(0)}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className="font-bold text-[14px] text-on-surface/90">{reply.author_name}</span>
+                                  <span className="text-[9px] font-mono text-on-surface-variant/30 tracking-tighter">
+                                    {new Date(reply.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                  </span>
                                 </div>
-                              ))}
-                            </div>
-                          )}
+                                <p className="text-on-surface-variant/80 font-light text-[14px] leading-relaxed mb-4">
+                                  {reply.content}
+                                </p>
 
-                          <div className="flex items-center gap-4">
-                            <button onClick={() => handleLike(reply)} className="flex items-center gap-1 text-[10px] text-on-surface-variant/60 hover:text-secondary group">
-                              <AppIcon name="thumb_up" size={12}/>
-                              <span className="font-mono">{reply.likes_count}</span>
-                            </button>
-                            <button onClick={() => sharePost(reply)} className="flex items-center gap-1 text-[10px] text-on-surface-variant/60 hover:text-on-surface group">
-                              <AppIcon name="arrow_forward" size={12}/>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                                {reply.media_urls && reply.media_urls.length > 0 && (
+                                  <div className="grid grid-cols-2 gap-2 mb-4">
+                                    {reply.media_urls.map((url, i) => (
+                                      <div key={i} className="relative rounded-2xl overflow-hidden bg-black/20 aspect-video">
+                                        {reply.media_type === 'video' ? <video src={url} className="w-full h-full object-cover" /> : <img src={url} alt="reply media" className="w-full h-full object-cover" />}
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+
+                                <div className="flex items-center gap-6">
+                                  <button onClick={() => handleLike(reply)} className="flex items-center gap-1.5 group/like">
+                                    <AppIcon name="thumb_up" size={13} className="text-on-surface-variant/30 group-hover/like:text-secondary transition-colors"/>
+                                    <span className="text-[11px] font-mono text-on-surface-variant/40 group-hover/like:text-secondary">{reply.likes_count}</span>
+                                  </button>
+                                  <button onClick={() => sharePost(reply)} className="text-on-surface-variant/20 hover:text-on-surface/50 transition-colors">
+                                    <AppIcon name="arrow_forward" size={13}/>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                         </div>
+                       ))}
+                    </div>
                   </div>
                 ))
               )}
             </div>
           </div>
 
-          {/* Right Sidebar (Ads Space) */}
-          <aside className="hidden lg:block w-[300px] space-y-6">
-            <div className="glass-panel p-8 rounded-[38px] border border-secondary/10 flex flex-col items-center justify-center min-h-[400px] text-center sticky top-8">
-               <div className="w-16 h-16 rounded-full bg-secondary/10 flex items-center justify-center mb-4">
-                 <AppIcon name="auto_awesome" className="text-secondary" size={32} />
+          {/* Right Sidebar (Ads Space) - Refined */}
+          <aside className="hidden lg:block w-[300px] space-y-8">
+            <div className="bg-surface-container-low/10 rounded-[48px] border border-white/5 p-8 flex flex-col items-center justify-center min-h-[450px] text-center sticky top-8 backdrop-blur-2xl">
+               <div className="w-20 h-20 rounded-full border border-secondary/10 flex items-center justify-center mb-6 relative">
+                 <div className="absolute inset-0 bg-secondary/5 rounded-full animate-pulse-slow" />
+                 <AppIcon name="auto_awesome" className="text-secondary/80 animate-float" size={32} />
                </div>
-               <h3 className="font-headline text-lg tracking-widest uppercase mb-2">Publicidad</h3>
-               <p className="text-xs text-on-surface-variant font-light leading-relaxed max-w-[200px]">
-                 Este es un espacio reservado para futuras promociones y contenido exclusivo de patrocinadores de Aura Gastronomy.
+               <h3 className="font-headline text-xl tracking-[0.2em] uppercase mb-3 text-white">Curated</h3>
+               <p className="text-[10px] text-secondary tracking-widest uppercase mb-6 font-medium opacity-60">Aura Gastronomy Ads</p>
+               <p className="text-xs text-on-surface-variant/60 font-light leading-relaxed max-w-[200px]">
+                 Espacio exclusivo para la alta gastronomía y patrocinadores premium.
                </p>
-               <div className="mt-8 pt-8 border-t border-outline-variant/10 w-full flex flex-col gap-3">
-                  <div className="h-2 w-full bg-surface-container-high rounded-full overflow-hidden opacity-30">
-                    <div className="h-full w-2/3 bg-secondary animate-pulse" />
+               <div className="mt-10 pt-10 border-t border-white/5 w-full space-y-4">
+                  <div className="h-[2px] w-full bg-secondary/5 rounded-full overflow-hidden">
+                    <div className="h-full w-full bg-gradient-to-r from-transparent via-secondary/30 to-transparent animate-shimmer" />
                   </div>
-                  <div className="h-2 w-1/2 bg-surface-container-high rounded-full overflow-hidden opacity-30" />
+                  <div className="h-[1px] w-2/3 mx-auto bg-white/5 rounded-full" />
                </div>
             </div>
             
-            <div className="glass-panel p-6 rounded-[28px] border border-secondary/5 text-[10px] text-on-surface-variant/50 font-mono tracking-tighter text-center uppercase">
-              Aura Gastronomy © 2026<br/>
-              Network Experience
+            <div className="px-6 text-[10px] text-on-surface-variant/20 font-mono tracking-[0.3em] text-center uppercase">
+              The Digital Hub<br/>
+              AURA NETWORK v1.2
             </div>
           </aside>
 
