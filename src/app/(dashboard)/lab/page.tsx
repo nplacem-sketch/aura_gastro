@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import AppIcon from '@/components/AppIcon';
+import InlineEditor from '@/components/InlineEditor';
 import LockedContentOverlay from '@/components/LockedContentOverlay';
 import PlansPopup from '@/components/PlansPopup';
 import { canAccessTier } from '@/lib/access';
@@ -22,6 +23,25 @@ type Ingredient = {
   tier?: string;
   created_at: string;
 };
+
+const DEFAULT_BEST_SEASON = `Todo el a\u00f1o`;
+
+function normalizeLabText(value: string | null | undefined) {
+  return String(value || '').replace(/\bano\b/gi, (match) => {
+    if (match === match.toUpperCase()) return `A\u00d1O`;
+    if (match[0] === match[0].toUpperCase()) return `A\u00f1o`;
+    return `a\u00f1o`;
+  });
+}
+
+function normalizeBestSeason(value: string | string[] | undefined) {
+  const entries = Array.isArray(value) ? value : [value || DEFAULT_BEST_SEASON];
+  const normalized = entries
+    .map((entry) => normalizeLabText(String(entry || '').trim()))
+    .filter(Boolean);
+
+  return normalized.length > 0 ? normalized : [DEFAULT_BEST_SEASON];
+}
 
 export default function LabPage() {
   const { plan, role } = useAuth();
@@ -43,14 +63,13 @@ export default function LabPage() {
     category: 'ESTABILIZANTE',
     culinary_notes: '',
     origin_region: '',
-    best_season: 'Todo el año',
+    best_season: DEFAULT_BEST_SEASON,
     technical_data: { 'Poder gelificante': '0', Solubilidad: 'Alta' },
     is_premium: true,
     tier: 'PREMIUM',
   });
 
-  const formatBestSeason = (value: string | string[] | undefined) =>
-    Array.isArray(value) ? value.join(', ') : value || 'Todo el año';
+  const formatBestSeason = (value: string | string[] | undefined) => normalizeBestSeason(value).join(', ');
 
   const resolveTier = (ingredient: Partial<Ingredient>) =>
     ingredient.tier ?? (ingredient.is_premium ? 'PREMIUM' : 'FREE');
@@ -63,11 +82,9 @@ export default function LabPage() {
 
     if (explicitNote) return String(explicitNote);
 
-    const season = formatBestSeason(ingredient.best_season).toLowerCase();
     const category = ingredient.category.toLowerCase();
-    const origin = ingredient.origin_region || 'origen controlado';
 
-    return `${ingredient.name} se trabaja como ${category} de perfil estable. Su mejor ventana operativa es ${season}, con especial atención al origen ${origin} y a una dosificación ajustada al equilibrio final del plato.`;
+    return `${ingredient.name} se trabaja como ${category} de perfil estable en la alta cocina, con especial atención a la sinergia molecular y su impacto en el diseño del menú final.`;
   };
 
   async function handleAdd() {
@@ -76,9 +93,7 @@ export default function LabPage() {
     const payload = {
       ...newIngredient,
       tier: resolveTier(newIngredient),
-      best_season: Array.isArray(newIngredient.best_season)
-        ? newIngredient.best_season
-        : [newIngredient.best_season || 'Todo el año'],
+      best_season: normalizeBestSeason(newIngredient.best_season),
     };
 
     const { error } = await labDb().from('ingredients').insert([payload]);
@@ -91,7 +106,7 @@ export default function LabPage() {
         category: 'ESTABILIZANTE',
         culinary_notes: '',
         origin_region: '',
-        best_season: 'Todo el año',
+        best_season: DEFAULT_BEST_SEASON,
         technical_data: { 'Poder gelificante': '0', Solubilidad: 'Alta' },
         is_premium: true,
         tier: 'PREMIUM',
@@ -277,16 +292,20 @@ export default function LabPage() {
             <div className="md:w-1/3 bg-surface-container-high p-12 flex flex-col justify-between border-r border-outline-variant/5">
               <div>
                 <AppIcon name="microscope" size={56} className="text-secondary mb-8" aria-label="Análisis" />
-                <h2 className="text-4xl font-headline text-on-surface mb-2">{selected.name}</h2>
+                <InlineEditor 
+                  as="h2"
+                  text={selected.name} 
+                  table="ingredients" 
+                  id={selected.id} 
+                  field="name" 
+                  dbName="lab"
+                  className="text-4xl font-headline text-on-surface mb-2" 
+                />
                 <p className="font-label text-[10px] text-secondary uppercase tracking-[0.3em] font-bold">
                   {selected.category} | {selected.scientific_name || 'GENÉRICO'}
                 </p>
               </div>
               <div className="space-y-6">
-                <div>
-                  <p className="text-[8px] font-label text-on-surface-variant uppercase tracking-[0.2em] mb-2">Temporada óptima</p>
-                  <p className="text-xl font-headline text-on-surface">{formatBestSeason(selected.best_season)}</p>
-                </div>
                 <button onClick={() => setSelected(null)} className="w-full py-4 border border-outline-variant/20 text-on-surface-variant rounded-2xl font-label text-[10px] uppercase tracking-widest hover:bg-surface-container-highest transition-all">
                   Cerrar análisis
                 </button>
@@ -295,14 +314,22 @@ export default function LabPage() {
             <div className="flex-1 p-12 overflow-y-auto space-y-12">
               <section>
                 <h4 className="font-label text-[10px] uppercase tracking-widest text-secondary mb-6">Perfil organoléptico</h4>
-                <p className="text-lg font-light leading-relaxed text-on-surface">{selected.culinary_notes}</p>
+                <InlineEditor 
+                  as="p"
+                  text={selected.culinary_notes} 
+                  table="ingredients" 
+                  id={selected.id} 
+                  field="culinary_notes" 
+                  dbName="lab"
+                  className="text-lg font-light leading-relaxed text-on-surface" 
+                />
               </section>
 
               <section className="grid grid-cols-2 gap-8">
                 <div>
                   <h4 className="font-label text-[10px] uppercase tracking-widest text-secondary mb-6">Sinergias de Sabor</h4>
                   <div className="space-y-3">
-                    {[selected.category, selected.origin_region || 'Origen técnico', formatBestSeason(selected.best_season)].map((entry) => (
+                    {[selected.category].map((entry) => (
                       <div key={entry} className="flex items-center gap-3 text-sm font-light text-on-surface-variant">
                         <span className="w-1 h-1 rounded-full bg-secondary"></span>
                         {entry}
@@ -360,8 +387,24 @@ export default function LabPage() {
                 <p className="text-[10px] font-label text-secondary font-bold uppercase tracking-widest">{accessTier}</p>
               </div>
 
-              <h3 className="font-headline text-2xl text-on-surface mb-3 group-hover:text-secondary transition-colors">{item.name}</h3>
-              <p className="text-on-surface-variant text-xs line-clamp-3 mb-8 leading-relaxed font-light flex-1">{item.culinary_notes}</p>
+              <InlineEditor 
+                as="h3"
+                text={item.name} 
+                table="ingredients" 
+                id={item.id} 
+                field="name" 
+                dbName="lab"
+                className="font-headline text-2xl text-on-surface mb-3 group-hover:text-secondary transition-colors" 
+              />
+              <InlineEditor 
+                as="p"
+                text={item.culinary_notes} 
+                table="ingredients" 
+                id={item.id} 
+                field="culinary_notes" 
+                dbName="lab"
+                className="text-on-surface-variant text-xs line-clamp-3 mb-8 leading-relaxed font-light flex-1" 
+              />
 
               <div className="space-y-3 mb-8">
                 {item.technical_data &&
@@ -375,16 +418,6 @@ export default function LabPage() {
                     ))}
               </div>
 
-              <div className="grid grid-cols-2 gap-6 pt-6 border-t border-outline-variant/10">
-                <div>
-                  <p className="text-[8px] font-label text-on-surface-variant uppercase tracking-[0.2em] mb-1">Origen Natural</p>
-                  <p className="text-[10px] text-on-surface uppercase tracking-widest truncate">{item.origin_region}</p>
-                </div>
-                <div>
-                  <p className="text-[8px] font-label text-on-surface-variant uppercase tracking-[0.2em] mb-1">Mejor Temporada</p>
-                  <p className="text-[10px] text-on-surface uppercase tracking-widest">{formatBestSeason(item.best_season)}</p>
-                </div>
-              </div>
             </div>
           );
         })}

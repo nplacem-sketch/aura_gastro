@@ -5,6 +5,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 import { AuthProvider } from "@/lib/auth-context";
+import MagicEditorOverlay from "@/components/MagicEditorOverlay";
 
 const notoSerif = Noto_Serif({
   subsets: ["latin"],
@@ -51,7 +52,10 @@ export default function RootLayout({
           manrope.variable,
         )}
       >
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <MagicEditorOverlay />
+        </AuthProvider>
       </body>
     </html>
   );
