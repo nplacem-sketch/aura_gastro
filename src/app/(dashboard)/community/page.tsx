@@ -79,13 +79,13 @@ export default function CommunityPage() {
   const handleLike = async (post: Post) => {
     if (!user) return;
     
-    const { error } = await fetch('/api/community/like', {
+    const response = await fetch('/api/community/like', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ post_id: post.id })
     });
 
-    if (!error) {
+    if (response.ok) {
       // Optimistic update
       setPosts(prev => prev.map(p => p.id === post.id ? { ...p, likes_count: p.likes_count + 1 } : p));
     }
