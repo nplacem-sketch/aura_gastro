@@ -155,20 +155,30 @@ export default function MagicEditorOverlay() {
             {status === 'success' && <p className="text-primary text-xs mb-4">{statusMsg}</p>}
             {status === 'error' && <p className="text-error text-xs mb-4">{statusMsg}</p>}
 
-            <div className="flex justify-end gap-3">
+            <div className="flex justify-between items-center gap-3">
               <button
-                onClick={() => setEditingNode(null)}
-                className="px-6 py-3 border border-outline-variant/20 text-on-surface rounded-xl font-label text-[10px] uppercase tracking-widest hover:bg-surface-container-highest"
+                onClick={() => { setNewText(''); if (newText === '') { handleSave(); } }}
+                className="px-4 py-3 bg-error text-on-error rounded-xl font-label text-[10px] uppercase tracking-widest font-bold opacity-30 hover:opacity-100 transition-opacity"
+                title="Eliminar este fragmento de texto del código"
               >
-                Descartar
+                <AppIcon name="delete" size={14} />
               </button>
-              <button
-                onClick={handleSave}
-                disabled={status === 'saving'}
-                className="px-6 py-3 bg-secondary text-on-secondary rounded-xl font-label text-[10px] uppercase tracking-widest font-bold disabled:opacity-50"
-              >
-                Inyectar Código
-              </button>
+              
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setEditingNode(null)}
+                  className="px-4 py-3 border border-outline-variant/20 text-on-surface rounded-xl font-label text-[10px] uppercase tracking-widest hover:bg-surface-container-highest whitespace-nowrap"
+                >
+                  Descartar
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={status === 'saving'}
+                  className="px-6 py-3 bg-secondary text-on-secondary rounded-xl font-label text-[10px] uppercase tracking-widest font-bold disabled:opacity-50 whitespace-nowrap shadow-lg shadow-secondary/10"
+                >
+                  Inyectar
+                </button>
+              </div>
             </div>
           </div>
         )}
