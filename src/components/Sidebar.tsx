@@ -37,6 +37,7 @@ export default function Sidebar() {
 
   const menuItems = [
     { name: 'Dashboard', icon: 'dashboard', href: '/', tier: null },
+    { name: 'Comunidad', icon: 'forum', href: '/community', tier: null },
     { name: 'Academia', icon: 'school', href: '/academy', tier: null },
     { name: 'Recetario', icon: 'menu_book', href: '/recipes', tier: 'PRO' },
     { name: 'Laboratorio', icon: 'biotech', href: '/lab', tier: 'PRO' },
