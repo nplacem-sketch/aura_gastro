@@ -6,7 +6,7 @@ require('dotenv').config({ path: '.env.local' });
 
 const aDb = createClient(process.env.SUPABASE_ACADEMY_URL, process.env.SUPABASE_ACADEMY_SERVICE_KEY);
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
-const DRIVE_FOLDER = "G:\\\\Mi unidad\\\\LIBROS COCINA";
+const DRIVE_FOLDER = "G:\\Mi unidad\\LIBROS COCINA";
 
 function getBooks() {
   try {
@@ -34,39 +34,43 @@ function extractText(bookPath) {
   }
 }
 
+const GEMINI_KEYS = [
+  "AIzaSyBIWzM25LcpUSH3lYxuqNSDb9E4oL6wV5Y",
+  "AIzaSyA7E48usjwy_StTvDo0ub7Q3urNS9j8y3w",
+  "AIzaSyBmWLNwQ4IWaxgk6EJfztjJ5o_o3uR6Jwk"
+];
+
 async function askGroq(prompt, systemContext = "") {
-  for (let attempt = 1; attempt <= 3; attempt++) {
+  // 1. Intentar Groq Primero (Más Rápido)
+  try {
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${GROQ_API_KEY}` },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        messages: [{ role: "system", content: systemContext }, { role: "user", content: prompt }],
+        response_format: { type: "json_object" }
+      })
+    });
+    const data = await res.json();
+    if (data.choices) return JSON.parse(data.choices[0].message.content);
+  } catch (e) {}
+
+  // 2. Fallback a Carrusel de Gemini Keys
+  for (const key of GEMINI_KEYS) {
     try {
-      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${GROQ_API_KEY}`
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
-          messages: [
-            { role: "system", content: systemContext || "Eres un maestro gastronómico riguroso. Responde solo el JSON válido sin backticks." },
-            { role: "user", content: prompt }
-          ],
-          response_format: { type: "json_object" },
-          temperature: 0.3
+          system_instruction: { parts: [{ text: systemContext }] },
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: "application/json" }
         })
       });
-
       const data = await res.json();
-      if (data.error) throw new Error(data.error.message);
-      
-      const content = data.choices[0].message.content;
-      return JSON.parse(content);
-    } catch (e) {
-      console.log(`  [Groq Error] (intento ${attempt}): ${e.message}`);
-      if (e.message.includes('Rate limit') || e.message.includes('429')) {
-        await new Promise(r => setTimeout(r, 10000));
-      } else {
-        await new Promise(r => setTimeout(r, 3000));
-      }
-    }
+      if (data.candidates) return JSON.parse(data.candidates[0].content.parts[0].text);
+    } catch (e) {}
   }
   return null;
 }
@@ -140,8 +144,8 @@ Devuelve un JSON estrictamente válido con esta estructura:
         console.log(`      x Falló el formato`);
       }
       
-      // Espera de 4 a 6 segundos para oxigenar la API de Groq y no golpear RATE LIMITS (30 rpm).
-      await new Promise(r => setTimeout(r, 5000));
+      // Espera mínima para que el disco respire
+      await new Promise(r => setTimeout(r, 500));
     }
   }
 }

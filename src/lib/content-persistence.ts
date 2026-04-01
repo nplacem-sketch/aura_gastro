@@ -158,15 +158,6 @@ async function persistCourse(topic: string, tier: string, generated: Record<stri
     }
   }
 
-  if (Array.isArray(generated.exam) && generated.exam.length > 0) {
-    const { error: examError } = await academySvc().from('exams').insert({
-      course_id: data.id,
-      questions: generated.exam,
-    });
-
-    if (examError) throw examError;
-  }
-
   const { error: marketingError } = await marketingSvc().from('marketing_tasks').insert({
     campaign_type: 'NEW_COURSE',
     target_url: `/academy/${data.id}`,

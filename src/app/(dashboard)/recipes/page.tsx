@@ -1,168 +1,179 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-
 import AppIcon from '@/components/AppIcon';
-import LockedContentOverlay from '@/components/LockedContentOverlay';
-import PlansPopup from '@/components/PlansPopup';
-import { canAccessTier } from '@/lib/access';
-import { useAuth } from '@/lib/auth-context';
-import { recipesDb } from '@/lib/supabase';
-import { normalizeDisplayText } from '@/lib/text';
 
-type RecipeCard = {
-  id: string;
-  title: string;
-  description: string | null;
-  tier: string;
-  prep_time: string | null;
-  difficulty: string | null;
-  created_at: string;
-};
-
-export default function RecipesPage() {
-  const { plan, role } = useAuth();
-  const [recipes, setRecipes] = useState<RecipeCard[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [lockedTier, setLockedTier] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchRecipes() {
-      const { data } = await recipesDb()
-        .from('recipes')
-        .select('id,title,description,tier,prep_time,difficulty,created_at')
-        .order('created_at', { ascending: false })
-        .limit(50);
-
-      setRecipes((data as RecipeCard[] | null) ?? []);
-      setLoading(false);
-    }
-
-    void fetchRecipes();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="animate-pulse p-20 text-center font-label text-xs uppercase tracking-[0.5em] text-secondary">
-        Sincronizando recetario maestro...
-      </div>
-    );
-  }
-
+export default function RecipeMainPage() {
   return (
-    <div className="mx-auto max-w-7xl pb-12">
-      <header className="mb-12 flex flex-col items-end justify-between gap-6 md:flex-row">
-        <div>
-          <p className="mb-2 font-label text-xs uppercase tracking-[0.3em] text-secondary">
-            Creatividad culinaria
-          </p>
-          <h1 className="text-5xl font-headline font-light tracking-tight text-on-surface">
-            Recetario <span className="font-normal italic text-secondary">Maestro</span>
-          </h1>
+    <div className="mx-auto max-w-4xl pb-24">
+      <header className="mb-16 border-b border-outline-variant/10 pb-12 text-center">
+        <p className="mb-4 font-label text-xs uppercase tracking-[0.4em] text-secondary">
+          Canon de Excelencia
+        </p>
+        <h1 className="mb-6 font-headline text-6xl font-light tracking-tight text-on-surface">
+          Manual de{' '}
+          <span className="font-normal italic text-secondary">Protocolo Técnico</span>
+        </h1>
+        <div className="flex justify-center gap-8 font-label text-[10px] uppercase tracking-widest text-[#afcdc3]/40">
+          <span className="flex items-center gap-2">
+            <AppIcon name="workspace_premium" size={14} className="text-secondary" />
+            Doctrina AURA
+          </span>
+          <span className="flex items-center gap-2">
+            <AppIcon name="science" size={14} className="text-secondary" />
+            Estandar Michelin
+          </span>
+          <span className="flex items-center gap-2">
+            <AppIcon name="menu_book" size={14} className="text-secondary" />
+            v1.0
+          </span>
         </div>
-        <button className="glass-panel group flex items-center gap-2 rounded-lg border border-secondary/20 px-6 py-3 font-label text-[10px] uppercase tracking-widest text-secondary transition-all hover:bg-secondary/10">
-          Nueva creacion
-          <AppIcon name="add" size={16} className="transition-transform group-hover:rotate-90" />
-        </button>
       </header>
 
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
-        {recipes.length > 0 ? (
-          recipes.map((recipe) => {
-            const canAccess = canAccessTier(plan, recipe.tier, role);
+      <div className="glass-panel relative overflow-hidden rounded-[2.5rem] border border-outline-variant/10 bg-surface/5 px-12 py-16 backdrop-blur-3xl lg:px-20">
+        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-secondary/5 blur-[100px]" />
 
-            return (
-              <article
-                key={recipe.id}
-                className={`group relative overflow-hidden rounded-2xl border glass-panel ${
-                  canAccess ? 'border-outline-variant/10 hover:border-secondary/30' : 'border-outline-variant/10 opacity-80'
-                }`}
-              >
-                {canAccess ? (
-                  <Link href={`/recipes/${recipe.id}`} className="absolute inset-0 z-40" />
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setLockedTier(recipe.tier)}
-                    className="absolute inset-0 z-40"
-                    aria-label={`Ver planes para ${recipe.title}`}
-                  />
-                )}
+        <div className="space-y-20">
 
-                <div className="relative min-h-[240px] bg-gradient-to-br from-[#191c1a] via-[#151816] to-[#101211] p-8">
-                  <div className="absolute inset-0 opacity-70">
-                    <div className="absolute -right-16 top-8 h-40 w-40 rounded-full bg-secondary/10 blur-3xl" />
-                    <div className="absolute bottom-0 left-0 h-32 w-32 rounded-full bg-primary/10 blur-3xl" />
-                  </div>
-
-                  <div className="relative z-10 flex h-full flex-col">
-                    <div className="mb-8 flex items-start justify-between gap-4">
-                      <span
-                        className={`rounded-md px-2 py-0.5 font-label text-[8px] uppercase tracking-widest ${
-                          recipe.tier === 'PREMIUM'
-                            ? 'bg-secondary text-on-secondary'
-                            : recipe.tier === 'PRO'
-                              ? 'bg-primary/20 text-primary'
-                              : 'bg-surface-container-highest text-on-surface'
-                        }`}
-                      >
-                        {recipe.tier}
-                      </span>
-                      <div className="rounded-full border border-outline-variant/10 bg-black/10 p-3 text-secondary/70">
-                        <AppIcon name="menu_book" size={18} />
-                      </div>
-                    </div>
-
-                    {!canAccess && (
-                      <LockedContentOverlay
-                        tier={recipe.tier}
-                        title="Receta reservada"
-                        description="Esta elaboracion pertenece a un plan superior. Al tocarla podras suscribirte desde el popup."
-                      />
-                    )}
-
-                    <h3 className="mb-4 font-headline text-2xl leading-tight text-on-surface transition-colors group-hover:text-secondary">
-                      {normalizeDisplayText(recipe.title)}
-                    </h3>
-                    <p className="mb-8 line-clamp-3 text-sm font-light text-on-surface-variant">
-                      {normalizeDisplayText(recipe.description) || 'Ficha culinaria lista para produccion y servicio.'}
-                    </p>
-
-                    <div className="mt-auto flex items-center justify-between border-t border-outline-variant/10 pt-6 font-label text-[9px] uppercase tracking-widest text-[#afcdc3]/40">
-                      <div className="flex gap-4">
-                        <span className="flex items-center gap-1.5">
-                          <AppIcon name="schedule" size={14} />
-                          {recipe.prep_time || 'Artesanal'}
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <AppIcon name="stairs" size={14} />
-                          {recipe.difficulty || 'Maestro'}
-                        </span>
-                      </div>
-                      <AppIcon name="arrow_forward" size={16} className="transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
-                </div>
-              </article>
-            );
-          })
-        ) : (
-          <div className="rounded-3xl border-2 border-dashed border-outline-variant/10 py-32 text-center md:col-span-3">
-            <AppIcon
-              name="menu_book"
-              size={36}
-              className="mx-auto mb-4 text-on-surface-variant/20"
-              aria-label="Recetario"
-            />
-            <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant">
-              El recetario esta vacio. Comienza tu primera creacion.
+          {/* Sección 1 */}
+          <section>
+            <h2 className="mb-6 flex items-center gap-4 font-headline text-3xl font-light tracking-tight text-secondary">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-secondary/20 bg-secondary/5 font-label text-sm text-secondary">01</span>
+              Fundamentos de la Excelencia Operativa
+            </h2>
+            <p className="mb-4 leading-relaxed text-on-surface-variant">
+              El presente documento constituye el canon doctrinal para la ejecución de la cocina de vanguardia en{' '}
+              <strong className="text-on-surface">AURA GASTRONOMY</strong>. Bajo la premisa de Ferran Adrià,{' '}
+              <em>&ldquo;Creatividad es no copiar&rdquo;</em>, establecemos que la innovación culinaria no es un fenómeno
+              fortuito, sino el resultado del rigor científico y la disciplina técnica.
             </p>
-          </div>
-        )}
-      </div>
+            <p className="leading-relaxed text-on-surface-variant">
+              Adoptamos la <strong className="text-on-surface">Metodología Sapiens</strong> como pilar de nuestra investigación:
+              un sistema holístico diseñado para &ldquo;comprender para crear&rdquo;. No basta con ejecutar una receta; es
+              imperativo analizar el ingrediente desde su origen biológico, su evolución histórica y sus propiedades físicas y
+              químicas.
+            </p>
+          </section>
 
-      <PlansPopup open={Boolean(lockedTier)} onClose={() => setLockedTier(null)} requiredTier={lockedTier ?? 'PRO'} />
+          {/* Sección 2 */}
+          <section>
+            <h2 className="mb-6 flex items-center gap-4 font-headline text-3xl font-light tracking-tight text-secondary">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-secondary/20 bg-secondary/5 font-label text-sm text-secondary">02</span>
+              Metrología y Termometría de Alta Precisión
+            </h2>
+            <p className="mb-6 leading-relaxed text-on-surface-variant">
+              En la alta gastronomía, la inconsistencia es el síntoma de una técnica deficiente.
+            </p>
+            <h3 className="mb-3 font-label text-xs uppercase tracking-widest text-on-surface">Protocolo de Pesaje y Reología</h3>
+            <ul className="mb-6 space-y-2 text-on-surface-variant">
+              <li className="flex gap-3"><span className="mt-1 text-secondary">—</span><span><strong className="text-on-surface">Instrumentación:</strong> Balanzas analíticas con resolución de <strong className="text-on-surface">0.01g</strong> obligatorias.</span></li>
+              <li className="flex gap-3"><span className="mt-1 text-secondary">—</span><span><strong className="text-on-surface">Precisión Química:</strong> El pesaje de hidrocoloides no admite desviaciones. Variaciones mínimas alteran la reología del producto final.</span></li>
+              <li className="flex gap-3"><span className="mt-1 text-secondary">—</span><span><strong className="text-on-surface">Monitoreo de pH:</strong> Líquidos con <strong className="text-on-surface">pH inferior a 3</strong> inhiben la reticulación. Neutralizar con bicarbonato de sodio.</span></li>
+            </ul>
+            <h3 className="mb-3 font-label text-xs uppercase tracking-widest text-on-surface">Control de Termodinámica Culinaria</h3>
+            <ul className="space-y-2 text-on-surface-variant">
+              <li className="flex gap-3"><span className="mt-1 text-secondary">—</span><span><strong className="text-on-surface">Desnaturalización:</strong> Distinguir entre proteínas globulares y tejido conectivo (colágeno).</span></li>
+              <li className="flex gap-3"><span className="mt-1 text-secondary">—</span><span><strong className="text-on-surface">Sous-Vide:</strong> Termocirculadores (Roner) prescritos para rangos de <strong className="text-on-surface">50–80°C</strong>.</span></li>
+            </ul>
+          </section>
+
+          {/* Sección 3 — Tabla */}
+          <section>
+            <h2 className="mb-6 flex items-center gap-4 font-headline text-3xl font-light tracking-tight text-secondary">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-secondary/20 bg-secondary/5 font-label text-sm text-secondary">03</span>
+              Ingeniería de la Despensa Modernista
+            </h2>
+            <div className="overflow-x-auto rounded-xl border border-outline-variant/10 bg-black/20">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-outline-variant/10 bg-secondary/5 font-label text-[10px] uppercase tracking-widest text-secondary">
+                    <th className="px-6 py-4">Agente</th>
+                    <th className="px-6 py-4 text-center">Prop. (%)</th>
+                    <th className="px-6 py-4">Función Reológica</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-outline-variant/5 font-light text-on-surface-variant">
+                  {[
+                    ['Alginato de Sodio', '0.5 – 1.0', 'Gelificante iónico para esferificación directa e inversa.'],
+                    ['Goma Xantana', '0.1 – 0.2', 'Espesante y suspensor; estabiliza emulsiones sin alterar sabor.'],
+                    ['Lecitina de Soja', '0.2 – 0.5', 'Emulsionante para la creación de Aires (burbujas ligeras).'],
+                    ['Agar-Agar', '0.5 – 2.0', 'Gelificante termoresistente. Espaguetis vegetales.'],
+                    ['Maltodextrina (N-Zorbit)', 'Variable', 'Terrificación: transformación de grasas en polvo.'],
+                    ['Gluconolactato Ca', '1.0 – 2.0', 'Esferificación inversa, sin sabor amargo.'],
+                    ['Metilcelulosa', '0.5 – 2.0', 'Gela en caliente, funde en frío (inverso).'],
+                  ].map(([agente, prop, funcion]) => (
+                    <tr key={agente}>
+                      <td className="px-6 py-4 font-normal text-on-surface">{agente}</td>
+                      <td className="px-6 py-4 text-center">{prop}</td>
+                      <td className="px-6 py-4">{funcion}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* Sección 4 */}
+          <section>
+            <h2 className="mb-6 flex items-center gap-4 font-headline text-3xl font-light tracking-tight text-secondary">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-secondary/20 bg-secondary/5 font-label text-sm text-secondary">04</span>
+              Esferificación e Ingeniería de Membrana
+            </h2>
+            <p className="mb-4 leading-relaxed text-on-surface-variant">
+              Proceso de encapsulación mediante reticulación iónica. El caso de la{' '}
+              <strong className="text-on-surface">Aceituna Esférica (Adrià)</strong> es nuestro estándar de oro.
+            </p>
+            <h3 className="mb-3 font-label text-xs uppercase tracking-widest text-on-surface">Protocolo de Hidratación</h3>
+            <p className="leading-relaxed text-on-surface-variant">
+              Reposo estricto de <strong className="text-on-surface">24 horas</strong> para mezclas de alginato — hidratación
+              total del polímero y eliminación de microburbujas garantizada. Las esferas terminadas se conservan en{' '}
+              <em>aceite aromatizado</em> para prevenir deshidratación osmótica.
+            </p>
+          </section>
+
+          {/* Sección 5 */}
+          <section>
+            <h2 className="mb-6 flex items-center gap-4 font-headline text-3xl font-light tracking-tight text-secondary">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-secondary/20 bg-secondary/5 font-label text-sm text-secondary">05</span>
+              Estándares Michelin y Emplatado
+            </h2>
+            <p className="mb-6 leading-relaxed text-on-surface-variant">
+              La operatividad diaria se rige por los <strong className="text-on-surface">Criterios de 1936</strong>: calidad de
+              ingredientes, dominio técnico, personalidad del chef, armonía de sabores y consistencia matemática.
+            </p>
+            <div className="border-l-2 border-secondary/20 pl-8 italic text-on-surface-variant">
+              &ldquo;La búsqueda de la estrella es un compromiso unánime con la perfección absoluta.&rdquo;
+            </div>
+          </section>
+
+        </div>
+
+        {/* CTA hacia recetas */}
+        <div className="mt-24 flex items-center justify-center">
+          <Link href="/recipes/recetas" className="group flex flex-col items-center gap-6">
+            <div className="h-px w-32 bg-gradient-to-r from-transparent via-secondary/30 to-transparent" />
+            <div className="relative">
+              <div className="absolute inset-0 -m-8 animate-pulse rounded-full bg-secondary/5 blur-2xl" />
+              <div className="flex h-20 w-20 items-center justify-center rounded-full border border-secondary/20 bg-secondary/5 transition-all duration-500 group-hover:scale-110 group-hover:border-secondary/40">
+                <AppIcon
+                  name="arrow_forward"
+                  size={24}
+                  className="text-secondary transition-transform duration-500 group-hover:translate-x-1"
+                />
+              </div>
+            </div>
+            <div className="text-center">
+              <p className="font-label text-[10px] uppercase tracking-[0.4em] text-secondary">
+                Protocolo interiorizado
+              </p>
+              <p className="mt-2 font-headline text-3xl font-light text-on-surface transition-colors group-hover:text-secondary">
+                Acceder al <span className="font-normal italic">Recetario Maestro</span>
+              </p>
+            </div>
+            <div className="h-px w-32 bg-gradient-to-r from-transparent via-secondary/30 to-transparent" />
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

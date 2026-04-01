@@ -21,7 +21,7 @@ export async function GET(req: Request) {
       .order('course_order'),
     academySvc()
       .from('enrollments')
-      .select('course_id,progress_percentage,completed_at,exam_attempts,best_score,last_score,exam_passed,payment_required,payment_unlocked,locked_until')
+      .select('course_id,progress_percentage,completed_at')
       .eq('user_id', auth.user.id),
   ]);
 

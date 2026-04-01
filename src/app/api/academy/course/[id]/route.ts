@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
 
 import { buildFallbackCoursePayload } from '@/lib/academy-content';
-import { buildCatalogState, sortCourses } from '@/lib/academy-progression';
+import { buildCatalogState } from '@/lib/academy-progression';
 import { canAccessTier } from '@/lib/access';
 import { requireUser } from '@/lib/server-auth';
 import { academySvc } from '@/lib/supabase-service';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   const auth = await requireUser(req);
@@ -14,13 +17,12 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
   const courseId = params.id;
 
-  const [courseRes, modulesRes, examsRes, enrollmentsRes, coursesRes] = await Promise.all([
+  const [courseRes, modulesRes, enrollmentsRes, coursesRes] = await Promise.all([
     academySvc().from('courses').select('*').eq('id', courseId).single(),
     academySvc().from('modules').select('*').eq('course_id', courseId).order('order_index'),
-    academySvc().from('exams').select('questions').eq('course_id', courseId).maybeSingle(),
     academySvc()
       .from('enrollments')
-      .select('course_id,progress_percentage,completed_at,exam_attempts,best_score,last_score,exam_passed,payment_required,payment_unlocked,locked_until')
+      .select('course_id,progress_percentage,completed_at')
       .eq('user_id', auth.user.id),
     academySvc().from('courses').select('id,title,tier,course_order,created_at'),
   ]);
@@ -44,26 +46,23 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     ...module,
     lessons: (lessonsRes.data ?? []).filter((lesson) => lesson.module_id === module.id),
   }));
-  const fallbackPayload = buildFallbackCoursePayload(
-    courseRes.data,
-    modules,
-    Array.isArray(examsRes.data?.questions) ? examsRes.data.questions : [],
-  );
+  const coursePayload = buildFallbackCoursePayload(courseRes.data, modules);
 
   const catalog = buildCatalogState(coursesRes.data ?? [], enrollmentsRes.data ?? [], auth.profile?.plan ?? 'FREE', auth.profile?.role ?? 'USER');
   const state = catalog.find((item) => item.id === courseId) || null;
   if (state?.premiumLocked && auth.profile?.role !== 'ADMIN') {
     return NextResponse.json({ error: 'La academia premium esta bloqueada temporalmente', lockedUntil: state.lockedUntil }, { status: 423 });
   }
-  const sortedCourses = sortCourses(catalog);
-  const currentIndex = sortedCourses.findIndex((item) => item.id === courseId);
-  const nextCourse = currentIndex >= 0 ? sortedCourses[currentIndex + 1] ?? null : null;
 
   return NextResponse.json({
-    course: fallbackPayload.course,
-    modules: fallbackPayload.modules,
-    exam: fallbackPayload.exam,
+    course: coursePayload.course,
+    modules: coursePayload.modules,
     state,
-    nextCourse,
+  }, {
+    headers: {
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      Pragma: 'no-cache',
+      Expires: '0',
+    },
   });
 }

@@ -61,7 +61,7 @@ async function main() {
       
       const payload = {
         title,
-        description: `Programa profesional avanzado sobre ${title.toLowerCase()}. Incluye modulos tecnicos, evaluacion continua y certificacion de competencias Aura Gastronomy.`,
+        description: `Programa profesional avanzado sobre ${title.toLowerCase()}. Incluye modulos tecnicos, aplicacion guiada y cierre editorial dentro del campus Aura Gastronomy.`,
         tier,
         level: tier === 'FREE' ? 'Iniciacion' : tier === 'PRO' ? 'Chef Elite' : 'Master Vanguarda',
         duration: '10-25 horas',

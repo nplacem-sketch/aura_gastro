@@ -61,10 +61,9 @@ function buildSystemPrompt(type: AutoGenerationType) {
     - tags (array de strings, opcional)
     - modules (array de objetos con title, content y lessons)
     - lessons (array de objetos con title, content y duration)
-    - exam (array de 5 preguntas con question, options y correct_index)
 
     EJEMPLO DE SALIDA:
-    { "title": "Tecnicas de vacio", "description": "...", "level": "Maestro", "tier": "PRO", "modules": [{ "title": "Modulo 1", "content": "...", "lessons": [{ "title": "Leccion 1", "content": "...", "duration": "18 min" }] }], "exam": [{ "question": "...", "options": ["A", "B", "C", "D"], "correct_index": 1 }] }`;
+    { "title": "Tecnicas de vacio", "description": "...", "level": "Maestro", "tier": "PRO", "modules": [{ "title": "Modulo 1", "content": "...", "lessons": [{ "title": "Leccion 1", "content": "...", "duration": "18 min" }] }] }`;
     return systemPrompt;
   }
 
@@ -80,7 +79,7 @@ function buildSystemPrompt(type: AutoGenerationType) {
   - tier (string: "FREE" | "PRO" | "PREMIUM")
 
   EJEMPLO DE SALIDA:
-  { "name": "Agar-Agar", "scientific_name": "Gelidium", "category": "ESTABILIZANTE", "culinary_notes": "...", "origin_region": "Japon", "best_season": "Todo el ano", "technical_data": {"Poder": "Alto"}, "tier": "PRO" }`;
+  { "name": "Agar-Agar", "scientific_name": "Gelidium", "category": "ESTABILIZANTE", "culinary_notes": "...", "origin_region": "Japon", "best_season": "Todo el a\u00f1o", "technical_data": {"Poder": "Alto"}, "tier": "PRO" }`;
   return systemPrompt;
 }
 

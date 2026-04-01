@@ -17,8 +17,6 @@ type CatalogCourse = {
   tier: string;
   unlockedByOrder: boolean;
   passed: boolean;
-  attemptsUsed: number;
-  paymentRequired: boolean;
   lockedUntil?: string | null;
   premiumLocked?: boolean;
 };
@@ -61,14 +59,13 @@ export default function AcademyPage() {
 
       <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-3 lg:gap-10">
         {courses.map((course, index) => {
-          const unlocked = course.unlockedByOrder;
           const blockedByPlan = !canAccessTier(plan, course.tier, role);
 
           return (
             <div
               key={course.id}
               className={`glass-panel group flex flex-col overflow-hidden rounded-[28px] border border-outline-variant/10 transition-all duration-500 sm:rounded-[40px] ${
-                unlocked && !blockedByPlan ? 'hover:border-secondary/40' : 'opacity-90'
+                !blockedByPlan ? 'hover:border-secondary/40' : 'opacity-90'
               }`}
             >
               <div className="relative h-48 overflow-hidden bg-surface-container-high sm:h-64">
@@ -95,12 +92,6 @@ export default function AcademyPage() {
                     title="Curso reservado a planes superiores"
                     description="Puedes ver el campus completo, pero este curso solo se abre al activar la membresia indicada."
                   />
-                ) : !unlocked ? (
-                  <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 p-6 text-center backdrop-blur-md sm:p-8">
-                    <AppIcon name="lock" size={28} className="mb-4 text-secondary opacity-50" />
-                    <p className="mb-2 font-label text-[10px] uppercase tracking-[0.2em] text-on-surface">Sigue el orden del campus</p>
-                    <p className="text-[10px] text-on-surface-variant">Completa o desbloquea el curso anterior para avanzar.</p>
-                  </div>
                 ) : null}
               </div>
 
@@ -115,8 +106,6 @@ export default function AcademyPage() {
 
                 <div className="mb-6 space-y-2 text-[10px] uppercase tracking-widest text-on-surface-variant sm:mb-8">
                   <p>{course.level || 'Master'}</p>
-                  <p>Intentos usados: {course.attemptsUsed} / 3</p>
-                  {course.paymentRequired && <p className="text-secondary">Pago pendiente de 1,50 EUR para desbloquear el siguiente curso</p>}
                   {course.premiumLocked && course.lockedUntil && (
                     <p className="text-error">Academia premium bloqueada hasta {new Date(course.lockedUntil).toLocaleDateString('es-ES')}</p>
                   )}
@@ -138,7 +127,7 @@ export default function AcademyPage() {
                     </button>
                   ) : (
                     <Link href={`/academy/${course.id}`} className="relative z-50 inline-flex items-center justify-center gap-3 rounded-2xl bg-surface-container-high px-6 py-3 font-label text-[10px] font-bold uppercase tracking-widest transition-all hover:bg-secondary hover:text-black sm:px-8 sm:py-4">
-                      {unlocked ? 'Acceder' : 'Ver detalle'} <AppIcon name="arrow_forward" size={16} />
+                      Acceder <AppIcon name="arrow_forward" size={16} />
                     </Link>
                   )}
                 </div>

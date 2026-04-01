@@ -1,0 +1,37 @@
+[
+  {
+    "title": "Nombre de la receta",
+    "description": "Resumen corto de la elaboracion.",
+    "tier": "PRO",
+    "difficulty": "Maestro",
+    "prep_time": "45 min",
+    "category": "Principal",
+    "cover_image": null,
+    "tags": ["temporada", "menu"],
+    "ingredients": [
+      { "name": "Ingrediente 1", "quantity": "120", "unit": "g" },
+      { "name": "Ingrediente 2", "quantity": "30", "unit": "ml" }
+    ],
+    "steps": [
+      "Paso 1 de la elaboracion.",
+      "Paso 2 de la elaboracion."
+    ],
+    "technical_sheet": {
+      "title": "Nombre de la receta",
+      "category": "Produccion",
+      "plan_tier": "PRO",
+      "yield_text": "4 raciones",
+      "ingredients": [
+        { "name": "Ingrediente 1", "quantity": "120", "unit": "g" },
+        { "name": "Ingrediente 2", "quantity": "30", "unit": "ml" }
+      ],
+      "method": "Paso 1.\\n\\nPaso 2.",
+      "plating_notes": "Notas de emplatado.",
+      "allergens": ["Lacteos"],
+      "cost_summary": {
+        "food_cost": "0.00",
+        "cost_per_serving": "0.00"
+      }
+    }
+  }
+]

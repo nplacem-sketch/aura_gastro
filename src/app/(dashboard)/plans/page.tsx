@@ -147,7 +147,7 @@ export default function PlansPage() {
 
         <p className="mx-auto max-w-2xl text-sm font-light leading-relaxed text-on-surface-variant sm:text-base">
           Cada plan ya tiene contenido real asignado por nivel: recetas, ingredientes, técnicas y cursos con módulos,
-          lecciones y examen. Los planes PRO mensual y PREMIUM mensual ya muestran descontados los {TRIAL_GIFT_DAYS} días de regalo del primer pago.
+          lecciones y progresión guiada. Los planes PRO mensual y PREMIUM mensual ya muestran descontados los {TRIAL_GIFT_DAYS} días de regalo del primer pago.
         </p>
 
         {checkoutError && (

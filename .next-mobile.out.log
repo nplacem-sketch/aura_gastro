@@ -1,0 +1,45 @@
+
+> aura-gastronomy@0.1.0 dev
+> next dev --hostname 0.0.0.0 --port 3000
+
+  ▲ Next.js 14.2.32
+  - Local:        http://localhost:3000
+  - Network:      http://0.0.0.0:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 26.2s
+ ○ Compiling / ...
+ ✓ Compiled / in 36.4s (793 modules)
+ ✓ Compiled in 5.5s (388 modules)
+ ✓ Compiled in 737ms (374 modules)
+ GET / 200 in 125ms
+ ○ Compiling /api/plans ...
+ ✓ Compiled /api/plans in 1294ms (472 modules)
+ GET /api/plans 200 in 2793ms
+ GET /api/plans 200 in 2834ms
+ ○ Compiling /academy ...
+ ✓ Compiled /academy in 2.9s (854 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /login in 2.2s (860 modules)
+ ✓ Compiled /api/auth/profile in 440ms (486 modules)
+ GET /api/auth/profile 200 in 1266ms
+ GET /api/auth/profile 200 in 1178ms
+ ○ Compiling /api/notifications ...
+ ✓ Compiled /api/notifications in 786ms (488 modules)
+ GET /api/plans 200 in 1340ms
+ GET /api/plans 200 in 1359ms
+ GET /api/notifications 200 in 1876ms
+ GET /api/notifications 200 in 2165ms
+ ○ Compiling /api/academy/catalog ...
+ ✓ Compiled /api/academy/catalog in 757ms (492 modules)
+ GET /api/academy/catalog 200 in 1829ms
+ GET /api/academy/catalog 200 in 1818ms
+ ○ Compiling /academy/[id] ...
+ ✓ Compiled /academy/[id] in 1962ms (879 modules)
+ ○ Compiling /api/academy/course/[id] ...
+ ✓ Compiled /api/academy/course/[id] in 576ms (502 modules)
+ GET /api/academy/course/384d3649-fd67-499a-a2fc-c5816fbe489d 200 in 3014ms
+ GET /api/academy/course/384d3649-fd67-499a-a2fc-c5816fbe489d 200 in 3100ms
+ GET /api/notifications 200 in 363ms
+ GET /api/auth/profile 200 in 1170ms
