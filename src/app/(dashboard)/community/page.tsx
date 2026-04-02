@@ -33,7 +33,8 @@ export default function CommunityPage() {
   const [loading, setLoading] = useState(true);
   const [replyingTo, setReplyingTo] = useState<Post | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  
+  const [deletingPostId, setDeletingPostId] = useState<string | null>(null);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchPosts = async () => {
@@ -42,7 +43,7 @@ export default function CommunityPage() {
       .select('*')
       .order('created_at', { ascending: false })
       .limit(50);
-    
+
     if (data) setPosts(data);
     setLoading(false);
   };
@@ -71,7 +72,7 @@ export default function CommunityPage() {
     if (files.length === 0) return;
 
     const isVideo = files[0].type.startsWith('video/');
-    
+
     if (isVideo) {
       if (files[0].size > MAX_VIDEO_SIZE) {
         alert('El video supera los 50MB permitidos.');
@@ -106,7 +107,7 @@ export default function CommunityPage() {
 
     setIsUploading(true);
     const authorName = user.user_metadata?.name || user.email?.split('@')[0] || 'Chef';
-    
+
     let uploadedUrls: string[] = [];
     if (mediaFiles.length > 0) {
       uploadedUrls = await uploadMedia();
@@ -123,7 +124,7 @@ export default function CommunityPage() {
     };
 
     const { error } = await chatDb().from('posts').insert(postData);
-    
+
     setIsUploading(false);
     if (!error) {
       setNewContent('');
@@ -169,14 +170,48 @@ export default function CommunityPage() {
     }
   };
 
+  const handleDelete = async (post: Post) => {
+    if (!user) return;
+
+    // Solo admin o el autor pueden eliminar
+    const isAdmin = user.role === 'ADMIN';
+    const isAuthor = user.id === post.author_id;
+
+    if (!isAdmin && !isAuthor) {
+      alert('No tienes permisos para eliminar este mensaje.');
+      return;
+    }
+
+    if (!confirm(`¿Estás seguro de que quieres eliminar este ${post.parent_id ? 'comentario' : 'mensaje'}?`)) {
+      return;
+    }
+
+    setDeletingPostId(post.id);
+
+    const { error } = await chatDb().from('posts').delete().eq('id', post.id);
+
+    setDeletingPostId(null);
+
+    if (!error) {
+      setPosts(prev => prev.filter(p => p.id !== post.id && p.parent_id !== post.id));
+    } else {
+      alert('Error al eliminar el mensaje.');
+    }
+  };
+
+  const canDeletePost = (post: Post): boolean => {
+    if (!user) return false;
+    return user.role === 'ADMIN' || user.id === post.author_id;
+  };
+
   const mainPosts = posts.filter(p => !p.parent_id);
-  const getReplies = (postId: string) => posts.filter(p => p.parent_id === postId).sort((a,b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+  const getReplies = (postId: string) => posts.filter(p => p.parent_id === postId).sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
   return (
     <div className="flex h-screen bg-[#121413] text-on-surface overflow-hidden selection:bg-secondary/30">
       <div className="flex-1 flex justify-center overflow-y-auto px-4 py-8">
         <div className="w-full flex flex-col lg:flex-row gap-12 max-w-7xl justify-center">
-          
+
           {/* Main Feed Column */}
           <div className="flex-1 max-w-2xl space-y-10">
             <header className="flex items-end justify-between pb-6 border-b border-outline-variant/10">
@@ -194,7 +229,7 @@ export default function CommunityPage() {
               {replyingTo && (
                 <div className="mb-6 px-4 py-2 bg-secondary/5 rounded-full border border-secondary/10 flex justify-between items-center text-[10px] tracking-widest uppercase">
                   <span className="text-secondary/70">Respondiendo a <b className="text-secondary">{replyingTo.author_name}</b></span>
-                  <button onClick={() => setReplyingTo(null)} className="hover:text-error transition-colors"><AppIcon name="close" size={14}/></button>
+                  <button onClick={() => setReplyingTo(null)} className="hover:text-error transition-colors"><AppIcon name="close" size={14} /></button>
                 </div>
               )}
               <div className="flex gap-6">
@@ -208,21 +243,21 @@ export default function CommunityPage() {
                     value={newContent}
                     onChange={e => setNewContent(e.target.value.slice(0, MAX_CHARS))}
                   />
-                  
+
                   {mediaFiles.length > 0 && (
                     <div className="mt-6 grid grid-cols-2 gap-3">
                       {mediaFiles.map((f, i) => (
                         <div key={i} className="relative aspect-video rounded-3xl overflow-hidden bg-[#0a0a0a] border border-white/5 group shadow-2xl">
                           {f.type.startsWith('video/') ? (
-                            <div className="flex items-center justify-center h-full"><AppIcon name="videocam" size={32} className="text-secondary opacity-30"/></div>
+                            <div className="flex items-center justify-center h-full"><AppIcon name="videocam" size={32} className="text-secondary opacity-30" /></div>
                           ) : (
-                            <img src={URL.createObjectURL(f)} alt="preview" className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-700"/>
+                            <img src={URL.createObjectURL(f)} alt="preview" className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-700" />
                           )}
-                          <button 
+                          <button
                             onClick={() => setMediaFiles(prev => prev.filter((_, idx) => idx !== i))}
                             className="absolute top-3 right-3 p-2 bg-black/80 rounded-full hover:bg-error transition-all scale-75 group-hover:scale-100"
                           >
-                            <AppIcon name="close" size={14}/>
+                            <AppIcon name="close" size={14} />
                           </button>
                         </div>
                       ))}
@@ -231,12 +266,12 @@ export default function CommunityPage() {
 
                   <div className="flex justify-between items-center mt-6 pt-6 border-t border-white/5">
                     <div className="flex gap-2">
-                      <input type="file" ref={fileInputRef} onChange={handleFileSelect} multiple className="hidden" accept="image/*,video/*"/>
+                      <input type="file" ref={fileInputRef} onChange={handleFileSelect} multiple className="hidden" accept="image/*,video/*" />
                       <button onClick={() => fileInputRef.current?.click()} className="w-10 h-10 flex items-center justify-center text-secondary/40 hover:text-secondary hover:bg-secondary/5 rounded-full transition-all border border-transparent hover:border-secondary/10">
                         <AppIcon name="attach_file" size={20} />
                       </button>
                     </div>
-                    
+
                     <div className="flex items-center gap-6">
                       <span className={`text-[11px] font-mono tracking-widest ${newContent.length >= MAX_CHARS ? 'text-error' : 'text-on-surface-variant/30'}`}>
                         {newContent.length} / {MAX_CHARS}
@@ -267,23 +302,23 @@ export default function CommunityPage() {
                     <div className="relative z-10 glass-panel p-8 rounded-[40px] border border-white/5 flex gap-6 hover:bg-surface-container-low/30 transition-all duration-500 mb-2">
                       <div className="relative group/avatar shrink-0">
                         <div className="w-12 h-12 rounded-full border border-secondary/20 overflow-hidden bg-surface-container-high transition-transform group-hover/avatar:scale-110 duration-500">
-                           <div className="w-full h-full flex items-center justify-center font-bold text-secondary uppercase text-sm">
-                             {post.author_name.charAt(0)}
-                           </div>
+                          <div className="w-full h-full flex items-center justify-center font-bold text-secondary uppercase text-sm">
+                            {post.author_name.charAt(0)}
+                          </div>
                         </div>
                       </div>
-                      
+
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-3 overflow-hidden">
                             <span className="font-bold text-[#f0f0f0] truncate text-[15px]">{post.author_name}</span>
                             {post.author_role === 'ADMIN' && <AppIcon name="workspace_premium" size={13} className="text-secondary shrink-0" />}
                             <span className="text-[10px] font-mono text-on-surface-variant/40 tracking-tighter">
-                              {new Date(post.created_at).toLocaleDateString([], {day:'2-digit', month:'short'})} · {new Date(post.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                              {new Date(post.created_at).toLocaleDateString([], { day: '2-digit', month: 'short' })} · {new Date(post.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </span>
                           </div>
                         </div>
-                        
+
                         <p className="text-on-surface-variant font-light text-[16px] leading-[1.65] whitespace-pre-wrap mb-6 max-w-[95%]">
                           {post.content}
                         </p>
@@ -293,9 +328,9 @@ export default function CommunityPage() {
                             {post.media_urls.map((url, i) => (
                               <div key={i} className="relative rounded-[32px] overflow-hidden bg-black/40 border border-white/5 aspect-[4/3] group/media">
                                 {post.media_type === 'video' ? (
-                                  <video src={url} className="w-full h-full object-cover" controls/>
+                                  <video src={url} className="w-full h-full object-cover" controls />
                                 ) : (
-                                  <img src={url} alt="content" className="w-full h-full object-cover transition-transform duration-[2s] group-hover/media:scale-110"/>
+                                  <img src={url} alt="content" className="w-full h-full object-cover transition-transform duration-[2s] group-hover/media:scale-110" />
                                 )}
                               </div>
                             ))}
@@ -304,22 +339,37 @@ export default function CommunityPage() {
 
                         <div className="flex items-center gap-8 border-t border-white/5 pt-6">
                           <button onClick={() => handleLike(post)} className="flex items-center gap-2 group/btn">
-                             <div className="p-2.5 rounded-full group-hover/btn:bg-secondary/10 transition-colors">
-                               <AppIcon name="thumb_up" size={16} className="text-on-surface-variant/40 group-hover/btn:text-secondary transition-colors"/>
-                             </div>
-                             <span className="text-[12px] font-mono text-on-surface-variant/40 group-hover/btn:text-secondary">{post.likes_count}</span>
-                          </button>
-                          
-                          <button onClick={() => setReplyingTo(post)} className="flex items-center gap-2 group/btn">
-                             <div className="p-2.5 rounded-full group-hover/btn:bg-primary/10 transition-colors">
-                               <AppIcon name="forum" size={16} className="text-on-surface-variant/40 group-hover/btn:text-primary transition-colors"/>
-                             </div>
-                             <span className="text-[12px] font-mono text-on-surface-variant/40 group-hover/btn:text-primary">{getReplies(post.id).length}</span>
+                            <div className="p-2.5 rounded-full group-hover/btn:bg-secondary/10 transition-colors">
+                              <AppIcon name="thumb_up" size={16} className="text-on-surface-variant/40 group-hover/btn:text-secondary transition-colors" />
+                            </div>
+                            <span className="text-[12px] font-mono text-on-surface-variant/40 group-hover/btn:text-secondary">{post.likes_count}</span>
                           </button>
 
-                          <button onClick={() => sharePost(post)} className="ml-auto w-10 h-10 flex items-center justify-center hover:bg-white/5 rounded-full text-on-surface-variant/40 transition-colors">
-                            <AppIcon name="arrow_forward" size={16}/>
+                          <button onClick={() => setReplyingTo(post)} className="flex items-center gap-2 group/btn">
+                            <div className="p-2.5 rounded-full group-hover/btn:bg-primary/10 transition-colors">
+                              <AppIcon name="forum" size={16} className="text-on-surface-variant/40 group-hover/btn:text-primary transition-colors" />
+                            </div>
+                            <span className="text-[12px] font-mono text-on-surface-variant/40 group-hover/btn:text-primary">{getReplies(post.id).length}</span>
                           </button>
+
+                          <button onClick={() => sharePost(post)} className="w-10 h-10 flex items-center justify-center hover:bg-white/5 rounded-full text-on-surface-variant/40 transition-colors">
+                            <AppIcon name="arrow_forward" size={16} />
+                          </button>
+
+                          {canDeletePost(post) && (
+                            <button
+                              onClick={() => handleDelete(post)}
+                              disabled={deletingPostId === post.id}
+                              className="w-10 h-10 flex items-center justify-center hover:bg-error/10 rounded-full text-on-surface-variant/20 hover:text-error transition-colors disabled:opacity-30"
+                              title="Eliminar mensaje"
+                            >
+                              {deletingPostId === post.id ? (
+                                <div className="w-4 h-4 border-2 border-error border-t-transparent rounded-full animate-spin" />
+                              ) : (
+                                <AppIcon name="block" size={16} />
+                              )}
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -331,49 +381,63 @@ export default function CommunityPage() {
 
                     {/* REPLIES NESTED */}
                     <div className="space-y-2 mt-4 ml-8">
-                       {getReplies(post.id).map((reply, ridx, rarr) => (
-                         <div key={reply.id} className="relative group/reply pb-4">
-                            {/* Horizontal connector line */}
-                            <div className="absolute left-[-22px] top-[30px] w-[22px] h-px bg-secondary/30" />
-                            
-                            <div className="glass-panel p-6 rounded-[32px] border border-white/5 flex gap-4 bg-surface-container-low/20 backdrop-blur-3xl group-hover/reply:border-secondary/20 transition-all duration-300">
-                              <div className="w-10 h-10 rounded-full border border-secondary/10 bg-surface-container-high flex items-center justify-center font-bold text-[10px] text-secondary/60 uppercase shrink-0 transform scale-90">
-                                {reply.author_name.charAt(0)}
+                      {getReplies(post.id).map((reply, ridx, rarr) => (
+                        <div key={reply.id} className="relative group/reply pb-4">
+                          {/* Horizontal connector line */}
+                          <div className="absolute left-[-22px] top-[30px] w-[22px] h-px bg-secondary/30" />
+
+                          <div className="glass-panel p-6 rounded-[32px] border border-white/5 flex gap-4 bg-surface-container-low/20 backdrop-blur-3xl group-hover/reply:border-secondary/20 transition-all duration-300">
+                            <div className="w-10 h-10 rounded-full border border-secondary/10 bg-surface-container-high flex items-center justify-center font-bold text-[10px] text-secondary/60 uppercase shrink-0 transform scale-90">
+                              {reply.author_name.charAt(0)}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className="font-bold text-[14px] text-on-surface/90">{reply.author_name}</span>
+                                <span className="text-[9px] font-mono text-on-surface-variant/30 tracking-tighter">
+                                  {new Date(reply.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>
                               </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-2">
-                                  <span className="font-bold text-[14px] text-on-surface/90">{reply.author_name}</span>
-                                  <span className="text-[9px] font-mono text-on-surface-variant/30 tracking-tighter">
-                                    {new Date(reply.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                                  </span>
-                                </div>
-                                <p className="text-on-surface-variant/80 font-light text-[14px] leading-relaxed mb-4">
-                                  {reply.content}
-                                </p>
+                              <p className="text-on-surface-variant/80 font-light text-[14px] leading-relaxed mb-4">
+                                {reply.content}
+                              </p>
 
-                                {reply.media_urls && reply.media_urls.length > 0 && (
-                                  <div className="grid grid-cols-2 gap-2 mb-4">
-                                    {reply.media_urls.map((url, i) => (
-                                      <div key={i} className="relative rounded-2xl overflow-hidden bg-black/20 aspect-video">
-                                        {reply.media_type === 'video' ? <video src={url} className="w-full h-full object-cover" /> : <img src={url} alt="reply media" className="w-full h-full object-cover" />}
-                                      </div>
-                                    ))}
-                                  </div>
+                              {reply.media_urls && reply.media_urls.length > 0 && (
+                                <div className="grid grid-cols-2 gap-2 mb-4">
+                                  {reply.media_urls.map((url, i) => (
+                                    <div key={i} className="relative rounded-2xl overflow-hidden bg-black/20 aspect-video">
+                                      {reply.media_type === 'video' ? <video src={url} className="w-full h-full object-cover" /> : <img src={url} alt="reply media" className="w-full h-full object-cover" />}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+
+                              <div className="flex items-center gap-6">
+                                <button onClick={() => handleLike(reply)} className="flex items-center gap-1.5 group/like">
+                                  <AppIcon name="thumb_up" size={13} className="text-on-surface-variant/30 group-hover/like:text-secondary transition-colors" />
+                                  <span className="text-[11px] font-mono text-on-surface-variant/40 group-hover/like:text-secondary">{reply.likes_count}</span>
+                                </button>
+                                <button onClick={() => sharePost(reply)} className="text-on-surface-variant/20 hover:text-on-surface/50 transition-colors">
+                                  <AppIcon name="arrow_forward" size={13} />
+                                </button>
+                                {canDeletePost(reply) && (
+                                  <button
+                                    onClick={() => handleDelete(reply)}
+                                    disabled={deletingPostId === reply.id}
+                                    className="ml-auto text-on-surface-variant/20 hover:text-error transition-colors disabled:opacity-30"
+                                    title="Eliminar comentario"
+                                  >
+                                    {deletingPostId === reply.id ? (
+                                      <div className="w-3.5 h-3.5 border-2 border-error border-t-transparent rounded-full animate-spin" />
+                                    ) : (
+                                      <AppIcon name="block" size={13} />
+                                    )}
+                                  </button>
                                 )}
-
-                                <div className="flex items-center gap-6">
-                                  <button onClick={() => handleLike(reply)} className="flex items-center gap-1.5 group/like">
-                                    <AppIcon name="thumb_up" size={13} className="text-on-surface-variant/30 group-hover/like:text-secondary transition-colors"/>
-                                    <span className="text-[11px] font-mono text-on-surface-variant/40 group-hover/like:text-secondary">{reply.likes_count}</span>
-                                  </button>
-                                  <button onClick={() => sharePost(reply)} className="text-on-surface-variant/20 hover:text-on-surface/50 transition-colors">
-                                    <AppIcon name="arrow_forward" size={13}/>
-                                  </button>
-                                </div>
                               </div>
                             </div>
-                         </div>
-                       ))}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ))
@@ -384,25 +448,25 @@ export default function CommunityPage() {
           {/* Right Sidebar (Ads Space) - Refined */}
           <aside className="hidden lg:block w-[300px] space-y-8">
             <div className="bg-surface-container-low/10 rounded-[48px] border border-white/5 p-8 flex flex-col items-center justify-center min-h-[450px] text-center sticky top-8 backdrop-blur-2xl">
-               <div className="w-20 h-20 rounded-full border border-secondary/10 flex items-center justify-center mb-6 relative">
-                 <div className="absolute inset-0 bg-secondary/5 rounded-full animate-pulse-slow" />
-                 <AppIcon name="auto_awesome" className="text-secondary/80 animate-float" size={32} />
-               </div>
-               <h3 className="font-headline text-xl tracking-[0.2em] uppercase mb-3 text-white">Curated</h3>
-               <p className="text-[10px] text-secondary tracking-widest uppercase mb-6 font-medium opacity-60">Aura Gastronomy Ads</p>
-               <p className="text-xs text-on-surface-variant/60 font-light leading-relaxed max-w-[200px]">
-                 Espacio exclusivo para la alta gastronomía y patrocinadores premium.
-               </p>
-               <div className="mt-10 pt-10 border-t border-white/5 w-full space-y-4">
-                  <div className="h-[2px] w-full bg-secondary/5 rounded-full overflow-hidden">
-                    <div className="h-full w-full bg-gradient-to-r from-transparent via-secondary/30 to-transparent animate-shimmer" />
-                  </div>
-                  <div className="h-[1px] w-2/3 mx-auto bg-white/5 rounded-full" />
-               </div>
+              <div className="w-20 h-20 rounded-full border border-secondary/10 flex items-center justify-center mb-6 relative">
+                <div className="absolute inset-0 bg-secondary/5 rounded-full animate-pulse-slow" />
+                <AppIcon name="auto_awesome" className="text-secondary/80 animate-float" size={32} />
+              </div>
+              <h3 className="font-headline text-xl tracking-[0.2em] uppercase mb-3 text-white">Curated</h3>
+              <p className="text-[10px] text-secondary tracking-widest uppercase mb-6 font-medium opacity-60">Aura Gastronomy Ads</p>
+              <p className="text-xs text-on-surface-variant/60 font-light leading-relaxed max-w-[200px]">
+                Espacio exclusivo para la alta gastronomía y patrocinadores premium.
+              </p>
+              <div className="mt-10 pt-10 border-t border-white/5 w-full space-y-4">
+                <div className="h-[2px] w-full bg-secondary/5 rounded-full overflow-hidden">
+                  <div className="h-full w-full bg-gradient-to-r from-transparent via-secondary/30 to-transparent animate-shimmer" />
+                </div>
+                <div className="h-[1px] w-2/3 mx-auto bg-white/5 rounded-full" />
+              </div>
             </div>
-            
+
             <div className="px-6 text-[10px] text-on-surface-variant/20 font-mono tracking-[0.3em] text-center uppercase">
-              The Digital Hub<br/>
+              The Digital Hub<br />
               AURA NETWORK v1.2
             </div>
           </aside>
