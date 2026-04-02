@@ -22,12 +22,9 @@ export default function EscandallosPage() {
   const latestSearchRef = useRef('');
 
   const [pax, setPax] = useState(10);
-  const [recipeName, setRecipeName] = useState('Risotto de Setas Silvestres');
-  const [ingredients, setIngredients] = useState<Ingredient[]>([
-    { id: '1', name: 'Arroz Carnaroli', gross_weight: 1.2, waste_percent: 0, price_per_kg: 4.5, unit: 'Kg' },
-    { id: '2', name: 'Setas Porcini', gross_weight: 0.8, waste_percent: 15, price_per_kg: 28, unit: 'Kg' },
-    { id: '3', name: 'Parmigiano Reggiano', gross_weight: 0.2, waste_percent: 5, price_per_kg: 32, unit: 'Kg' },
-  ]);
+  const [recipeName, setRecipeName] = useState('');
+  const [profitMargin, setProfitMargin] = useState(30); // % de ganancia por defecto
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -35,12 +32,27 @@ export default function EscandallosPage() {
 
   const stats = useMemo(() => {
     const total_cost = ingredients.reduce((acc, ing) => acc + ing.gross_weight * ing.price_per_kg, 0);
+    const cost_per_serving = total_cost / (pax || 1);
+
+    // Cálculos con margen de ganancia
+    // Precio de venta = Coste / (1 - %margen/100)
+    // Ejemplo: si coste es 100€ y queremos 30% de margen, precio venta = 100 / (1 - 0.30) = 142.86€
+    const selling_price_total = cost_per_serving > 0 ? total_cost / (1 - profitMargin / 100) : 0;
+    const selling_price_per_serving = selling_price_total / (pax || 1);
+    const profit = selling_price_total - total_cost;
+    const profit_per_serving = profit / (pax || 1);
+
     return {
       total_cost,
-      cost_per_serving: total_cost / (pax || 1),
+      cost_per_serving,
       total_net_weight: ingredients.reduce((acc, ing) => acc + ing.gross_weight * (1 - ing.waste_percent / 100), 0),
+      selling_price_total,
+      selling_price_per_serving,
+      profit,
+      profit_per_serving,
+      profit_margin: profitMargin,
     };
-  }, [ingredients, pax]);
+  }, [ingredients, pax, profitMargin]);
 
   async function searchIngredients(query: string) {
     setSearchQuery(query);
@@ -87,11 +99,11 @@ export default function EscandallosPage() {
       current.map((item) =>
         item.id === targetId
           ? {
-              ...item,
-              name: ing.name,
-              waste_percent: ing.technical_data?.merma || 0,
-              price_per_kg: ing.avg_price || 0,
-            }
+            ...item,
+            name: ing.name,
+            waste_percent: ing.technical_data?.merma || 0,
+            price_per_kg: ing.avg_price || 0,
+          }
           : item,
       ),
     );
@@ -131,7 +143,7 @@ export default function EscandallosPage() {
   function addIngredient() {
     setIngredients((current) => [
       ...current,
-      { id: crypto.randomUUID(), name: 'Nuevo ingrediente', gross_weight: 1, waste_percent: 0, price_per_kg: 0, unit: 'Kg' },
+      { id: crypto.randomUUID(), name: '', gross_weight: 0, waste_percent: 0, price_per_kg: 0, unit: 'Kg' },
     ]);
   }
 
@@ -210,6 +222,21 @@ export default function EscandallosPage() {
               <div class="card">
                 <div class="label">Ingredientes</div>
                 <div class="value">${ingredients.length}</div>
+              </div>
+            </div>
+
+            <div class="summary" style="margin-top: 10px;">
+              <div class="card" style="background: #e8f5e9; border-color: #a5d6a7;">
+                <div class="label" style="color: #2e7d32;">Margen de ganancia</div>
+                <div class="value" style="color: #2e7d32;">${profitMargin}%</div>
+              </div>
+              <div class="card" style="background: #e8f5e9; border-color: #a5d6a7;">
+                <div class="label" style="color: #2e7d32;">Precio de venta total</div>
+                <div class="value" style="color: #2e7d32;">${stats.selling_price_total.toFixed(2)} EUR</div>
+              </div>
+              <div class="card" style="background: #e8f5e9; border-color: #a5d6a7;">
+                <div class="label" style="color: #2e7d32;">Ganancia por racion</div>
+                <div class="value" style="color: #2e7d32;">${stats.profit_per_serving.toFixed(2)} EUR</div>
               </div>
             </div>
 
@@ -369,6 +396,22 @@ export default function EscandallosPage() {
           <div className="glass-panel rounded-[32px] border border-outline-variant/10 bg-gradient-to-br from-surface-container-high/80 to-transparent p-8 shadow-3xl sm:rounded-[40px] sm:p-10">
             <h3 className="mb-10 font-headline text-2xl italic">Resumen técnico</h3>
 
+            <div className="mb-8">
+              <label className="mb-2 block text-[9px] font-label uppercase tracking-widest text-on-surface-variant">% de Ganancia Deseada</label>
+              <div className="relative">
+                <input
+                  type="number"
+                  value={profitMargin}
+                  onChange={(e) => setProfitMargin(parseFloat(e.target.value) || 0)}
+                  className="w-full border-b border-secondary/20 bg-transparent py-3 text-center text-3xl font-headline text-secondary outline-none"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-label uppercase tracking-widest text-on-surface-variant/40">%</span>
+              </div>
+              <p className="mt-2 text-[9px] font-light italic text-on-surface-variant/40">
+                Precio de venta = Coste / (1 - {profitMargin}%)
+              </p>
+            </div>
+
             <div className="mb-12 space-y-8">
               <div className="flex items-center justify-between gap-4">
                 <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Coste total de producción</p>
@@ -378,9 +421,25 @@ export default function EscandallosPage() {
                 <p className="font-label text-[10px] uppercase tracking-widest font-bold text-secondary">Coste por ración</p>
                 <p className="text-right text-4xl font-headline tracking-tighter text-secondary sm:text-5xl">{stats.cost_per_serving.toFixed(2)} EUR</p>
               </div>
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center justify-between gap-4 border-b border-outline-variant/10 pb-6">
                 <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Rendimiento neto total</p>
                 <p className="text-right text-2xl font-headline italic text-on-surface-variant/60">{stats.total_net_weight.toFixed(3)} Kg</p>
+              </div>
+
+              {/* Sección de Ganancia */}
+              <div className="mt-8 rounded-2xl bg-secondary/5 p-6 border border-secondary/10">
+                <div className="mb-4 flex items-center justify-between gap-4">
+                  <p className="font-label text-[9px] uppercase tracking-widest font-bold text-secondary">Precio de Venta Total</p>
+                  <p className="text-right text-3xl font-headline text-secondary">{stats.selling_price_total.toFixed(2)} EUR</p>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <p className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">Ganancia por ración</p>
+                  <p className="text-right text-xl font-headline text-on-surface">{stats.profit_per_serving.toFixed(2)} EUR</p>
+                </div>
+                <div className="mt-4 flex items-center justify-between gap-4">
+                  <p className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">Ganancia total</p>
+                  <p className="text-right text-xl font-headline text-on-surface">{stats.profit.toFixed(2)} EUR</p>
+                </div>
               </div>
             </div>
 
