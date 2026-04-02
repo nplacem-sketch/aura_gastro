@@ -281,6 +281,7 @@ export default function EscandallosPage() {
             value={recipeName}
             onChange={(e) => setRecipeName(e.target.value)}
             className="w-full bg-transparent text-4xl font-headline font-light text-on-surface outline-none transition-all focus:text-secondary sm:text-5xl lg:text-6xl"
+            placeholder="Nombre de la receta"
           />
         </div>
         <div className="glass-panel min-w-[140px] rounded-2xl border border-outline-variant/10 p-4 text-center">
